@@ -4,12 +4,11 @@ import Layout from './components/Layout';
 import TimeGrid from './components/TimeGrid';
 import BookingSummary from './components/BookingSummary';
 import { SERVICES, BARBER_CONFIG } from './constants';
-import { Service, Booking, ViewType } from './types';
+import { Service, Booking } from './types';
 import { bookingService } from './services/bookingService';
 import { ChevronRight, MapPin, CheckCircle, Smartphone, ChevronLeft, ArrowRight } from 'lucide-react';
 
 const App: React.FC = () => {
-  const [activeView, setActiveView] = useState<ViewType>('customer');
   const [selectedLocation, setSelectedLocation] = useState(BARBER_CONFIG.locations[0]);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -38,7 +37,7 @@ const App: React.FC = () => {
     const msg = `Lekker Nev! Booking: ${selectedService.name} on ${dateStr} at ${selectedTime}. Customer: ${customerName}. Vibe the vibe!`;
     const whatsappUrl = `https://wa.me/${BARBER_CONFIG.phone}?text=${encodeURIComponent(msg)}`;
     window.open(whatsappUrl, '_blank');
-    
+
     bookingService.addBooking({
       id: Math.random().toString(36).substr(2, 9),
       serviceId: selectedService.id,
@@ -64,19 +63,21 @@ const App: React.FC = () => {
   const renderLanding = () => (
     <div className="space-y-12 pb-10">
       {/* Location Toggle */}
-      <div className="px-6 mt-4">
-        <div className="flex bg-zinc-900 rounded-lg p-1">
-          {BARBER_CONFIG.locations.map(loc => (
-            <button
-              key={loc.id}
-              onClick={() => setSelectedLocation(loc)}
-              className={`flex-1 py-2 text-xs font-bold rounded-md transition-all ${selectedLocation.id === loc.id ? 'bg-[#2a2a2a] text-white' : 'text-zinc-500'}`}
-            >
-              {loc.name}
-            </button>
-          ))}
+      {BARBER_CONFIG.locations.length > 1 && (
+        <div className="px-6 mt-4">
+          <div className="flex bg-zinc-900 rounded-lg p-1">
+            {BARBER_CONFIG.locations.map(loc => (
+              <button
+                key={loc.id}
+                onClick={() => setSelectedLocation(loc)}
+                className={`flex-1 py-2 text-xs font-bold rounded-md transition-all ${selectedLocation.id === loc.id ? 'bg-[#2a2a2a] text-white' : 'text-zinc-500'}`}
+              >
+                {loc.name}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Legendary Styles Section */}
       <div className="space-y-8">
@@ -92,13 +93,13 @@ const App: React.FC = () => {
               View More Styles <ArrowRight size={16} />
             </button>
             <div className="flex gap-2">
-              <button 
+              <button
                 onClick={() => scroll('left')}
                 className="w-12 h-12 border border-zinc-800 flex items-center justify-center hover:bg-zinc-900 transition-colors"
               >
                 <ChevronLeft size={24} />
               </button>
-              <button 
+              <button
                 onClick={() => scroll('right')}
                 className="w-12 h-12 border border-zinc-800 flex items-center justify-center hover:bg-zinc-900 transition-colors"
               >
@@ -109,14 +110,14 @@ const App: React.FC = () => {
         </div>
 
         {/* Style Cards Carousel */}
-        <div 
+        <div
           ref={scrollRef}
           className="flex overflow-x-auto px-6 gap-4 no-scrollbar snap-x snap-mandatory"
         >
           <div className="min-w-[280px] h-[400px] relative overflow-hidden rounded-[2rem] snap-start group bg-zinc-900">
-            <img 
-              src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&q=80&w=600" 
-              className="w-full h-full object-cover grayscale transition-transform duration-700 group-hover:scale-110" 
+            <img
+              src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&q=80&w=600"
+              className="w-full h-full object-cover grayscale transition-transform duration-700 group-hover:scale-110"
               alt="Adult Haircut Fade"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent flex flex-col justify-end p-8">
@@ -125,9 +126,9 @@ const App: React.FC = () => {
             </div>
           </div>
           <div className="min-w-[280px] h-[400px] relative overflow-hidden rounded-[2rem] snap-start group bg-zinc-900">
-            <img 
-              src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&q=80&w=600" 
-              className="w-full h-full object-cover grayscale transition-transform duration-700 group-hover:scale-110" 
+            <img
+              src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&q=80&w=600"
+              className="w-full h-full object-cover grayscale transition-transform duration-700 group-hover:scale-110"
               alt="Beard Shave Clipper"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent flex flex-col justify-end p-8">
@@ -136,9 +137,9 @@ const App: React.FC = () => {
             </div>
           </div>
           <div className="min-w-[280px] h-[400px] relative overflow-hidden rounded-[2rem] snap-start group bg-zinc-900">
-            <img 
-              src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80&w=600" 
-              className="w-full h-full object-cover grayscale transition-transform duration-700 group-hover:scale-110" 
+            <img
+              src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80&w=600"
+              className="w-full h-full object-cover grayscale transition-transform duration-700 group-hover:scale-110"
               alt="The Scholar"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent flex flex-col justify-end p-8">
@@ -176,7 +177,7 @@ const App: React.FC = () => {
               </div>
               <div className="flex items-center gap-2 text-white">
                 <div className="w-3.5 h-3.5 flex items-center justify-center font-black text-[10px]">P</div>
-                <span className="font-bold uppercase text-[9px]">Parking On-Site</span>
+                <span className="font-bold uppercase text-[9px]">Street Parking</span>
               </div>
             </div>
           </div>
@@ -185,7 +186,7 @@ const App: React.FC = () => {
 
       {/* Action Button */}
       <div className="px-6">
-        <button 
+        <button
           onClick={() => setStep(1)}
           className="w-full bg-white text-black py-5 rounded-full font-black uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-zinc-200 transition-all active:scale-95"
         >
@@ -216,7 +217,7 @@ const App: React.FC = () => {
           <h2 className="text-3xl font-brand italic uppercase tracking-tighter">{selectedLocation.name}</h2>
           <div className="flex items-center gap-2 text-[10px] font-bold text-yellow-400 mt-1 uppercase">
             <MapPin size={10} />
-            <span>Glenwood & Durban North</span>
+            <span>Kensington</span>
           </div>
         </div>
 
@@ -240,7 +241,7 @@ const App: React.FC = () => {
                       <span className="text-2xl font-black text-yellow-400 italic leading-none">R{s.price}</span>
                     </div>
                   </div>
-                  <button 
+                  <button
                     onClick={() => { setSelectedService(s); setStep(2); }}
                     className={`w-full py-3 font-black uppercase text-xs tracking-widest transition-all ${s.id === 'full' ? 'bg-[#FFC107] text-black' : 'bg-white text-black hover:bg-zinc-200'}`}
                   >
@@ -273,7 +274,7 @@ const App: React.FC = () => {
                 <div className="w-6 h-6 rounded-full bg-yellow-400 flex items-center justify-center text-black">
                   <MapPin size={14} />
                 </div>
-                <span className="text-xs font-bold uppercase tracking-wider">Street & Private Parking</span>
+                <span className="text-xs font-bold uppercase tracking-wider">Street Parking</span>
               </div>
             </div>
           </div>
@@ -283,47 +284,38 @@ const App: React.FC = () => {
   };
 
   return (
-    <Layout activeView={activeView} onViewChange={setActiveView}>
-      {activeView === 'customer' ? (
-        <>
-          {step === 0 && renderLanding()}
-          {step === 1 && renderServiceMenu()}
-          {step === 2 && (
-            <div className="p-6 space-y-8">
-              <button onClick={() => setStep(1)} className="flex items-center gap-2 text-zinc-500 uppercase text-[10px] font-black"><ChevronLeft size={16}/> Back to Menu</button>
-              <h2 className="text-2xl font-brand italic uppercase text-center">Select Time</h2>
-              <div className="bg-zinc-900 p-6">
-                <TimeGrid 
-                  selectedDate={selectedDate} 
-                  selectedTime={selectedTime} 
-                  onTimeSelect={(t) => { setSelectedTime(t); setStep(3); }}
-                  bookings={bookings}
-                />
-              </div>
-            </div>
-          )}
-          {step === 3 && selectedService && selectedTime && (
-            <div className="p-6 space-y-8">
-               <button onClick={() => setStep(2)} className="flex items-center gap-2 text-zinc-500 uppercase text-[10px] font-black"><ChevronLeft size={16}/> Back to Time</button>
-               <BookingSummary 
-                service={selectedService}
-                time={selectedTime}
-                date={selectedDate.toISOString().split('T')[0]}
-                customerName={customerName}
-                customerPhone={customerPhone}
-                notes={notes}
-                onNameChange={setCustomerName}
-                onPhoneChange={setCustomerPhone}
-                onNotesChange={setNotes}
-                onConfirm={handleConfirm}
-              />
-            </div>
-          )}
-        </>
-      ) : (
-        <div className="p-6">
-          <h2 className="text-3xl font-brand italic uppercase border-b border-zinc-900 pb-4 mb-6">Barber Login</h2>
-          <div className="bg-zinc-900 p-8 text-center text-zinc-500 italic">Restricted portal for Nev's internal systems.</div>
+    <Layout>
+      {step === 0 && renderLanding()}
+      {step === 1 && renderServiceMenu()}
+      {step === 2 && (
+        <div className="p-6 space-y-8">
+          <button onClick={() => setStep(1)} className="flex items-center gap-2 text-zinc-500 uppercase text-[10px] font-black"><ChevronLeft size={16} /> Back to Menu</button>
+          <h2 className="text-2xl font-brand italic uppercase text-center">Select Time</h2>
+          <div className="bg-zinc-900 p-6">
+            <TimeGrid
+              selectedDate={selectedDate}
+              selectedTime={selectedTime}
+              onTimeSelect={(t) => { setSelectedTime(t); setStep(3); }}
+              bookings={bookings}
+            />
+          </div>
+        </div>
+      )}
+      {step === 3 && selectedService && selectedTime && (
+        <div className="p-6 space-y-8">
+          <button onClick={() => setStep(2)} className="flex items-center gap-2 text-zinc-500 uppercase text-[10px] font-black"><ChevronLeft size={16} /> Back to Time</button>
+          <BookingSummary
+            service={selectedService}
+            time={selectedTime}
+            date={selectedDate.toISOString().split('T')[0]}
+            customerName={customerName}
+            customerPhone={customerPhone}
+            notes={notes}
+            onNameChange={setCustomerName}
+            onPhoneChange={setCustomerPhone}
+            onNotesChange={setNotes}
+            onConfirm={handleConfirm}
+          />
         </div>
       )}
     </Layout>
