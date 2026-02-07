@@ -23,4 +23,4 @@ export interface TimeSlot {
   isBooked: boolean;
 }
 
-export type ViewType = 'customer' | 'barber';
+export type ViewType = 'customer';

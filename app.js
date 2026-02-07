@@ -231,7 +231,7 @@ function renderLandingPage() {
             </div>
             <div class="feature-item">
               <div class="feature-icon">P</div>
-              <span class="feature-label">Parking On-Site</span>
+              <span class="feature-label">Street Parking</span>
             </div>
           </div>
         </div>
@@ -326,7 +326,7 @@ function renderServiceMenu() {
             <div class="detail-icon">
               <i data-feather="map-pin"></i>
             </div>
-            <span class="detail-label">Street & Private Parking</span>
+            <span class="detail-label">Street Parking</span>
           </div>
         </div>
       </div>

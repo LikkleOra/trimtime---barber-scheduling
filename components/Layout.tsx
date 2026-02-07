@@ -1,15 +1,13 @@
 
 import React from 'react';
-import { Scissors, Calendar, User, Info, MessageSquare } from 'lucide-react';
+import { Scissors, Calendar, Info, MessageSquare } from 'lucide-react';
 import { ViewType } from '../types';
 
 interface LayoutProps {
   children: React.ReactNode;
-  activeView: ViewType;
-  onViewChange: (view: ViewType) => void;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children, activeView, onViewChange }) => {
+const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="min-h-screen flex flex-col max-w-md mx-auto bg-[#0a0a0a] text-white shadow-2xl relative overflow-x-hidden">
       {/* Header - Brand Identity */}
@@ -37,11 +35,10 @@ const Layout: React.FC<LayoutProps> = ({ children, activeView, onViewChange }) =
 
       {/* Bottom Nav */}
       <nav className="sticky bottom-0 left-0 right-0 bg-[#050505] border-t border-zinc-900 px-6 py-4 flex justify-between items-center z-50">
-        <button 
-          onClick={() => onViewChange('customer')}
-          className={`flex flex-col items-center gap-1 transition-all ${activeView === 'customer' ? 'text-[#FFC107]' : 'text-zinc-600'}`}
+        <button
+          className="flex flex-col items-center gap-1 text-[#FFC107] transition-all"
         >
-          <Scissors size={20} className={activeView === 'customer' ? 'stroke-[3px]' : 'stroke-[1.5px]'} />
+          <Scissors size={20} className="stroke-[3px]" />
           <span className="text-[8px] font-black uppercase tracking-widest">Services</span>
         </button>
         <button className="flex flex-col items-center gap-1 text-zinc-600">
@@ -51,13 +48,6 @@ const Layout: React.FC<LayoutProps> = ({ children, activeView, onViewChange }) =
         <button className="flex flex-col items-center gap-1 text-zinc-600">
           <Info size={20} />
           <span className="text-[8px] font-black uppercase tracking-widest">About</span>
-        </button>
-        <button 
-          onClick={() => onViewChange('barber')}
-          className={`flex flex-col items-center gap-1 transition-all ${activeView === 'barber' ? 'text-[#FFC107]' : 'text-zinc-600'}`}
-        >
-          <User size={20} className={activeView === 'barber' ? 'stroke-[3px]' : 'stroke-[1.5px]'} />
-          <span className="text-[8px] font-black uppercase tracking-widest">Profile</span>
         </button>
       </nav>
     </div>
