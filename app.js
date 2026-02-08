@@ -73,7 +73,8 @@ const BARBER_CONFIG = {
 // ===== STATE MANAGEMENT =====
 
 const state = {
-  activeView: 'customer',
+  user: JSON.parse(localStorage.getItem('trimtime_user')) || null,
+  activeView: 'landing',
   selectedLocation: BARBER_CONFIG.locations[0],
   selectedService: null,
   selectedDate: new Date(),
@@ -82,7 +83,9 @@ const state = {
   customerPhone: '',
   notes: '',
   bookings: [],
-  step: 0 // 0: Landing, 1: Services, 2: Time, 3: Summary
+  reviews: JSON.parse(localStorage.getItem('trimtime_reviews')) || [],
+  step: 0, // 0: Landing, 1: Services, 2: Time, 3: Summary
+  isAdminMode: false
 };
 
 // ===== BOOKING SERVICE (Local Storage) =====
@@ -107,6 +110,47 @@ const bookingService = {
     const updated = bookings.filter(b => b.id !== id);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
     window.dispatchEvent(new Event('storage'));
+  },
+
+  updateBookingStatus(id, status) {
+    const bookings = this.getBookings();
+    const index = bookings.findIndex(b => b.id === id);
+    if (index !== -1) {
+      bookings[index].status = status;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(bookings));
+      window.dispatchEvent(new Event('storage'));
+    }
+  },
+
+  addReview(review) {
+    const reviews = JSON.parse(localStorage.getItem('trimtime_reviews') || '[]');
+    reviews.push(review);
+    localStorage.setItem('trimtime_reviews', JSON.stringify(reviews));
+    state.reviews = reviews;
+    window.dispatchEvent(new Event('storage'));
+  }
+};
+
+const authService = {
+  login(name, phone) {
+    const user = { name, phone, role: 'client' };
+    localStorage.setItem('trimtime_user', JSON.stringify(user));
+    state.user = user;
+    return user;
+  },
+  adminLogin(password) {
+    if (password === 'nev') {
+      const user = { name: 'Nev', phone: 'Admin', role: 'admin' };
+      localStorage.setItem('trimtime_user', JSON.stringify(user));
+      state.user = user;
+      return user;
+    }
+    return null;
+  },
+  logout() {
+    localStorage.removeItem('trimtime_user');
+    state.user = null;
+    window.location.reload();
   }
 };
 
@@ -377,6 +421,14 @@ function renderBookingSummary() {
   const service = state.selectedService;
   const dateStr = formatDate(state.selectedDate);
 
+  // Pre-fill customer details from logged-in user
+  if (state.user && !state.customerName) {
+    state.customerName = state.user.name;
+  }
+  if (state.user && !state.customerPhone) {
+    state.customerPhone = state.user.phone;
+  }
+
   container.innerHTML = `
     <div class="booking-summary">
       <button class="back-btn" onclick="navigateToStep(2)" style="margin-bottom: 1rem;">
@@ -511,55 +563,106 @@ function renderBookingSummary() {
   feather.replace();
 }
 
-function renderProfileView() {
-  const container = document.getElementById('barber-view');
+function renderAuthPage() {
+  const container = document.getElementById('auth-view');
+  const error = state.authError || '';
 
   container.innerHTML = `
-    <div class="barber-view">
-      <h2 class="barber-title">My Profile</h2>
-      <div class="barber-content">
-        Manage your profile and preferences here. This section will be expanded with more details later.
+    <div class="auth-screen">
+      <div class="auth-container">
+        <h2 class="section-title">${state.isAdminLogin ? 'Admin Access' : 'Welcome to TrimTime'}</h2>
+        <p class="section-description">${state.isAdminLogin ? 'Enter password to access dashboard' : 'Please enter your details to continue'}</p>
+        
+        <form id="auth-form" onsubmit="handleAuthSubmit(event)">
+          ${!state.isAdminLogin ? `
+            <input type="text" id="auth-name" class="input-field" placeholder="Your Name" required>
+            <input type="tel" id="auth-phone" class="input-field" placeholder="Phone Number" required>
+          ` : `
+            <input type="password" id="auth-password" class="input-field" placeholder="Admin Password" required autoFocus>
+          `}
+          ${error ? `<p class="error-text">${error}</p>` : ''}
+          <button type="submit" class="btn-primary" style="margin-top: 2rem;">
+            ${state.isAdminLogin ? 'Login as Admin' : 'Start Booking'}
+          </button>
+        </form>
+
+        <div class="auth-footer">
+          <button class="link-btn" onclick="toggleAdminLogin()">
+            ${state.isAdminLogin ? 'Back to Client Booking' : 'Are you Nev? (Admin Login)'}
+          </button>
+        </div>
       </div>
     </div>
   `;
 }
 
-function renderBookingsView() {
-  const container = document.getElementById('bookings-view');
+function renderAdminDashboard() {
+  const container = document.getElementById('admin-view');
   const bookings = bookingService.getBookings();
 
   container.innerHTML = `
-    <div class="booking-summary">
-      <h2 class="barber-title">My Bookings</h2>
-      ${bookings.length === 0 ? `
-        <div class="barber-content">
-          You have no active bookings.
-        </div>
-      ` : `
-        <div class="service-list">
-          ${bookings.map(b => {
-    const service = SERVICES.find(s => s.id === b.serviceId);
-    return `
-              <div class="service-card" style="margin-bottom: 1rem;">
-                <div class="service-card-header">
-                  <div>
-                    <h4 class="service-name">${service ? service.name : 'Unknown Service'}</h4>
-                    <p class="service-details">${b.date} • ${b.time}</p>
+    <div class="admin-dashboard">
+      <div class="admin-header">
+        <h2 class="section-title">Admin Dashboard</h2>
+        <button class="logout-btn" onclick="authService.logout()">Logout</button>
+      </div>
+      
+      <div class="admin-content">
+        <h3 class="category-title">Upcoming Appointments</h3>
+        ${bookings.length === 0 ? '<p class="empty-text">No bookings yet...</p>' : `
+          <div class="admin-booking-list">
+            ${bookings.map(b => `
+              <div class="admin-booking-card">
+                <div class="booking-main">
+                  <div class="booking-user">
+                    <i data-feather="user"></i>
+                    <span>${b.customerName}</span>
                   </div>
-                  <div class="service-price-container">
-                    <span class="service-price">Confirmed</span>
+                  <div class="booking-time">
+                    <i data-feather="clock"></i>
+                    <span>${b.date} • ${b.time}</span>
                   </div>
                 </div>
-                <button class="btn-book" onclick="deleteBooking('${b.id}')" style="background-color: var(--color-accent-red); color: white;">
-                  Cancel Booking
-                </button>
+                <div class="booking-status-badge ${b.status}">${b.status}</div>
+                <div class="booking-actions">
+                  <button class="btn-confirm" onclick="updateStatus('${b.id}', 'confirmed')">Confirm</button>
+                  <button class="btn-cancel" onclick="updateStatus('${b.id}', 'cancelled')">Cancel</button>
+                </div>
               </div>
-            `;
-  }).join('')}
-        </div>
-      `}
+            `).join('')}
+          </div>
+        `}
+      </div>
     </div>
   `;
+  feather.replace();
+}
+
+function renderReviewPage() {
+  const container = document.getElementById('review-view');
+  container.innerHTML = `
+    <div class="review-page">
+      <button class="back-btn" onclick="navigateToStep(0)">
+        <i data-feather="chevron-left"></i>
+      </button>
+      <h2 class="section-title">Share the Vibe</h2>
+      <p class="section-description">Tell the community about your legendary cut.</p>
+      
+      <form id="review-form" onsubmit="handleReviewSubmit(event)" style="margin-top: 2rem;">
+        <div class="rating-input">
+          <p class="label">How's the cut?</p>
+          <div class="stars">
+            ${[1, 2, 3, 4, 5].map(s => `
+              <i data-feather="star" onclick="setRating(${s})" class="${state.tempRating >= s ? 'active' : ''}"></i>
+            `).join('')}
+          </div>
+        </div>
+        <textarea id="review-comment" class="input-field" placeholder="What a vibe! The fade is legendary..." style="min-height: 150px;"></textarea>
+        <button type="submit" class="btn-primary" style="margin-top: 2rem;">Post Review</button>
+      </form>
+    </div>
+  `;
+  feather.replace();
 }
 
 function renderAboutView() {
@@ -589,12 +692,26 @@ function showView(viewName) {
     viewElement.classList.add('active');
   }
 
-  // Update navigation
+  // Update navigation visibility
+  const nav = document.querySelector('nav');
+  if (nav) {
+    if (viewName === 'auth' || viewName === 'admin') {
+      nav.style.display = 'none';
+      document.querySelector('.support-fab').style.display = 'none';
+    } else {
+      nav.style.display = 'flex';
+      document.querySelector('.support-fab').style.display = 'flex';
+    }
+  }
+
+  // Update navigation active state
   document.querySelectorAll('.nav-btn').forEach(btn => {
     btn.classList.remove('active');
   });
-  const activeBtn = document.querySelector(`[data-view="${viewName}"]`);
-  if (activeBtn) {
+  const activeBtn = document.querySelector(`[data-view="${viewName}"]`) || document.querySelector(`[data-view="customer"]`);
+  if (activeBtn && (viewName === 'landing' || viewName === 'customer')) {
+    activeBtn.classList.add('active');
+  } else if (activeBtn) {
     activeBtn.classList.add('active');
   }
 }
@@ -691,9 +808,9 @@ function confirmBooking() {
       serviceId: state.selectedService.id,
       date: dateStr,
       time: state.selectedTime,
-      customerName: state.customerName,
-      customerPhone: state.customerPhone,
-      status: 'confirmed'
+      customerName: state.user.name || state.customerName, // Use logged in user name
+      customerPhone: state.user.phone || state.customerPhone,
+      status: 'pending'
     });
 
     // Reset state & navigate
@@ -710,7 +827,7 @@ function confirmBooking() {
 function changeView(viewName) {
   state.activeView = viewName;
 
-  if (viewName === 'customer') {
+  if (viewName === 'customer' || viewName === 'landing') {
     navigateToStep(state.step);
   } else if (viewName === 'bookings') {
     renderBookingsView();
@@ -718,9 +835,12 @@ function changeView(viewName) {
   } else if (viewName === 'about') {
     renderAboutView();
     showView('about');
-  } else if (viewName === 'barber') {
-    renderProfileView();
-    showView('barber');
+  } else if (viewName === 'review') {
+    renderReviewPage();
+    showView('review');
+  } else if (viewName === 'admin') {
+    renderAdminDashboard();
+    showView('admin');
   }
 }
 
@@ -729,6 +849,55 @@ function deleteBooking(id) {
     bookingService.deleteBooking(id);
     renderBookingsView();
   }
+}
+
+function updateStatus(id, status) {
+  bookingService.updateBookingStatus(id, status);
+  renderAdminDashboard();
+}
+
+function toggleAdminLogin() {
+  state.isAdminLogin = !state.isAdminLogin;
+  state.authError = '';
+  renderAuthPage();
+}
+
+function handleAuthSubmit(e) {
+  e.preventDefault();
+  if (state.isAdminLogin) {
+    const pass = document.getElementById('auth-password').value;
+    const user = authService.adminLogin(pass);
+    if (user) {
+      init();
+    } else {
+      state.authError = 'Invalid admin password';
+      renderAuthPage();
+    }
+  } else {
+    const name = document.getElementById('auth-name').value;
+    const phone = document.getElementById('auth-phone').value;
+    authService.login(name, phone);
+    init();
+  }
+}
+
+function handleReviewSubmit(e) {
+  e.preventDefault();
+  const comment = document.getElementById('review-comment').value;
+  bookingService.addReview({
+    id: Date.now(),
+    customerName: state.user.name,
+    rating: state.tempRating || 5,
+    comment,
+    date: new Date().toISOString()
+  });
+  alert('Lekker Nev! Thanks for the feedback.');
+  navigateToStep(0);
+}
+
+function setRating(r) {
+  state.tempRating = r;
+  renderReviewPage();
 }
 
 function refreshBookings() {
@@ -741,12 +910,17 @@ function init() {
   // Load bookings
   refreshBookings();
 
-  // Listen for storage changes
-  window.addEventListener('storage', refreshBookings);
-
-  // Render initial view
-  renderLandingPage();
-  showView('landing');
+  if (!state.user) {
+    showView('auth');
+    renderAuthPage();
+  } else if (state.user.role === 'admin') {
+    showView('admin');
+    renderAdminDashboard();
+  } else {
+    // Render initial client view
+    renderLandingPage();
+    showView('landing');
+  }
 
   console.log('FadeZone Grooming App initialized!');
 }

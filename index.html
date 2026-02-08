@@ -33,6 +33,11 @@
 
     <!-- Main Content -->
     <main>
+      <!-- Auth View -->
+      <div id="auth-view" class="view">
+        <!-- Content will be rendered by JavaScript -->
+      </div>
+
       <!-- Customer Landing View -->
       <div id="landing-view" class="view active">
         <!-- Content will be rendered by JavaScript -->
@@ -58,19 +63,24 @@
         <!-- Content will be rendered by JavaScript -->
       </div>
 
+      <!-- Review View -->
+      <div id="review-view" class="view">
+        <!-- Content will be rendered by JavaScript -->
+      </div>
+
+      <!-- Admin View -->
+      <div id="admin-view" class="view">
+        <!-- Content will be rendered by JavaScript -->
+      </div>
+
       <!-- About View -->
       <div id="about-view" class="view">
         <!-- Content will be rendered by JavaScript -->
       </div>
-
-      <!-- Barber View -->
-      <div id="barber-view" class="view">
-        <!-- Content will be rendered by JavaScript -->
-      </div>
     </main>
 
-    <!-- Support FAB -->
-    <button class="support-fab" aria-label="Support">
+    <!-- Support FAB (Reviews) -->
+    <button class="support-fab" aria-label="Support" onclick="changeView('review')">
       <i data-feather="message-square"></i>
     </button>
 

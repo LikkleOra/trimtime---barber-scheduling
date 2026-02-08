@@ -3,21 +3,27 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Layout from './components/Layout';
 import TimeGrid from './components/TimeGrid';
 import BookingSummary from './components/BookingSummary';
+import AuthScreen from './components/AuthScreen';
+import AdminDashboard from './components/AdminDashboard';
+import ReviewPage from './components/ReviewPage';
 import { SERVICES, BARBER_CONFIG } from './constants';
-import { Service, Booking } from './types';
+import { Service, Booking, User } from './types';
 import { bookingService } from './services/bookingService';
-import { ChevronRight, MapPin, CheckCircle, Smartphone, ChevronLeft, ArrowRight } from 'lucide-react';
+import { authService } from './services/authService';
+import { ChevronRight, MapPin, CheckCircle, Smartphone, ChevronLeft, ArrowRight, Star } from 'lucide-react';
 
 const App: React.FC = () => {
+  const [user, setUser] = useState<User | null>(authService.getCurrentUser());
   const [selectedLocation, setSelectedLocation] = useState(BARBER_CONFIG.locations[0]);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
-  const [customerName, setCustomerName] = useState('');
-  const [customerPhone, setCustomerPhone] = useState('');
+  const [customerName, setCustomerName] = useState(user?.name || '');
+  const [customerPhone, setCustomerPhone] = useState(user?.phone || '');
   const [notes, setNotes] = useState('');
   const [bookings, setBookings] = useState<Booking[]>([]);
-  const [step, setStep] = useState<0 | 1 | 2 | 3>(0); // 0: Landing, 1: Services, 2: Time, 3: Summary
+  const [step, setStep] = useState<0 | 1 | 2 | 3 | 4 | 5>(0); // 0: Landing, 1: Services, 2: Time, 3: Summary, 4: Reviews, 5: My Bookings
+  const [isReviewOpen, setIsReviewOpen] = useState(false);
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -27,8 +33,12 @@ const App: React.FC = () => {
 
   useEffect(() => {
     refreshBookings();
-    window.addEventListener('storage', refreshBookings);
-    return () => window.removeEventListener('storage', refreshBookings);
+    const handleStorage = () => {
+      refreshBookings();
+      setUser(authService.getCurrentUser());
+    };
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
   }, [refreshBookings]);
 
   const handleConfirm = () => {
@@ -45,7 +55,7 @@ const App: React.FC = () => {
       time: selectedTime,
       customerName,
       customerPhone,
-      status: 'confirmed'
+      status: 'pending' // Default to pending for admin to confirm
     });
 
     setStep(0);
@@ -59,6 +69,18 @@ const App: React.FC = () => {
       scrollRef.current.scrollTo({ left: scrollTo, behavior: 'smooth' });
     }
   };
+
+  if (!user) {
+    return <AuthScreen onAuthComplete={() => setUser(authService.getCurrentUser())} />;
+  }
+
+  if (user.role === 'admin') {
+    return (
+      <Layout onLogout={() => authService.logout()}>
+        <AdminDashboard />
+      </Layout>
+    );
+  }
 
   const renderLanding = () => (
     <div className="space-y-12 pb-10">
@@ -217,7 +239,7 @@ const App: React.FC = () => {
           <h2 className="text-3xl font-brand italic uppercase tracking-tighter">{selectedLocation.name}</h2>
           <div className="flex items-center gap-2 text-[10px] font-bold text-yellow-400 mt-1 uppercase">
             <MapPin size={10} />
-            <span>Kensington</span>
+            <span>{selectedLocation.name}</span>
           </div>
         </div>
 
@@ -283,21 +305,81 @@ const App: React.FC = () => {
     );
   };
 
+  const renderMyBookings = () => {
+    const myBookings = bookings.filter(b => b.customerPhone === user.phone);
+    return (
+      <div className="p-6 space-y-8">
+        <button onClick={() => setStep(0)} className="flex items-center gap-2 text-zinc-500 uppercase text-[10px] font-black"><ChevronLeft size={16} /> Back</button>
+        <h2 className="text-4xl font-brand italic uppercase tracking-tighter">My Bookings</h2>
+        {myBookings.length === 0 ? (
+          <div className="py-20 text-center space-y-4">
+            <p className="text-zinc-500 italic">No bookings yet. Ready for a legendary cut?</p>
+            <button onClick={() => setStep(1)} className="text-[#FFC107] font-black uppercase text-xs border-b border-[#FFC107]">Book Now</button>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {myBookings.map(b => (
+              <div key={b.id} className="bg-zinc-900/50 p-6 border border-zinc-800 flex justify-between items-center">
+                <div className="space-y-1">
+                  <span className="text-sm font-black uppercase block">{SERVICES.find(s => s.id === b.serviceId)?.name || 'Haircut'}</span>
+                  <span className="text-[10px] font-bold text-zinc-500 uppercase">{b.date} • {b.time}</span>
+                </div>
+                <span className={`text-[8px] font-black uppercase px-2 py-1 rounded ${b.status === 'confirmed' ? 'bg-green-500/20 text-green-500' : 'bg-yellow-500/20 text-yellow-500'
+                  }`}>
+                  {b.status}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+
   return (
-    <Layout>
+    <Layout
+      onLogout={() => authService.logout()}
+      onReviewClick={() => setStep(4)}
+      onMyBookingsClick={() => setStep(5)}
+      onServicesClick={() => setStep(0)}
+    >
       {step === 0 && renderLanding()}
       {step === 1 && renderServiceMenu()}
       {step === 2 && (
         <div className="p-6 space-y-8">
           <button onClick={() => setStep(1)} className="flex items-center gap-2 text-zinc-500 uppercase text-[10px] font-black"><ChevronLeft size={16} /> Back to Menu</button>
-          <h2 className="text-2xl font-brand italic uppercase text-center">Select Time</h2>
-          <div className="bg-zinc-900 p-6">
-            <TimeGrid
-              selectedDate={selectedDate}
-              selectedTime={selectedTime}
-              onTimeSelect={(t) => { setSelectedTime(t); setStep(3); }}
-              bookings={bookings}
-            />
+          <div className="space-y-6">
+            <h2 className="text-2xl font-brand italic uppercase text-center">Select Date & Time</h2>
+            <div className="flex overflow-x-auto gap-3 pb-4 no-scrollbar -mx-2 px-2">
+              {[...Array(14)].map((_, i) => {
+                const date = new Date();
+                date.setDate(date.getDate() + i);
+                const isSelected = selectedDate.toDateString() === date.toDateString();
+                const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
+                const dayNum = date.getDate();
+                return (
+                  <button
+                    key={i}
+                    onClick={() => setSelectedDate(date)}
+                    className={`flex flex-col items-center min-w-[60px] py-4 rounded-2xl border transition-all ${isSelected
+                      ? 'bg-yellow-400 border-yellow-400 text-black shadow-[0_0_15px_rgba(250,204,21,0.3)]'
+                      : 'bg-zinc-900 border-zinc-800 text-zinc-400'
+                      }`}
+                  >
+                    <span className="text-[10px] font-black uppercase tracking-tighter mb-1">{dayName}</span>
+                    <span className="text-xl font-black italic">{dayNum}</span>
+                  </button>
+                );
+              })}
+            </div>
+            <div className="bg-zinc-900 p-6">
+              <TimeGrid
+                selectedDate={selectedDate}
+                selectedTime={selectedTime}
+                onTimeSelect={(t) => { setSelectedTime(t); setStep(3); }}
+                bookings={bookings}
+              />
+            </div>
           </div>
         </div>
       )}
@@ -318,6 +400,8 @@ const App: React.FC = () => {
           />
         </div>
       )}
+      {step === 4 && <ReviewPage onBack={() => setStep(0)} />}
+      {step === 5 && renderMyBookings()}
     </Layout>
   );
 };
