@@ -996,3 +996,28 @@ if (document.readyState === 'loading') {
 } else {
   init();
 }
+
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+
+// Expose functions to global scope for HTML event handlers
+window.changeView = changeView;
+window.selectLocation = selectLocation;
+window.navigateToStep = navigateToStep;
+window.selectService = selectService;
+window.selectTime = selectTime;
+window.renderBookingSummary = renderBookingSummary;
+window.validateBookingForm = validateBookingForm;
+window.confirmBooking = confirmBooking;
+window.scrollCarousel = scrollCarousel;
+window.handleLogin = handleLogin;
+window.handleAuthSubmit = handleAuthSubmit;
+window.toggleAdminLogin = toggleAdminLogin;
+window.deleteBooking = deleteBooking;
+window.updateStatus = updateStatus;
+window.handleReviewSubmit = handleReviewSubmit;
+window.setRating = setRating;
