@@ -7,6 +7,13 @@ export interface Service {
   description: string;
 }
 
+export interface User {
+  id: string;
+  name: string;
+  phone: string;
+  role: 'client' | 'admin';
+}
+
 export interface Booking {
   id: string;
   serviceId: string;
@@ -15,7 +22,16 @@ export interface Booking {
   customerName: string;
   customerPhone: string;
   notes?: string;
-  status: 'confirmed' | 'pending';
+  status: 'confirmed' | 'pending' | 'cancelled';
+}
+
+export interface Review {
+  id: string;
+  customerId: string;
+  customerName: string;
+  rating: number; // 1-5
+  comment: string;
+  date: string;
 }
 
 export interface TimeSlot {
@@ -23,4 +39,4 @@ export interface TimeSlot {
   isBooked: boolean;
 }
 
-export type ViewType = 'customer' | 'barber';
+export type ViewType = 'client' | 'admin';

@@ -54,9 +54,9 @@ const BARBER_CONFIG = {
   shopName: 'FadeZone Grooming',
   locations: [
     {
-      id: 'jb',
-      name: 'Johannesburg',
-      address: 'Sandton City, Sandton, Johannesburg',
+      id: 'kt',
+      name: 'Kensington',
+      address: '424 Commissioner street Kensington',
       hours: [
         { day: 'Monday', time: '08:00 - 18:00', status: 'active' },
         { day: 'Tuesday', time: '08:00 - 18:00', status: 'active' },
@@ -73,7 +73,8 @@ const BARBER_CONFIG = {
 // ===== STATE MANAGEMENT =====
 
 const state = {
-  activeView: 'customer',
+  user: JSON.parse(localStorage.getItem('trimtime_user')) || null,
+  activeView: 'landing',
   selectedLocation: BARBER_CONFIG.locations[0],
   selectedService: null,
   selectedDate: new Date(),
@@ -82,7 +83,11 @@ const state = {
   customerPhone: '',
   notes: '',
   bookings: [],
-  step: 0 // 0: Landing, 1: Services, 2: Time, 3: Summary
+  reviews: JSON.parse(localStorage.getItem('trimtime_reviews')) || [],
+  step: 0, // 0: Landing, 1: Services, 2: Time, 3: Summary
+  isAdminMode: false,
+  isAdminLogin: false,
+  authError: ''
 };
 
 // ===== BOOKING SERVICE (Local Storage) =====
@@ -107,6 +112,58 @@ const bookingService = {
     const updated = bookings.filter(b => b.id !== id);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
     window.dispatchEvent(new Event('storage'));
+  },
+
+  updateBookingStatus(id, status) {
+    const bookings = this.getBookings();
+    const index = bookings.findIndex(b => b.id === id);
+    if (index !== -1) {
+      bookings[index].status = status;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(bookings));
+      window.dispatchEvent(new Event('storage'));
+    }
+  },
+
+  addReview(review) {
+    const reviews = JSON.parse(localStorage.getItem('trimtime_reviews') || '[]');
+    reviews.push(review);
+    localStorage.setItem('trimtime_reviews', JSON.stringify(reviews));
+    state.reviews = reviews;
+    window.dispatchEvent(new Event('storage'));
+  }
+};
+
+const authService = {
+  login(name, phone) {
+    const user = { name, phone, role: 'client' };
+    localStorage.setItem('trimtime_user', JSON.stringify(user));
+    state.user = user;
+    return user;
+  },
+  /**
+   * TODO: [SECURITY] This client-side check is HIGHLY INSECURE.
+   * Hardcoded passwords must be replaced with a secure server-side 
+   * authentication endpoint (e.g., POST /auth/login) before production.
+   * Admin roles must never be derived on the client and instead should 
+   * be based on signed, server-validated tokens.
+   */
+  async adminLogin(password) {
+    // Simulating a server call to a secure backend
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    // In production, the password check happens on the server
+    if (password === 'nev') {
+      const user = { name: 'Nev', phone: 'Admin', role: 'admin' };
+      localStorage.setItem('trimtime_user', JSON.stringify(user));
+      state.user = user;
+      return user;
+    }
+    return null;
+  },
+  logout() {
+    localStorage.removeItem('trimtime_user');
+    state.user = null;
+    window.location.reload();
   }
 };
 
@@ -129,6 +186,13 @@ function formatDate(date) {
   return date.toISOString().split('T')[0];
 }
 
+function escapeHtml(str) {
+  if (typeof str !== 'string') return str;
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
 // ===== RENDER FUNCTIONS =====
 
 function renderLandingPage() {
@@ -139,7 +203,7 @@ function renderLandingPage() {
     <div class="location-toggle">
       <div class="toggle-buttons">
         <button class="toggle-btn active" style="flex: 1; cursor: default;">
-          ${state.selectedLocation.name}
+          ${escapeHtml(state.selectedLocation.name)}
         </button>
       </div>
     </div>
@@ -208,12 +272,12 @@ function renderLandingPage() {
         <h4>Opening Times</h4>
         <div class="hours-list">
           ${state.selectedLocation.hours.map(h => `
-            <div class="hours-item ${h.status === 'current' ? 'current' : ''}">
+            <div class="hours-item ${escapeHtml(h.status) === 'current' ? 'current' : ''}">
               <div class="hours-day">
-                <div class="status-dot ${h.status === 'active' || h.status === 'current' ? 'active' : ''}"></div>
-                <span>${h.day.slice(0, 3)}</span>
+                <div class="status-dot ${escapeHtml(h.status) === 'active' || escapeHtml(h.status) === 'current' ? 'active' : ''}"></div>
+                <span>${escapeHtml(h.day.slice(0, 3))}</span>
               </div>
-              <span>${h.time}</span>
+              <span>${escapeHtml(h.time)}</span>
             </div>
           `).join('')}
         </div>
@@ -221,7 +285,7 @@ function renderLandingPage() {
       <div class="info-section">
         <h4>The Spot</h4>
         <div class="location-info">
-          <p>${state.selectedLocation.address}</p>
+          <p>${escapeHtml(state.selectedLocation.address)}</p>
           <div class="location-features">
             <div class="feature-item">
               <div class="feature-icon">
@@ -231,7 +295,7 @@ function renderLandingPage() {
             </div>
             <div class="feature-item">
               <div class="feature-icon">P</div>
-              <span class="feature-label">Parking On-Site</span>
+              <span class="feature-label">Street Parking</span>
             </div>
           </div>
         </div>
@@ -269,7 +333,7 @@ function renderServiceMenu() {
       <h2 class="shop-name">${state.selectedLocation.name}</h2>
       <div class="shop-location">
         <i data-feather="map-pin"></i>
-        <span>Johannesburg</span>
+        <span>${escapeHtml(state.selectedLocation.name)}</span>
       </div>
     </div>
 
@@ -326,7 +390,7 @@ function renderServiceMenu() {
             <div class="detail-icon">
               <i data-feather="map-pin"></i>
             </div>
-            <span class="detail-label">Street & Private Parking</span>
+            <span class="detail-label">Street Parking</span>
           </div>
         </div>
       </div>
@@ -352,15 +416,15 @@ function renderTimeSelection() {
       <div class="time-grid-container">
         <div class="time-grid">
           ${slots.map(time => {
-    const isOccupied = state.bookings.some(b => b.date === dateStr && b.time === time);
+    const isOccupied = state.bookings.some(b => escapeHtml(b.date) === escapeHtml(dateStr) && escapeHtml(b.time) === escapeHtml(time));
     const isSelected = state.selectedTime === time;
     return `
               <button 
                 class="time-slot ${isSelected ? 'selected' : ''}"
                 ${isOccupied ? 'disabled' : ''}
-                onclick="selectTime('${time}')"
+                onclick="selectTime('${escapeHtml(time)}')"
               >
-                ${time}
+                ${escapeHtml(time)}
               </button>
             `;
   }).join('')}
@@ -377,6 +441,14 @@ function renderBookingSummary() {
   const service = state.selectedService;
   const dateStr = formatDate(state.selectedDate);
 
+  // Pre-fill customer details from logged-in user
+  if (state.user && !state.customerName) {
+    state.customerName = state.user.name;
+  }
+  if (state.user && !state.customerPhone) {
+    state.customerPhone = state.user.phone;
+  }
+
   container.innerHTML = `
     <div class="booking-summary">
       <button class="back-btn" onclick="navigateToStep(2)" style="margin-bottom: 1rem;">
@@ -391,7 +463,7 @@ function renderBookingSummary() {
             <h3 class="receipt-title">Booking Summary</h3>
             <p class="receipt-ref">Ref: #NZ-2941-DN</p>
           </div>
-          <span class="receipt-badge">${state.selectedLocation.name}</span>
+          <span class="receipt-badge">${escapeHtml(state.selectedLocation.name)}</span>
         </div>
 
         <!-- Location Section -->
@@ -401,7 +473,7 @@ function renderBookingSummary() {
           </div>
           <div class="location-text">
             <h5>Location</h5>
-            <p>${state.selectedLocation.address}</p>
+            <p>${escapeHtml(state.selectedLocation.address)}</p>
           </div>
         </div>
 
@@ -412,8 +484,8 @@ function renderBookingSummary() {
           <h5>Service</h5>
           <div class="service-info">
             <div>
-              <h4>${service.name}</h4>
-              <p class="service-meta">${service.duration} Mins • All professionals</p>
+              <h4>${escapeHtml(service.name)}</h4>
+              <p class="service-meta">${escapeHtml(service.duration)} Mins • All professionals</p>
             </div>
             <span class="service-amount">R ${service.price.toFixed(2)}</span>
           </div>
@@ -439,8 +511,8 @@ function renderBookingSummary() {
 
         <!-- Date Time Section -->
         <div class="receipt-datetime">
-          <span>Date: ${dateStr}</span>
-          <span>Time: ${state.selectedTime}</span>
+          <span>Date: ${escapeHtml(dateStr)}</span>
+          <span>Time: ${escapeHtml(state.selectedTime)}</span>
         </div>
 
         <!-- Barcode Element -->
@@ -457,7 +529,7 @@ function renderBookingSummary() {
           type="text" 
           class="input-field"
           placeholder="ENTER YOUR NAME"
-          value="${state.customerName}"
+          value="${escapeHtml(state.customerName)}"
           oninput="updateCustomerName(this.value)"
         >
         <input 
@@ -465,7 +537,7 @@ function renderBookingSummary() {
           type="tel" 
           class="input-field"
           placeholder="PHONE NUMBER"
-          value="${state.customerPhone}"
+          value="${escapeHtml(state.customerPhone)}"
           oninput="updateCustomerPhone(this.value)"
         >
       </div>
@@ -511,17 +583,106 @@ function renderBookingSummary() {
   feather.replace();
 }
 
-function renderProfileView() {
-  const container = document.getElementById('barber-view');
+function renderAuthPage() {
+  const container = document.getElementById('auth-view');
+  const error = state.authError || '';
 
   container.innerHTML = `
-    <div class="barber-view">
-      <h2 class="barber-title">My Profile</h2>
-      <div class="barber-content">
-        Manage your profile and preferences here. This section will be expanded with more details later.
+    <div class="auth-screen">
+      <div class="auth-container">
+        <h2 class="section-title">${state.isAdminLogin ? 'Admin Access' : 'Welcome to TrimTime'}</h2>
+        <p class="section-description">${state.isAdminLogin ? 'Enter password to access dashboard' : 'Please enter your details to continue'}</p>
+        
+        <form id="auth-form" onsubmit="handleAuthSubmit(event)">
+          ${!state.isAdminLogin ? `
+            <input type="text" id="auth-name" class="input-field" placeholder="Your Name" required>
+            <input type="tel" id="auth-phone" class="input-field" placeholder="Phone Number" required>
+          ` : `
+            <input type="password" id="auth-password" class="input-field" placeholder="Admin Password" required autofocus>
+          `}
+          ${error ? `<p class="error-text">${error}</p>` : ''}
+          <button type="submit" class="btn-primary" style="margin-top: 2rem;">
+            ${state.isAdminLogin ? 'Login as Admin' : 'Start Booking'}
+          </button>
+        </form>
+
+        <div class="auth-footer">
+          <button class="link-btn" onclick="toggleAdminLogin()">
+            ${state.isAdminLogin ? 'Back to Client Booking' : 'Are you Nev? (Admin Login)'}
+          </button>
+        </div>
       </div>
     </div>
   `;
+}
+
+function renderAdminDashboard() {
+  const container = document.getElementById('admin-view');
+  const bookings = bookingService.getBookings();
+
+  container.innerHTML = `
+    <div class="admin-dashboard">
+      <div class="admin-header">
+        <h2 class="section-title">Admin Dashboard</h2>
+        <button class="logout-btn" onclick="authService.logout()">Logout</button>
+      </div>
+      
+      <div class="admin-content">
+        <h3 class="category-title">Upcoming Appointments</h3>
+        ${bookings.length === 0 ? '<p class="empty-text">No bookings yet...</p>' : `
+          <div class="admin-booking-list">
+            ${bookings.map(b => `
+              <div class="admin-booking-card">
+                <div class="booking-main">
+                  <div class="booking-user">
+                    <i data-feather="user"></i>
+                    <span>${escapeHtml(b.customerName)}</span>
+                  </div>
+                  <div class="booking-time">
+                    <i data-feather="clock"></i>
+                    <span>${escapeHtml(b.date)} • ${escapeHtml(b.time)}</span>
+                  </div>
+                </div>
+                <div class="booking-status-badge ${escapeHtml(b.status)}">${escapeHtml(b.status)}</div>
+                <div class="booking-actions">
+                  <button class="btn-confirm" onclick="updateStatus('${escapeHtml(b.id)}', 'confirmed')">Confirm</button>
+                  <button class="btn-cancel" onclick="updateStatus('${escapeHtml(b.id)}', 'cancelled')">Cancel</button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `}
+      </div>
+    </div>
+  `;
+  feather.replace();
+}
+
+function renderReviewPage() {
+  const container = document.getElementById('review-view');
+  container.innerHTML = `
+    <div class="review-page">
+      <button class="back-btn" onclick="navigateToStep(0)">
+        <i data-feather="chevron-left"></i>
+      </button>
+      <h2 class="section-title">Share the Vibe</h2>
+      <p class="section-description">Tell the community about your legendary cut.</p>
+      
+      <form id="review-form" onsubmit="handleReviewSubmit(event)" style="margin-top: 2rem;">
+        <div class="rating-input">
+          <p class="label">How's the cut?</p>
+          <div class="stars">
+            ${[1, 2, 3, 4, 5].map(s => `
+              <i data-feather="star" onclick="setRating(${s})" class="${state.tempRating >= s ? 'active' : ''}"></i>
+            `).join('')}
+          </div>
+        </div>
+        <textarea id="review-comment" class="input-field" placeholder="What a vibe! The fade is legendary..." style="min-height: 150px;"></textarea>
+        <button type="submit" class="btn-primary" style="margin-top: 2rem;">Post Review</button>
+      </form>
+    </div>
+  `;
+  feather.replace();
 }
 
 function renderBookingsView() {
@@ -543,14 +704,14 @@ function renderBookingsView() {
               <div class="service-card" style="margin-bottom: 1rem;">
                 <div class="service-card-header">
                   <div>
-                    <h4 class="service-name">${service ? service.name : 'Unknown Service'}</h4>
-                    <p class="service-details">${b.date} • ${b.time}</p>
+                    <h4 class="service-name">${escapeHtml(service ? service.name : 'Unknown Service')}</h4>
+                    <p class="service-details">${escapeHtml(b.date)} • ${escapeHtml(b.time)}</p>
                   </div>
                   <div class="service-price-container">
-                    <span class="service-price">Confirmed</span>
+                    <span class="service-price">${escapeHtml(b.status || 'Confirmed')}</span>
                   </div>
                 </div>
-                <button class="btn-book" onclick="deleteBooking('${b.id}')" style="background-color: var(--color-accent-red); color: white;">
+                <button class="btn-book" onclick="deleteBooking('${escapeHtml(b.id)}')" style="background-color: var(--color-accent-red); color: white;">
                   Cancel Booking
                 </button>
               </div>
@@ -566,13 +727,18 @@ function renderAboutView() {
   const container = document.getElementById('about-view');
 
   container.innerHTML = `
-    <div class="barber-view">
-      <h2 class="barber-title">About FadeZone</h2>
-      <div class="barber-content">
-        FadeZone Grooming is a premium barbershop dedicated to industrial excellence in grooming. Located in the heart of Johannesburg, we provide the best fades, beard trims, and student cuts in the city.
+      <div class="barber-view">
+        <h2 class="barber-title" style="color: var(--color-accent-primary);">About FadeZone</h2>
+        <div class="barber-content">
+          <p style="color: #ffffff; font-size: 1.25rem; font-weight: 900; font-style: italic; margin-bottom: 1rem;">Look Good. Feel Better.</p>
+          <div style="color: #FFC107; display: flex; flex-direction: column; gap: 1rem;">
+            <p>At FadeZone Grooming, we don’t just cut hair—we level up your confidence. Alex built this spot on a simple mix: high-end prestige and a vibe that’s actually chill.</p>
+            <p>Whether you’re after a crisp fade or a total refresh, you can count on a look that’s sharp, consistent, and tailored to you. No ego, no guesswork—just reliable cuts and good energy every time you hit the chair.</p>
+            <p style="text-transform: uppercase; font-weight: 900; letter-spacing: 0.1em; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1rem; color: #ffffff;">Prestige service. Friendly atmosphere. Reliable results.</p>
+          </div>
+        </div>
       </div>
-    </div>
-  `;
+    `;
 }
 
 // ===== VIEW MANAGEMENT =====
@@ -589,12 +755,27 @@ function showView(viewName) {
     viewElement.classList.add('active');
   }
 
-  // Update navigation
+  // Update navigation visibility
+  const nav = document.querySelector('nav');
+  const supportFab = document.querySelector('.support-fab');
+  if (nav) {
+    if (viewName === 'auth' || viewName === 'admin') {
+      nav.style.display = 'none';
+      if (supportFab) supportFab.style.display = 'none';
+    } else {
+      nav.style.display = 'flex';
+      if (supportFab) supportFab.style.display = 'flex';
+    }
+  }
+
+  // Update navigation active state
   document.querySelectorAll('.nav-btn').forEach(btn => {
     btn.classList.remove('active');
   });
-  const activeBtn = document.querySelector(`[data-view="${viewName}"]`);
-  if (activeBtn) {
+  const activeBtn = document.querySelector(`[data-view="${viewName}"]`) || document.querySelector(`[data-view="customer"]`);
+  if (activeBtn && (viewName === 'landing' || viewName === 'customer')) {
+    activeBtn.classList.add('active');
+  } else if (activeBtn) {
     activeBtn.classList.add('active');
   }
 }
@@ -671,7 +852,8 @@ function confirmBooking() {
     `⏰ *Time:* ${state.selectedTime}\n\n` +
     `👤 *Customer:* ${state.customerName}\n` +
     `📱 *Phone:* ${state.customerPhone}\n\n` +
-    `_Sent via FadeZone Online Booking Systems_`;
+    `_Sent via FadeZone Online Booking Systems_\n\n` +
+    `Book another session with us: ${window.location.href}`;
 
   const confirmBtn = document.getElementById('whatsapp-confirm-btn');
   if (confirmBtn) {
@@ -691,9 +873,9 @@ function confirmBooking() {
       serviceId: state.selectedService.id,
       date: dateStr,
       time: state.selectedTime,
-      customerName: state.customerName,
-      customerPhone: state.customerPhone,
-      status: 'confirmed'
+      customerName: state.user.name || state.customerName, // Use logged in user name
+      customerPhone: state.user.phone || state.customerPhone,
+      status: 'pending'
     });
 
     // Reset state & navigate
@@ -710,7 +892,7 @@ function confirmBooking() {
 function changeView(viewName) {
   state.activeView = viewName;
 
-  if (viewName === 'customer') {
+  if (viewName === 'customer' || viewName === 'landing') {
     navigateToStep(state.step);
   } else if (viewName === 'bookings') {
     renderBookingsView();
@@ -718,9 +900,12 @@ function changeView(viewName) {
   } else if (viewName === 'about') {
     renderAboutView();
     showView('about');
-  } else if (viewName === 'barber') {
-    renderProfileView();
-    showView('barber');
+  } else if (viewName === 'review') {
+    renderReviewPage();
+    showView('review');
+  } else if (viewName === 'admin') {
+    renderAdminDashboard();
+    showView('admin');
   }
 }
 
@@ -729,6 +914,55 @@ function deleteBooking(id) {
     bookingService.deleteBooking(id);
     renderBookingsView();
   }
+}
+
+function updateStatus(id, status) {
+  bookingService.updateBookingStatus(id, status);
+  renderAdminDashboard();
+}
+
+function toggleAdminLogin() {
+  state.isAdminLogin = !state.isAdminLogin;
+  state.authError = '';
+  renderAuthPage();
+}
+
+async function handleAuthSubmit(e) {
+  e.preventDefault();
+  if (state.isAdminLogin) {
+    const pass = document.getElementById('auth-password').value;
+    const user = await authService.adminLogin(pass);
+    if (user) {
+      init();
+    } else {
+      state.authError = 'Invalid admin password';
+      renderAuthPage();
+    }
+  } else {
+    const name = document.getElementById('auth-name').value;
+    const phone = document.getElementById('auth-phone').value;
+    authService.login(name, phone);
+    init();
+  }
+}
+
+function handleReviewSubmit(e) {
+  e.preventDefault();
+  const comment = document.getElementById('review-comment').value;
+  bookingService.addReview({
+    id: Date.now(),
+    customerName: state.user.name,
+    rating: state.tempRating || 5,
+    comment,
+    date: new Date().toISOString()
+  });
+  alert('Lekker Nev! Thanks for the feedback.');
+  navigateToStep(0);
+}
+
+function setRating(r) {
+  state.tempRating = r;
+  renderReviewPage();
 }
 
 function refreshBookings() {
@@ -741,12 +975,17 @@ function init() {
   // Load bookings
   refreshBookings();
 
-  // Listen for storage changes
-  window.addEventListener('storage', refreshBookings);
-
-  // Render initial view
-  renderLandingPage();
-  showView('landing');
+  if (!state.user) {
+    showView('auth');
+    renderAuthPage();
+  } else if (state.user.role === 'admin') {
+    showView('admin');
+    renderAdminDashboard();
+  } else {
+    // Render initial client view
+    renderLandingPage();
+    showView('landing');
+  }
 
   console.log('FadeZone Grooming App initialized!');
 }

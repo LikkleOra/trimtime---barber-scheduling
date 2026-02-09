@@ -5,8 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description"
-    content="Book your appointment at FadeZone Grooming - Premium barbershop in Johannesburg. Professional haircuts, beard trims, and grooming services.">
-  <meta name="keywords" content="barber, haircut, fade, beard trim, Johannesburg, Sandton, grooming">
+    content="Book your appointment at FadeZone Grooming - Premium barbershop in Kensington. Professional haircuts, fade, beard trims, and grooming services at 424 Commissioner street.">
+  <meta name="keywords"
+    content="barber, haircut, fade, beard trim, Kensington, Johannesburg, grooming, Commissioner street">
   <title>FadeZone Grooming | Book Your Appointment</title>
 
   <!-- Styles -->
@@ -33,6 +34,11 @@
 
     <!-- Main Content -->
     <main>
+      <!-- Auth View -->
+      <div id="auth-view" class="view">
+        <!-- Content will be rendered by JavaScript -->
+      </div>
+
       <!-- Customer Landing View -->
       <div id="landing-view" class="view active">
         <!-- Content will be rendered by JavaScript -->
@@ -58,19 +64,24 @@
         <!-- Content will be rendered by JavaScript -->
       </div>
 
+      <!-- Review View -->
+      <div id="review-view" class="view">
+        <!-- Content will be rendered by JavaScript -->
+      </div>
+
+      <!-- Admin View -->
+      <div id="admin-view" class="view">
+        <!-- Content will be rendered by JavaScript -->
+      </div>
+
       <!-- About View -->
       <div id="about-view" class="view">
         <!-- Content will be rendered by JavaScript -->
       </div>
-
-      <!-- Barber View -->
-      <div id="barber-view" class="view">
-        <!-- Content will be rendered by JavaScript -->
-      </div>
     </main>
 
-    <!-- Support FAB -->
-    <button class="support-fab" aria-label="Support">
+    <!-- Support FAB (Reviews) -->
+    <button class="support-fab" aria-label="Support" onclick="changeView('review')">
       <i data-feather="message-square"></i>
     </button>
 
@@ -87,10 +98,6 @@
       <button class="nav-btn" data-view="about" onclick="changeView('about')" aria-label="About">
         <i data-feather="info"></i>
         <span class="nav-label">About</span>
-      </button>
-      <button class="nav-btn" data-view="barber" onclick="changeView('barber')" aria-label="Profile">
-        <i data-feather="user"></i>
-        <span class="nav-label">Profile</span>
       </button>
     </nav>
   </div>

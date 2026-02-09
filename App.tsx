@@ -3,22 +3,27 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Layout from './components/Layout';
 import TimeGrid from './components/TimeGrid';
 import BookingSummary from './components/BookingSummary';
+import AuthScreen from './components/AuthScreen';
+import AdminDashboard from './components/AdminDashboard';
+import ReviewPage from './components/ReviewPage';
 import { SERVICES, BARBER_CONFIG } from './constants';
-import { Service, Booking, ViewType } from './types';
+import { Service, Booking, User } from './types';
 import { bookingService } from './services/bookingService';
-import { ChevronRight, MapPin, CheckCircle, Smartphone, ChevronLeft, ArrowRight } from 'lucide-react';
+import { authService } from './services/authService';
+import { ChevronRight, MapPin, CheckCircle, Smartphone, ChevronLeft, ArrowRight, Star } from 'lucide-react';
 
 const App: React.FC = () => {
-  const [activeView, setActiveView] = useState<ViewType>('customer');
+  const [user, setUser] = useState<User | null>(authService.getCurrentUser());
   const [selectedLocation, setSelectedLocation] = useState(BARBER_CONFIG.locations[0]);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
-  const [customerName, setCustomerName] = useState('');
-  const [customerPhone, setCustomerPhone] = useState('');
+  const [customerName, setCustomerName] = useState(user?.name || '');
+  const [customerPhone, setCustomerPhone] = useState(user?.phone || '');
   const [notes, setNotes] = useState('');
   const [bookings, setBookings] = useState<Booking[]>([]);
-  const [step, setStep] = useState<0 | 1 | 2 | 3>(0); // 0: Landing, 1: Services, 2: Time, 3: Summary
+  const [step, setStep] = useState<0 | 1 | 2 | 3 | 4 | 5 | 6>(0); // 0: Landing, 1: Services, 2: Time, 3: Summary, 4: Reviews, 5: My Bookings, 6: About
+  const [isReviewOpen, setIsReviewOpen] = useState(false);
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -28,17 +33,21 @@ const App: React.FC = () => {
 
   useEffect(() => {
     refreshBookings();
-    window.addEventListener('storage', refreshBookings);
-    return () => window.removeEventListener('storage', refreshBookings);
+    const handleStorage = () => {
+      refreshBookings();
+      setUser(authService.getCurrentUser());
+    };
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
   }, [refreshBookings]);
 
   const handleConfirm = () => {
     if (!selectedService || !selectedTime) return;
     const dateStr = selectedDate.toISOString().split('T')[0];
-    const msg = `Lekker Nev! Booking: ${selectedService.name} on ${dateStr} at ${selectedTime}. Customer: ${customerName}. Vibe the vibe!`;
+    const msg = `Lekker Nev! Booking: ${selectedService.name} on ${dateStr} at ${selectedTime}. Customer: ${customerName}. Vibe the vibe! \n\nBook another session with us: ${window.location.href}`;
     const whatsappUrl = `https://wa.me/${BARBER_CONFIG.phone}?text=${encodeURIComponent(msg)}`;
     window.open(whatsappUrl, '_blank');
-    
+
     bookingService.addBooking({
       id: Math.random().toString(36).substr(2, 9),
       serviceId: selectedService.id,
@@ -46,7 +55,7 @@ const App: React.FC = () => {
       time: selectedTime,
       customerName,
       customerPhone,
-      status: 'confirmed'
+      status: 'pending' // Default to pending for admin to confirm
     });
 
     setStep(0);
@@ -61,22 +70,39 @@ const App: React.FC = () => {
     }
   };
 
-  const renderLanding = () => (
+  if (!user) {
+    return <AuthScreen onAuthComplete={() => setUser(authService.getCurrentUser())} />;
+  }
+
+  if (user.role === 'admin') {
+    return (
+      <Layout onLogout={() => {
+        authService.logout();
+        setUser(null);
+      }}>
+        <AdminDashboard />
+      </Layout>
+    );
+  }
+
+  const renderLandingPage = () => (
     <div className="space-y-12 pb-10">
       {/* Location Toggle */}
-      <div className="px-6 mt-4">
-        <div className="flex bg-zinc-900 rounded-lg p-1">
-          {BARBER_CONFIG.locations.map(loc => (
-            <button
-              key={loc.id}
-              onClick={() => setSelectedLocation(loc)}
-              className={`flex-1 py-2 text-xs font-bold rounded-md transition-all ${selectedLocation.id === loc.id ? 'bg-[#2a2a2a] text-white' : 'text-zinc-500'}`}
-            >
-              {loc.name}
-            </button>
-          ))}
+      {BARBER_CONFIG.locations.length > 1 && (
+        <div className="px-6 mt-4">
+          <div className="flex bg-zinc-900 rounded-lg p-1">
+            {BARBER_CONFIG.locations.map(loc => (
+              <button
+                key={loc.id}
+                onClick={() => setSelectedLocation(loc)}
+                className={`flex-1 py-2 text-xs font-bold rounded-md transition-all ${selectedLocation.id === loc.id ? 'bg-[#2a2a2a] text-white' : 'text-zinc-500'}`}
+              >
+                {loc.name}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Legendary Styles Section */}
       <div className="space-y-8">
@@ -92,13 +118,13 @@ const App: React.FC = () => {
               View More Styles <ArrowRight size={16} />
             </button>
             <div className="flex gap-2">
-              <button 
+              <button
                 onClick={() => scroll('left')}
                 className="w-12 h-12 border border-zinc-800 flex items-center justify-center hover:bg-zinc-900 transition-colors"
               >
                 <ChevronLeft size={24} />
               </button>
-              <button 
+              <button
                 onClick={() => scroll('right')}
                 className="w-12 h-12 border border-zinc-800 flex items-center justify-center hover:bg-zinc-900 transition-colors"
               >
@@ -109,14 +135,14 @@ const App: React.FC = () => {
         </div>
 
         {/* Style Cards Carousel */}
-        <div 
+        <div
           ref={scrollRef}
           className="flex overflow-x-auto px-6 gap-4 no-scrollbar snap-x snap-mandatory"
         >
           <div className="min-w-[280px] h-[400px] relative overflow-hidden rounded-[2rem] snap-start group bg-zinc-900">
-            <img 
-              src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&q=80&w=600" 
-              className="w-full h-full object-cover grayscale transition-transform duration-700 group-hover:scale-110" 
+            <img
+              src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&q=80&w=600"
+              className="w-full h-full object-cover grayscale transition-transform duration-700 group-hover:scale-110"
               alt="Adult Haircut Fade"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent flex flex-col justify-end p-8">
@@ -125,9 +151,9 @@ const App: React.FC = () => {
             </div>
           </div>
           <div className="min-w-[280px] h-[400px] relative overflow-hidden rounded-[2rem] snap-start group bg-zinc-900">
-            <img 
-              src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&q=80&w=600" 
-              className="w-full h-full object-cover grayscale transition-transform duration-700 group-hover:scale-110" 
+            <img
+              src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&q=80&w=600"
+              className="w-full h-full object-cover grayscale transition-transform duration-700 group-hover:scale-110"
               alt="Beard Shave Clipper"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent flex flex-col justify-end p-8">
@@ -136,9 +162,9 @@ const App: React.FC = () => {
             </div>
           </div>
           <div className="min-w-[280px] h-[400px] relative overflow-hidden rounded-[2rem] snap-start group bg-zinc-900">
-            <img 
-              src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80&w=600" 
-              className="w-full h-full object-cover grayscale transition-transform duration-700 group-hover:scale-110" 
+            <img
+              src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80&w=600"
+              className="w-full h-full object-cover grayscale transition-transform duration-700 group-hover:scale-110"
               alt="The Scholar"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent flex flex-col justify-end p-8">
@@ -176,7 +202,7 @@ const App: React.FC = () => {
               </div>
               <div className="flex items-center gap-2 text-white">
                 <div className="w-3.5 h-3.5 flex items-center justify-center font-black text-[10px]">P</div>
-                <span className="font-bold uppercase text-[9px]">Parking On-Site</span>
+                <span className="font-bold uppercase text-[9px]">Street Parking</span>
               </div>
             </div>
           </div>
@@ -185,7 +211,7 @@ const App: React.FC = () => {
 
       {/* Action Button */}
       <div className="px-6">
-        <button 
+        <button
           onClick={() => setStep(1)}
           className="w-full bg-white text-black py-5 rounded-full font-black uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-zinc-200 transition-all active:scale-95"
         >
@@ -216,7 +242,7 @@ const App: React.FC = () => {
           <h2 className="text-3xl font-brand italic uppercase tracking-tighter">{selectedLocation.name}</h2>
           <div className="flex items-center gap-2 text-[10px] font-bold text-yellow-400 mt-1 uppercase">
             <MapPin size={10} />
-            <span>Glenwood & Durban North</span>
+            <span>{selectedLocation.name}</span>
           </div>
         </div>
 
@@ -240,7 +266,7 @@ const App: React.FC = () => {
                       <span className="text-2xl font-black text-yellow-400 italic leading-none">R{s.price}</span>
                     </div>
                   </div>
-                  <button 
+                  <button
                     onClick={() => { setSelectedService(s); setStep(2); }}
                     className={`w-full py-3 font-black uppercase text-xs tracking-widest transition-all ${s.id === 'full' ? 'bg-[#FFC107] text-black' : 'bg-white text-black hover:bg-zinc-200'}`}
                   >
@@ -273,7 +299,7 @@ const App: React.FC = () => {
                 <div className="w-6 h-6 rounded-full bg-yellow-400 flex items-center justify-center text-black">
                   <MapPin size={14} />
                 </div>
-                <span className="text-xs font-bold uppercase tracking-wider">Street & Private Parking</span>
+                <span className="text-xs font-bold uppercase tracking-wider">Street Parking</span>
               </div>
             </div>
           </div>
@@ -282,50 +308,159 @@ const App: React.FC = () => {
     );
   };
 
-  return (
-    <Layout activeView={activeView} onViewChange={setActiveView}>
-      {activeView === 'customer' ? (
-        <>
-          {step === 0 && renderLanding()}
-          {step === 1 && renderServiceMenu()}
-          {step === 2 && (
-            <div className="p-6 space-y-8">
-              <button onClick={() => setStep(1)} className="flex items-center gap-2 text-zinc-500 uppercase text-[10px] font-black"><ChevronLeft size={16}/> Back to Menu</button>
-              <h2 className="text-2xl font-brand italic uppercase text-center">Select Time</h2>
-              <div className="bg-zinc-900 p-6">
-                <TimeGrid 
-                  selectedDate={selectedDate} 
-                  selectedTime={selectedTime} 
-                  onTimeSelect={(t) => { setSelectedTime(t); setStep(3); }}
-                  bookings={bookings}
-                />
+  const renderMyBookings = () => {
+    const myBookings = bookings.filter(b => b.customerPhone === user.phone);
+    return (
+      <div className="p-6 space-y-8">
+        <button onClick={() => setStep(0)} className="flex items-center gap-2 text-zinc-500 uppercase text-[10px] font-black"><ChevronLeft size={16} /> Back</button>
+        <h2 className="text-4xl font-brand italic uppercase tracking-tighter">My Bookings</h2>
+        {myBookings.length === 0 ? (
+          <div className="py-20 text-center space-y-4">
+            <p className="text-zinc-500 italic">No bookings yet. Ready for a legendary cut?</p>
+            <button onClick={() => setStep(1)} className="text-[#FFC107] font-black uppercase text-xs border-b border-[#FFC107]">Book Now</button>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {myBookings.map(b => (
+              <div key={b.id} className="bg-zinc-900/50 p-6 border border-zinc-800 flex justify-between items-center">
+                <div className="space-y-1">
+                  <span className="text-sm font-black uppercase block">{SERVICES.find(s => s.id === b.serviceId)?.name || 'Haircut'}</span>
+                  <span className="text-[10px] font-bold text-zinc-500 uppercase">{b.date} • {b.time}</span>
+                </div>
+                <span className={`text-[8px] font-black uppercase px-2 py-1 rounded ${b.status === 'confirmed' ? 'bg-green-500/20 text-green-500' : 'bg-yellow-500/20 text-yellow-500'
+                  }`}>
+                  {b.status}
+                </span>
               </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  const renderAboutView = () => (
+    <div className="p-8 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <button onClick={() => setStep(0)} className="flex items-center gap-2 text-zinc-500 uppercase text-[10px] font-black">
+        <ChevronLeft size={16} /> Back
+      </button>
+
+      <div className="space-y-6">
+        <h2 className="text-4xl font-brand italic uppercase tracking-tighter text-[#FFC107]">About FadeZone</h2>
+
+        <div className="space-y-6 leading-relaxed font-medium">
+          <p className="text-xl text-white font-black italic">Look Good. Feel Better.</p>
+
+          <div className="text-[#FFC107] space-y-6">
+            <p>
+              At FadeZone Grooming, we don’t just cut hair—we level up your confidence.
+              Alex built this spot on a simple mix: high-end prestige and a vibe that’s actually chill.
+            </p>
+
+            <p>
+              Whether you’re after a crisp fade or a total refresh, you can count on a look
+              that’s sharp, consistent, and tailored to you. No ego, no guesswork—just
+              reliable cuts and good energy every time you hit the chair.
+            </p>
+          </div>
+
+          <div className="pt-4 border-t border-zinc-900">
+            <p className="text-sm font-black uppercase tracking-widest text-white">
+              Prestige service. Friendly atmosphere. Reliable results.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="pt-10">
+        <div className="bg-zinc-900/50 p-6 border border-zinc-800 space-y-4">
+          <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Location</h4>
+          <p className="text-sm font-bold">{selectedLocation.address}</p>
+        </div>
+      </div>
+    </div>
+  );
+
+  const handleReviewSubmit = async (review: { rating: number; comment: string }) => {
+    const newReview = {
+      id: Date.now().toString(),
+      customerName: customerName || 'Anonymous',
+      rating: review.rating,
+      comment: review.comment,
+      date: new Date().toISOString().split('T')[0]
+    };
+
+    bookingService.addReview(newReview);
+  };
+
+  return (
+    <Layout
+      onLogout={handleLogout}
+      onReviewClick={() => setStep(4)}
+      onMyBookingsClick={() => setStep(5)}
+      onServicesClick={() => setStep(1)}
+      onAboutClick={() => setStep(6)}
+    >
+      {step === 0 && renderLandingPage()}
+      {step === 1 && renderServiceMenu()}
+      {step === 6 && renderAboutView()}
+      {step === 2 && (
+        <div className="p-6 space-y-8">
+          <button onClick={() => setStep(1)} className="flex items-center gap-2 text-zinc-500 uppercase text-[10px] font-black"><ChevronLeft size={16} /> Back to Menu</button>
+          <div className="space-y-6">
+            <h2 className="text-2xl font-brand italic uppercase text-center">Select Date & Time</h2>
+            <div className="flex overflow-x-auto gap-3 pb-4 no-scrollbar -mx-2 px-2">
+              {[...Array(14)].map((_, i) => {
+                const date = new Date();
+                date.setDate(date.getDate() + i);
+                const isSelected = selectedDate.toDateString() === date.toDateString();
+                const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
+                const dayNum = date.getDate();
+                return (
+                  <button
+                    key={i}
+                    onClick={() => setSelectedDate(date)}
+                    className={`flex flex-col items-center min-w-[60px] py-4 rounded-2xl border transition-all ${isSelected
+                      ? 'bg-yellow-400 border-yellow-400 text-black shadow-[0_0_15px_rgba(250,204,21,0.3)]'
+                      : 'bg-zinc-900 border-zinc-800 text-zinc-400'
+                      }`}
+                  >
+                    <span className="text-[10px] font-black uppercase tracking-tighter mb-1">{dayName}</span>
+                    <span className="text-xl font-black italic">{dayNum}</span>
+                  </button>
+                );
+              })}
             </div>
-          )}
-          {step === 3 && selectedService && selectedTime && (
-            <div className="p-6 space-y-8">
-               <button onClick={() => setStep(2)} className="flex items-center gap-2 text-zinc-500 uppercase text-[10px] font-black"><ChevronLeft size={16}/> Back to Time</button>
-               <BookingSummary 
-                service={selectedService}
-                time={selectedTime}
-                date={selectedDate.toISOString().split('T')[0]}
-                customerName={customerName}
-                customerPhone={customerPhone}
-                notes={notes}
-                onNameChange={setCustomerName}
-                onPhoneChange={setCustomerPhone}
-                onNotesChange={setNotes}
-                onConfirm={handleConfirm}
+            <div className="bg-zinc-900 p-6">
+              <TimeGrid
+                selectedDate={selectedDate}
+                selectedTime={selectedTime}
+                onTimeSelect={(t) => { setSelectedTime(t); setStep(3); }}
+                bookings={bookings}
               />
             </div>
-          )}
-        </>
-      ) : (
-        <div className="p-6">
-          <h2 className="text-3xl font-brand italic uppercase border-b border-zinc-900 pb-4 mb-6">Barber Login</h2>
-          <div className="bg-zinc-900 p-8 text-center text-zinc-500 italic">Restricted portal for Nev's internal systems.</div>
+          </div>
         </div>
       )}
+      {step === 3 && selectedService && selectedTime && (
+        <div className="p-6 space-y-8">
+          <button onClick={() => setStep(2)} className="flex items-center gap-2 text-zinc-500 uppercase text-[10px] font-black"><ChevronLeft size={16} /> Back to Time</button>
+          <BookingSummary
+            service={selectedService}
+            time={selectedTime}
+            date={selectedDate.toISOString().split('T')[0]}
+            customerName={customerName}
+            customerPhone={customerPhone}
+            notes={notes}
+            onNameChange={setCustomerName}
+            onPhoneChange={setCustomerPhone}
+            onNotesChange={setNotes}
+            onConfirm={handleConfirm}
+          />
+        </div>
+      )}
+      {step === 4 && <ReviewPage onBack={() => setStep(0)} onSubmitReview={handleReviewSubmit} />}
+      {step === 5 && renderMyBookings()}
     </Layout>
   );
 };
