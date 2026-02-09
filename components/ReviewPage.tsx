@@ -1,15 +1,37 @@
 import React, { useState } from 'react';
-import { Star, MessageSquare, ChevronLeft, Send } from 'lucide-react';
+import { Star, ChevronLeft, Send, Loader2 } from 'lucide-react';
 
-const ReviewPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
+interface ReviewPageProps {
+    onBack: () => void;
+    onSubmitReview: (review: { rating: number; comment: string }) => Promise<void> | void;
+}
+
+const ReviewPage: React.FC<ReviewPageProps> = ({ onBack, onSubmitReview }) => {
     const [rating, setRating] = useState(5);
     const [comment, setComment] = useState('');
     const [submitted, setSubmitted] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState('');
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Logic for saving review will go here
-        setSubmitted(true);
+        setError('');
+
+        if (!comment.trim()) {
+            setError('Please share a few words about your experience');
+            return;
+        }
+
+        setIsSubmitting(true);
+        try {
+            await onSubmitReview({ rating, comment: comment.trim() });
+            setSubmitted(true);
+        } catch (err) {
+            console.error('Failed to submit review:', err);
+            setError('Failed to post review. Please try again.');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     if (submitted) {
@@ -65,15 +87,23 @@ const ReviewPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                         value={comment}
                         onChange={(e) => setComment(e.target.value)}
                         placeholder="What a vibe! The fade is legendary..."
-                        className="w-full bg-zinc-900 border border-zinc-800 rounded-2xl p-4 text-white min-h-[150px] focus:outline-none focus:border-yellow-400"
+                        className="w-full bg-zinc-900 border border-zinc-800 rounded-2xl p-4 text-white min-h-[150px] focus:outline-none focus:border-yellow-400 disabled:opacity-50"
+                        disabled={isSubmitting}
                     />
                 </div>
 
+                {error && <p className="text-red-500 text-[10px] font-black uppercase text-center font-bold">{error}</p>}
+
                 <button
                     type="submit"
-                    className="w-full bg-white text-black py-5 rounded-full font-black uppercase tracking-widest flex items-center justify-center gap-3"
+                    disabled={isSubmitting}
+                    className="w-full bg-white text-black py-5 rounded-full font-black uppercase tracking-widest flex items-center justify-center gap-3 disabled:bg-zinc-800 disabled:text-zinc-600 transition-all active:scale-95"
                 >
-                    Post Review <Send size={18} />
+                    {isSubmitting ? (
+                        <>Posting... <Loader2 className="animate-spin" size={18} /></>
+                    ) : (
+                        <>Post Review <Send size={18} /></>
+                    )}
                 </button>
             </form>
         </div>

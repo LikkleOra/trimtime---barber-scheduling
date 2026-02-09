@@ -9,6 +9,7 @@ interface LayoutProps {
   onReviewClick?: () => void;
   onMyBookingsClick?: () => void;
   onServicesClick?: () => void;
+  onAboutClick?: () => void;
 }
 
 const Layout: React.FC<LayoutProps> = ({
@@ -16,7 +17,8 @@ const Layout: React.FC<LayoutProps> = ({
   onLogout,
   onReviewClick,
   onMyBookingsClick,
-  onServicesClick
+  onServicesClick,
+  onAboutClick
 }) => {
   return (
     <div className="min-h-screen flex flex-col max-w-md mx-auto bg-[#0a0a0a] text-white shadow-2xl relative overflow-x-hidden">
@@ -59,20 +61,27 @@ const Layout: React.FC<LayoutProps> = ({
       {/* Bottom Nav */}
       <nav className="sticky bottom-0 left-0 right-0 bg-[#050505] border-t border-zinc-900 px-6 py-4 flex justify-between items-center z-50">
         <button
-          onClick={onServicesClick}
-          className="flex flex-col items-center gap-1 text-[#FFC107] transition-all"
+          onClick={() => onServicesClick?.()}
+          disabled={!onServicesClick}
+          aria-disabled={!onServicesClick}
+          className={`flex flex-col items-center gap-1 transition-all ${!onServicesClick ? 'text-zinc-800 pointer-events-none' : 'text-[#FFC107]'}`}
         >
           <Scissors size={20} className="stroke-[3px]" />
           <span className="text-[8px] font-black uppercase tracking-widest">Services</span>
         </button>
         <button
-          onClick={onMyBookingsClick}
-          className="flex flex-col items-center gap-1 text-zinc-600 hover:text-white transition-colors"
+          onClick={() => onMyBookingsClick?.()}
+          disabled={!onMyBookingsClick}
+          aria-disabled={!onMyBookingsClick}
+          className={`flex flex-col items-center gap-1 transition-colors ${!onMyBookingsClick ? 'text-zinc-800 pointer-events-none' : 'text-zinc-600 hover:text-white'}`}
         >
           <Calendar size={20} />
           <span className="text-[8px] font-black uppercase tracking-widest">My Bookings</span>
         </button>
-        <button className="flex flex-col items-center gap-1 text-zinc-600">
+        <button
+          onClick={() => onAboutClick?.()}
+          className={`flex flex-col items-center gap-1 transition-colors ${!onAboutClick ? 'text-zinc-800 pointer-events-none' : 'text-zinc-600 hover:text-white'}`}
+        >
           <Info size={20} />
           <span className="text-[8px] font-black uppercase tracking-widest">About</span>
         </button>

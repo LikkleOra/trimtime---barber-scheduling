@@ -1,13 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Booking } from '../types';
 import { bookingService } from '../services/bookingService';
 import { Check, X, Clock, User } from 'lucide-react';
 
 const AdminDashboard: React.FC = () => {
-    const bookings = bookingService.getBookings();
+    const [bookings, setBookings] = useState<Booking[]>([]);
+
+    useEffect(() => {
+        loadBookings();
+    }, []);
+
+    const loadBookings = () => {
+        setBookings(bookingService.getBookings());
+    };
 
     const handleStatusChange = (id: string, status: 'confirmed' | 'cancelled') => {
         bookingService.updateBookingStatus(id, status);
+        loadBookings(); // Refresh the list to trigger re-render
     };
 
     return (

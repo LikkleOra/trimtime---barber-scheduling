@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { User, Lock, Phone, User as UserIcon } from 'lucide-react';
+import { User, Lock, Phone, User as UserIcon, Loader2 } from 'lucide-react';
 import { authService } from '../services/authService';
 
 interface AuthScreenProps {
@@ -12,24 +12,50 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onAuthComplete }) => {
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
-    const handleClientLogin = (e: React.FormEvent) => {
+    const handleClientLogin = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError('');
+
         if (!name || !phone) {
             setError('Please fill in all fields');
             return;
         }
-        authService.login(phone, name);
-        onAuthComplete();
+
+        // Basic phone validation (at least 10 digits)
+        const phoneRegex = /^[0-9+\s-]{10,}$/;
+        if (!phoneRegex.test(phone)) {
+            setError('Invalid phone number');
+            return;
+        }
+
+        setIsLoading(true);
+        try {
+            await authService.login(phone, name);
+            onAuthComplete();
+        } catch (err) {
+            console.error('Login failed:', err);
+            setError('Failed to login. Please try again.');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
-    const handleAdminLogin = (e: React.FormEvent) => {
+    const handleAdminLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        const user = authService.adminLogin(password);
-        if (user) {
-            onAuthComplete();
-        } else {
-            setError('Invalid admin password');
+        setError('');
+        setIsLoading(true);
+
+        try {
+            const user = await authService.adminLogin(password);
+            if (user) {
+                onAuthComplete();
+            }
+        } catch (err: any) {
+            setError(err.message || 'Invalid admin password');
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -86,9 +112,17 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onAuthComplete }) => {
 
                     <button
                         type="submit"
-                        className="w-full bg-[#FFC107] text-black py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-yellow-400 transition-all active:scale-95"
+                        disabled={isLoading}
+                        className="w-full bg-[#FFC107] text-black py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-yellow-400 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     >
-                        {isAdminMode ? 'Login as Admin' : 'Start Booking'}
+                        {isLoading ? (
+                            <>
+                                <Loader2 className="animate-spin" size={20} />
+                                {isAdminMode ? 'Authenticating...' : 'Processing...'}
+                            </>
+                        ) : (
+                            isAdminMode ? 'Login as Admin' : 'Start Booking'
+                        )}
                     </button>
                 </form>
 

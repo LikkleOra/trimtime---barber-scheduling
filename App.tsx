@@ -22,7 +22,7 @@ const App: React.FC = () => {
   const [customerPhone, setCustomerPhone] = useState(user?.phone || '');
   const [notes, setNotes] = useState('');
   const [bookings, setBookings] = useState<Booking[]>([]);
-  const [step, setStep] = useState<0 | 1 | 2 | 3 | 4 | 5>(0); // 0: Landing, 1: Services, 2: Time, 3: Summary, 4: Reviews, 5: My Bookings
+  const [step, setStep] = useState<0 | 1 | 2 | 3 | 4 | 5 | 6>(0); // 0: Landing, 1: Services, 2: Time, 3: Summary, 4: Reviews, 5: My Bookings, 6: About
   const [isReviewOpen, setIsReviewOpen] = useState(false);
 
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -44,7 +44,7 @@ const App: React.FC = () => {
   const handleConfirm = () => {
     if (!selectedService || !selectedTime) return;
     const dateStr = selectedDate.toISOString().split('T')[0];
-    const msg = `Lekker Nev! Booking: ${selectedService.name} on ${dateStr} at ${selectedTime}. Customer: ${customerName}. Vibe the vibe!`;
+    const msg = `Lekker Nev! Booking: ${selectedService.name} on ${dateStr} at ${selectedTime}. Customer: ${customerName}. Vibe the vibe! \n\nBook another session with us: ${window.location.href}`;
     const whatsappUrl = `https://wa.me/${BARBER_CONFIG.phone}?text=${encodeURIComponent(msg)}`;
     window.open(whatsappUrl, '_blank');
 
@@ -76,13 +76,16 @@ const App: React.FC = () => {
 
   if (user.role === 'admin') {
     return (
-      <Layout onLogout={() => authService.logout()}>
+      <Layout onLogout={() => {
+        authService.logout();
+        setUser(null);
+      }}>
         <AdminDashboard />
       </Layout>
     );
   }
 
-  const renderLanding = () => (
+  const renderLandingPage = () => (
     <div className="space-y-12 pb-10">
       {/* Location Toggle */}
       {BARBER_CONFIG.locations.length > 1 && (
@@ -336,15 +339,71 @@ const App: React.FC = () => {
     );
   }
 
+  const renderAboutView = () => (
+    <div className="p-8 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <button onClick={() => setStep(0)} className="flex items-center gap-2 text-zinc-500 uppercase text-[10px] font-black">
+        <ChevronLeft size={16} /> Back
+      </button>
+
+      <div className="space-y-6">
+        <h2 className="text-4xl font-brand italic uppercase tracking-tighter text-[#FFC107]">About FadeZone</h2>
+
+        <div className="space-y-6 leading-relaxed font-medium">
+          <p className="text-xl text-white font-black italic">Look Good. Feel Better.</p>
+
+          <div className="text-[#FFC107] space-y-6">
+            <p>
+              At FadeZone Grooming, we don’t just cut hair—we level up your confidence.
+              Alex built this spot on a simple mix: high-end prestige and a vibe that’s actually chill.
+            </p>
+
+            <p>
+              Whether you’re after a crisp fade or a total refresh, you can count on a look
+              that’s sharp, consistent, and tailored to you. No ego, no guesswork—just
+              reliable cuts and good energy every time you hit the chair.
+            </p>
+          </div>
+
+          <div className="pt-4 border-t border-zinc-900">
+            <p className="text-sm font-black uppercase tracking-widest text-white">
+              Prestige service. Friendly atmosphere. Reliable results.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="pt-10">
+        <div className="bg-zinc-900/50 p-6 border border-zinc-800 space-y-4">
+          <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Location</h4>
+          <p className="text-sm font-bold">{selectedLocation.address}</p>
+        </div>
+      </div>
+    </div>
+  );
+
+  const handleReviewSubmit = async (review: { rating: number; comment: string }) => {
+    const newReview = {
+      id: Date.now().toString(),
+      customerName: customerName || 'Anonymous',
+      rating: review.rating,
+      comment: review.comment,
+      date: new Date().toISOString().split('T')[0]
+    };
+
+    bookingService.addReview(newReview);
+  };
+
   return (
     <Layout
-      onLogout={() => authService.logout()}
+      onLogout={handleLogout}
       onReviewClick={() => setStep(4)}
       onMyBookingsClick={() => setStep(5)}
-      onServicesClick={() => setStep(0)}
+      onServicesClick={() => setStep(1)}
+      onAboutClick={() => setStep(6)}
     >
-      {step === 0 && renderLanding()}
+      {step === 0 && renderLandingPage()}
       {step === 1 && renderServiceMenu()}
+      {step === 6 && renderAboutView()}
       {step === 2 && (
         <div className="p-6 space-y-8">
           <button onClick={() => setStep(1)} className="flex items-center gap-2 text-zinc-500 uppercase text-[10px] font-black"><ChevronLeft size={16} /> Back to Menu</button>
@@ -400,7 +459,7 @@ const App: React.FC = () => {
           />
         </div>
       )}
-      {step === 4 && <ReviewPage onBack={() => setStep(0)} />}
+      {step === 4 && <ReviewPage onBack={() => setStep(0)} onSubmitReview={handleReviewSubmit} />}
       {step === 5 && renderMyBookings()}
     </Layout>
   );
