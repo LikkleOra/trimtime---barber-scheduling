@@ -979,17 +979,7 @@ function refreshBookings() {
   state.bookings = bookingService.getBookings();
 }
 
-// ===== HANDLERS =====
 
-function updateCustomerName(val) {
-  state.customerName = val;
-  if (typeof validateBookingForm === 'function') validateBookingForm();
-}
-
-function updateCustomerPhone(val) {
-  state.customerPhone = val;
-  if (typeof validateBookingForm === 'function') validateBookingForm();
-}
 
 // ===== INITIALIZATION =====
 
@@ -1029,7 +1019,6 @@ window.renderBookingSummary = renderBookingSummary;
 window.validateBookingForm = validateBookingForm;
 window.confirmBooking = confirmBooking;
 window.scrollCarousel = scrollCarousel;
-window.handleLogin = handleLogin;
 window.handleAuthSubmit = handleAuthSubmit;
 window.toggleAdminLogin = toggleAdminLogin;
 window.deleteBooking = deleteBooking;
