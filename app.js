@@ -929,20 +929,30 @@ function toggleAdminLogin() {
 
 async function handleAuthSubmit(e) {
   e.preventDefault();
-  if (state.isAdminLogin) {
-    const pass = document.getElementById('auth-password').value;
-    const user = await authService.adminLogin(pass);
-    if (user) {
-      init();
+  try {
+    if (state.isAdminLogin) {
+      const pass = document.getElementById('auth-password').value;
+      const user = await authService.adminLogin(pass);
+      if (user) {
+        init();
+      } else {
+        state.authError = 'Invalid admin password';
+        renderAuthPage();
+      }
     } else {
-      state.authError = 'Invalid admin password';
-      renderAuthPage();
+      const name = document.getElementById('auth-name').value;
+      const phone = document.getElementById('auth-phone').value;
+
+      if (!name || !phone) {
+        throw new Error('Please enter both name and phone number');
+      }
+
+      authService.login(name, phone);
+      init();
     }
-  } else {
-    const name = document.getElementById('auth-name').value;
-    const phone = document.getElementById('auth-phone').value;
-    authService.login(name, phone);
-    init();
+  } catch (error) {
+    console.error('Auth error:', error);
+    alert('Authentication failed: ' + error.message);
   }
 }
 
@@ -967,6 +977,18 @@ function setRating(r) {
 
 function refreshBookings() {
   state.bookings = bookingService.getBookings();
+}
+
+// ===== HANDLERS =====
+
+function updateCustomerName(val) {
+  state.customerName = val;
+  if (typeof validateBookingForm === 'function') validateBookingForm();
+}
+
+function updateCustomerPhone(val) {
+  state.customerPhone = val;
+  if (typeof validateBookingForm === 'function') validateBookingForm();
 }
 
 // ===== INITIALIZATION =====
@@ -996,3 +1018,23 @@ if (document.readyState === 'loading') {
 } else {
   init();
 }
+
+// Expose functions to global scope for HTML event handlers
+window.changeView = changeView;
+window.selectLocation = selectLocation;
+window.navigateToStep = navigateToStep;
+window.selectService = selectService;
+window.selectTime = selectTime;
+window.renderBookingSummary = renderBookingSummary;
+window.validateBookingForm = validateBookingForm;
+window.confirmBooking = confirmBooking;
+window.scrollCarousel = scrollCarousel;
+window.handleLogin = handleLogin;
+window.handleAuthSubmit = handleAuthSubmit;
+window.toggleAdminLogin = toggleAdminLogin;
+window.deleteBooking = deleteBooking;
+window.updateStatus = updateStatus;
+window.handleReviewSubmit = handleReviewSubmit;
+window.setRating = setRating;
+window.updateCustomerName = updateCustomerName;
+window.updateCustomerPhone = updateCustomerPhone;
