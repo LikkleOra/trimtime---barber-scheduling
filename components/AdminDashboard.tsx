@@ -8,6 +8,11 @@ const AdminDashboard: React.FC = () => {
 
     useEffect(() => {
         loadBookings();
+        const handleStorage = () => {
+            loadBookings();
+        };
+        window.addEventListener('storage', handleStorage);
+        return () => window.removeEventListener('storage', handleStorage);
     }, []);
 
     const loadBookings = () => {

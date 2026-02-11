@@ -38,8 +38,12 @@ const App: React.FC = () => {
       setUser(authService.getCurrentUser());
     };
     window.addEventListener('storage', handleStorage);
-    return () => window.removeEventListener('storage', handleStorage);
   }, [refreshBookings]);
+
+  const handleLogout = () => {
+    authService.logout();
+    setUser(null);
+  };
 
   const handleConfirm = () => {
     if (!selectedService || !selectedTime) return;
@@ -76,10 +80,7 @@ const App: React.FC = () => {
 
   if (user.role === 'admin') {
     return (
-      <Layout onLogout={() => {
-        authService.logout();
-        setUser(null);
-      }}>
+      <Layout onLogout={handleLogout}>
         <AdminDashboard />
       </Layout>
     );

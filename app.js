@@ -1027,3 +1027,4 @@ window.handleReviewSubmit = handleReviewSubmit;
 window.setRating = setRating;
 window.updateCustomerName = updateCustomerName;
 window.updateCustomerPhone = updateCustomerPhone;
+window.authService = authService;
