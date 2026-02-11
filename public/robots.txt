@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://trimtime-barber.netlify.app/sitemap.xml
