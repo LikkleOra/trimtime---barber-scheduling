@@ -758,6 +758,8 @@ function showView(viewName) {
   // Update navigation visibility
   const nav = document.querySelector('nav');
   const supportFab = document.querySelector('.support-fab');
+  const logoutBtn = document.getElementById('logout-btn');
+
   if (nav) {
     if (viewName === 'auth' || viewName === 'admin') {
       nav.style.display = 'none';
@@ -765,6 +767,15 @@ function showView(viewName) {
     } else {
       nav.style.display = 'flex';
       if (supportFab) supportFab.style.display = 'flex';
+    }
+  }
+
+  // Toggle logout button visibility
+  if (logoutBtn) {
+    if (viewName === 'auth') {
+      logoutBtn.style.display = 'none';
+    } else {
+      logoutBtn.style.display = 'flex';
     }
   }
 

@@ -106,6 +106,36 @@ header {
   border-bottom: 1px solid var(--color-border);
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(8px);
+  position: relative;
+}
+
+.header-action-btn {
+  position: absolute;
+  top: var(--spacing-lg);
+  right: var(--spacing-lg);
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 100;
+}
+
+.header-action-btn:hover {
+  background-color: var(--color-bg-tertiary);
+  border-color: var(--color-accent-primary);
+  color: var(--color-accent-primary);
+  transform: translateY(-2px);
+}
+
+.header-action-btn:active {
+  transform: translateY(0);
 }
 
 .logo {
