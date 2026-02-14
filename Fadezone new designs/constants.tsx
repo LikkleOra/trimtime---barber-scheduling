@@ -40,9 +40,9 @@ export const SERVICES: Service[] = [
 ];
 
 export const WORKING_HOURS = {
-  start: 7,
-  end: 17,
-  interval: 30
+  start: 7, 
+  end: 17,  
+  interval: 30 
 };
 
 export const BARBER_CONFIG = {
@@ -50,10 +50,10 @@ export const BARBER_CONFIG = {
   phone: '27721234567',
   shopName: 'Nev the Barber',
   locations: [
-    {
-      id: 'kt',
-      name: 'Kensington',
-      address: '424 Commissioner street Kensington',
+    { 
+      id: 'dn',
+      name: 'Durban North', 
+      address: '28 Mackeurtan Avenue, Durban North',
       hours: [
         { day: 'Monday', time: '07:00 - 12:00', status: 'active' },
         { day: 'Tuesday', time: '07:00 - 17:00', status: 'active' },
@@ -63,6 +63,12 @@ export const BARBER_CONFIG = {
         { day: 'Saturday', time: '07:30 - 13:00', status: 'active' },
         { day: 'Sunday', time: 'CLOSED', status: 'closed' }
       ]
+    },
+    { 
+      id: 'gw',
+      name: 'Glenwood', 
+      address: '123 Helen Joseph Rd, Glenwood',
+      hours: [] // Assume similar
     }
   ]
 };

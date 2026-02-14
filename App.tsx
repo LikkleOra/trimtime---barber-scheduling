@@ -5,7 +5,7 @@ import TimeGrid from './components/TimeGrid';
 import BookingSummary from './components/BookingSummary';
 import AuthScreen from './components/AuthScreen';
 import AdminDashboard from './components/AdminDashboard';
-import ReviewPage from './components/ReviewPage';
+import ReviewPage from './Fadezone new designs/components/ReviewPage';
 import { SERVICES, BARBER_CONFIG } from './constants';
 import { Service, Booking, User } from './types';
 import { bookingService } from './services/bookingService';
@@ -48,7 +48,7 @@ const App: React.FC = () => {
   const handleConfirm = () => {
     if (!selectedService || !selectedTime) return;
     const dateStr = selectedDate.toISOString().split('T')[0];
-    const msg = `Lekker Nev! Booking: ${selectedService.name} on ${dateStr} at ${selectedTime}. Customer: ${customerName}. Vibe the vibe! \n\nBook another session with us: ${window.location.href}`;
+    const msg = `Hi Nev! Booking: ${selectedService.name} on ${dateStr} at ${selectedTime}. Customer: ${customerName}. Vibe the vibe! \n\nBook your session: ${window.location.href}`;
     const whatsappUrl = `https://wa.me/${BARBER_CONFIG.phone}?text=${encodeURIComponent(msg)}`;
     window.open(whatsappUrl, '_blank');
 
@@ -87,138 +87,197 @@ const App: React.FC = () => {
   }
 
   const renderLandingPage = () => (
-    <div className="space-y-12 pb-10">
-      {/* Location Toggle */}
-      {BARBER_CONFIG.locations.length > 1 && (
-        <div className="px-6 mt-4">
-          <div className="flex bg-zinc-900 rounded-lg p-1">
-            {BARBER_CONFIG.locations.map(loc => (
-              <button
-                key={loc.id}
-                onClick={() => setSelectedLocation(loc)}
-                className={`flex-1 py-2 text-xs font-bold rounded-md transition-all ${selectedLocation.id === loc.id ? 'bg-[#2a2a2a] text-white' : 'text-zinc-500'}`}
-              >
-                {loc.name}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Legendary Styles Section */}
-      <div className="space-y-8">
-        <div className="px-6 space-y-4">
-          <h2 className="text-5xl font-black tracking-tighter leading-[0.9] text-white">
-            See Our<br />Legendary<br />Styles
-          </h2>
-          <p className="text-sm text-zinc-500 max-w-[240px] leading-relaxed">
-            Check out our Legendary styles that would best suite you.
-          </p>
-          <div className="flex items-center justify-between pt-2">
-            <button className="flex items-center gap-2 text-sm font-black uppercase tracking-wider border-b-2 border-white pb-1">
-              View More Styles <ArrowRight size={16} />
-            </button>
-            <div className="flex gap-2">
-              <button
-                onClick={() => scroll('left')}
-                className="w-12 h-12 border border-zinc-800 flex items-center justify-center hover:bg-zinc-900 transition-colors"
-              >
-                <ChevronLeft size={24} />
-              </button>
-              <button
-                onClick={() => scroll('right')}
-                className="w-12 h-12 border border-zinc-800 flex items-center justify-center hover:bg-zinc-900 transition-colors"
-              >
-                <ChevronRight size={24} />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Style Cards Carousel */}
-        <div
-          ref={scrollRef}
-          className="flex overflow-x-auto px-6 gap-4 no-scrollbar snap-x snap-mandatory"
-        >
-          <div className="min-w-[280px] h-[400px] relative overflow-hidden rounded-[2rem] snap-start group bg-zinc-900">
-            <img
-              src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&q=80&w=600"
-              className="w-full h-full object-cover grayscale transition-transform duration-700 group-hover:scale-110"
-              alt="Adult Haircut Fade"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent flex flex-col justify-end p-8">
-              <p className="text-xs font-black uppercase tracking-widest text-white mb-1">Adult Haircut • Fade</p>
-              <p className="text-4xl font-black text-white italic">R200</p>
-            </div>
-          </div>
-          <div className="min-w-[280px] h-[400px] relative overflow-hidden rounded-[2rem] snap-start group bg-zinc-900">
-            <img
-              src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&q=80&w=600"
-              className="w-full h-full object-cover grayscale transition-transform duration-700 group-hover:scale-110"
-              alt="Beard Shave Clipper"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent flex flex-col justify-end p-8">
-              <p className="text-xs font-black uppercase tracking-widest text-white mb-1">Beard Shave • Clipper</p>
-              <p className="text-4xl font-black text-white italic">R40</p>
-            </div>
-          </div>
-          <div className="min-w-[280px] h-[400px] relative overflow-hidden rounded-[2rem] snap-start group bg-zinc-900">
-            <img
-              src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80&w=600"
-              className="w-full h-full object-cover grayscale transition-transform duration-700 group-hover:scale-110"
-              alt="The Scholar"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent flex flex-col justify-end p-8">
-              <p className="text-xs font-black uppercase tracking-widest text-white mb-1">The Scholar • Student</p>
-              <p className="text-4xl font-black text-white italic">R150</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Opening Times & Location Info */}
-      <div className="px-6 grid grid-cols-2 gap-8 py-4">
-        <div className="space-y-4">
-          <h4 className="text-lg font-bold border-b border-zinc-900 pb-2">Opening Times</h4>
-          <div className="space-y-2 text-[11px] font-medium text-zinc-400">
-            {selectedLocation.hours.map(h => (
-              <div key={h.day} className={`flex justify-between items-center ${h.status === 'current' ? 'text-white' : ''}`}>
-                <div className="flex items-center gap-2">
-                  <div className={`w-1 h-1 rounded-full ${h.status === 'active' || h.status === 'current' ? 'bg-green-500' : 'bg-zinc-700'}`} />
-                  <span>{h.day.slice(0, 3)}</span>
-                </div>
-                <span>{h.time}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="space-y-4">
-          <h4 className="text-lg font-bold border-b border-zinc-900 pb-2">The Spot</h4>
-          <div className="text-[11px] text-zinc-400 space-y-4 leading-relaxed">
-            <p>{selectedLocation.address}</p>
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-white">
-                <CheckCircle size={14} className="text-white" />
-                <span className="font-bold uppercase text-[9px]">Instant Confirm</span>
-              </div>
-              <div className="flex items-center gap-2 text-white">
-                <div className="w-3.5 h-3.5 flex items-center justify-center font-black text-[10px]">P</div>
-                <span className="font-bold uppercase text-[9px]">Street Parking</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Action Button */}
-      <div className="px-6">
+    <div className="space-y-0 pb-10 overflow-hidden w-full">
+      {/* Dynamic Hero Section */}
+      <div className="bg-[#fbd600] relative min-h-[90vh] flex flex-col md:flex-row items-center justify-center p-6 md:p-12 diagonal-stripes overflow-hidden">
+        {/* Book Button - Top Right */}
         <button
           onClick={() => setStep(1)}
-          className="w-full bg-white text-black py-5 rounded-full font-black uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-zinc-200 transition-all active:scale-95"
+          className="absolute top-10 md:top-20 right-10 md:right-20 bg-[#b32b2b] text-white px-6 md:px-8 py-3 md:py-4 rounded-full font-black uppercase tracking-widest text-[10px] md:text-xs z-20 hover:scale-110 active:scale-95 transition-all shadow-lg"
         >
-          Book an Appointment
-          <ChevronRight size={20} />
+          BOOK AN APPOINTMENT
         </button>
+
+        {/* Brand Block (Left) - Sliding Entrance */}
+        <div className="z-10 bg-[#3e2723] p-6 md:p-12 jagged-edge animate-in slide-in-from-left-[150%] duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] flex-1">
+          <h2 className="text-6xl md:text-9xl lg:text-[12rem] font-heading text-[#fbd600] leading-none mb-2">
+            NEV
+          </h2>
+          <h2 className="text-4xl md:text-7xl lg:text-9xl font-heading text-white leading-none mb-1">
+            THE
+          </h2>
+          <h2 className="text-6xl md:text-9xl lg:text-[12rem] font-heading text-[#fbd600] leading-none">
+            BARBER
+          </h2>
+        </div>
+
+        {/* Bust (Right) - Sliding Entrance */}
+        <div className="mt-8 md:mt-0 md:flex-1 md:flex md:items-center md:justify-center relative animate-in slide-in-from-right-[150%] duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)]">
+          {/* Glow backdrop */}
+          <div className="absolute inset-0 bg-[#fbd600] rounded-full blur-3xl opacity-50 w-72 h-72 md:w-[450px] md:h-[450px]" />
+          <div className="w-56 h-72 md:w-[450px] md:h-[600px] rounded-full border-[12px] border-white overflow-hidden shadow-2xl relative z-10 group">
+            <img
+              src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80&w=600"
+              className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+              alt="Nev the Barber"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Brand Story Section ("Durban Pigeon") */}
+      <div className="bg-[#e0f2f1] py-24 md:py-32 px-6 md:px-12 lg:px-24">
+        <div className="grid lg:grid-cols-2 gap-16 md:gap-24 items-center">
+          {/* Left - Image */}
+          <div className="flex justify-center lg:justify-start">
+            <div className="w-72 h-72 md:w-[500px] md:h-[500px] rounded-full border-8 border-white overflow-hidden shadow-2xl bg-white flex items-center justify-center relative group hover:rotate-12 transition-transform duration-500">
+              <div className="absolute inset-0 sunburst-gradient opacity-50"></div>
+              {/* Placeholder for Pigeon SVG */}
+              <div className="text-[120px] md:text-[200px] z-10">🕊️</div>
+            </div>
+          </div>
+
+          {/* Right - Content */}
+          <div className="space-y-8 lg:text-left text-center">
+            {/* Tab Navigation */}
+            <div className="flex gap-4 justify-center lg:justify-start flex-wrap">
+              <button className="text-xs md:text-sm font-black uppercase tracking-widest text-[#b32b2b] border-b-4 border-[#b32b2b] pb-2">ABOUT NEV</button>
+              <button className="text-xs md:text-sm font-black uppercase tracking-widest text-zinc-400 border-b-4 border-transparent pb-2 hover:text-black transition-colors">PRICING</button>
+              <button className="text-xs md:text-sm font-black uppercase tracking-widest text-zinc-400 border-b-4 border-transparent pb-2 hover:text-black transition-colors">CONTACT</button>
+            </div>
+
+            <h3 className="text-4xl md:text-6xl font-heading text-[#b32b2b] italic leading-tight">
+              LOOKING TO THE INSPIRATION OF THE CITY IT WAS FOUNDED IN, NEV THE BARBER WAS BORN OUT OF A PASSION.
+            </h3>
+            <p className="text-zinc-700 font-medium leading-relaxed text-sm md:text-base">
+              Captivated by good design, good coffee and exceptional haircuts, Nev wanted to create a space that delivered an authentic, modern barber experience. Established in 2010, he has built a space that opens before your first meeting.
+            </p>
+            <div className="flex flex-col md:flex-row gap-4 justify-center lg:justify-start pt-8">
+              <button
+                onClick={() => setStep(1)}
+                className="bg-[#b32b2b] text-white px-8 md:px-12 py-4 md:py-5 rounded-full font-black uppercase tracking-widest text-xs md:text-sm hover:bg-[#8e2222] transition-colors shadow-lg"
+              >
+                BOOK AN APPOINTMENT
+              </button>
+              <button className="bg-[#fbd600] text-black px-8 md:px-12 py-4 md:py-5 rounded-full font-black uppercase tracking-widest text-xs md:text-sm flex items-center justify-center gap-2 hover:bg-[#e6c400] transition-colors shadow-lg">
+                <span className="w-0 h-0 border-t-[6px] border-t-transparent border-l-[10px] border-l-black border-b-[6px] border-b-transparent"></span>
+                VIEW OUR VIDEO
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Legendary Styles Carousel */}
+      <div className="bg-black py-32 px-6 md:px-12">
+        <div className="mb-16 flex flex-col gap-6">
+          <div>
+            <h2 className="text-6xl md:text-9xl font-heading text-white leading-none">
+              SEE OUR<br />
+              <span className="text-[#fbd600] italic">LEGENDARY</span>
+            </h2>
+            <h2 className="text-6xl md:text-9xl font-heading text-white italic">STYLES</h2>
+          </div>
+          <p className="text-zinc-500 font-bold uppercase tracking-widest text-[10px]">
+            SELECT A STYLE TO START YOUR BOOKING IMMEDIATELY.
+          </p>
+          <div className="flex gap-4">
+            <button onClick={() => scroll('left')} className="w-16 h-16 border-2 border-white/10 rounded-full flex items-center justify-center text-white hover:bg-white/5 transition-colors">
+              <ChevronLeft size={28} />
+            </button>
+            <button onClick={() => scroll('right')} className="w-16 h-16 border-2 border-white/10 rounded-full flex items-center justify-center text-white hover:bg-white/5 transition-colors">
+              <ChevronRight size={28} />
+            </button>
+          </div>
+        </div>
+
+        <div
+          ref={scrollRef}
+          className="flex overflow-x-auto gap-8 no-scrollbar snap-x snap-mandatory"
+        >
+          {SERVICES.map(service => (
+            <button
+              key={service.id}
+              onClick={() => { setSelectedService(service); setStep(2); }}
+              className="min-w-[340px] md:min-w-[500px] h-[400px] md:h-[600px] relative rounded-[4rem] overflow-hidden snap-start group bg-zinc-900 flex-shrink-0 border-2 border-white/5"
+            >
+              <img
+                src={
+                  service.id === 'fade' ? "https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&q=80&w=600" :
+                    service.id === 'beard' ? "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&q=80&w=600" :
+                      "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80&w=600"
+                }
+                className="w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700"
+                alt={service.name}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent p-10 flex flex-col justify-between items-start">
+                {/* Start Booking Text - Shows on Hover */}
+                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  <span className="text-white font-black uppercase tracking-widest text-xs md:text-sm">START BOOKING</span>
+                </div>
+
+                {/* Bottom Details */}
+                <div>
+                  <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-white/60 mb-2 block">
+                    {service.name.includes(' ') ? service.name.split(' ')[0] : 'Legendary'} • {service.id.toUpperCase()}
+                  </span>
+                  <span className="text-4xl md:text-6xl font-heading text-[#fbd600] italic leading-none">
+                    R{service.price}
+                  </span>
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Studio Info Section ("THE STUDIO") */}
+      <div className="bg-white py-32 px-6 md:px-12 lg:px-24">
+        <div className="grid lg:grid-cols-2 gap-20 md:gap-32">
+          {/* Left Column */}
+          <div className="space-y-12">
+            <h2 className="text-6xl md:text-7xl font-heading italic text-[#b32b2b] leading-tight">THE STUDIO</h2>
+            
+            <div className="space-y-8">
+              <div className="flex gap-6 items-start">
+                <div className="w-16 h-16 bg-[#fbd600] rounded-full flex items-center justify-center flex-shrink-0">
+                  <MapPin size={28} className="text-black" />
+                </div>
+                <div>
+                  <h4 className="text-lg md:text-2xl font-bold mb-3">
+                    {BARBER_CONFIG.locations[0].address}
+                  </h4>
+                  <button className="text-[#b32b2b] font-black uppercase tracking-widest text-[10px] border-b-2 border-[#b32b2b] pb-1 hover:opacity-70 transition-opacity">
+                    GET DIRECTIONS
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-3">
+                {['INSTANT CONFIRM', 'KID FRIENDLY', 'EXPERT BARBERS'].map(badge => (
+                  <div key={badge} className="px-6 py-3 border-2 border-black/10 rounded-full text-[9px] font-black uppercase tracking-widest bg-white hover:bg-zinc-50 transition-colors">
+                    {badge}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column - Hours Box */}
+          <div className="bg-zinc-50 p-12 md:p-16 rounded-[4rem] border border-zinc-100 shadow-inner h-fit">
+            <h4 className="font-heading text-3xl md:text-4xl mb-10 text-[#b32b2b] italic">OPENING TIMES</h4>
+            <div className="space-y-5">
+              {BARBER_CONFIG.locations[0].hours.map(h => (
+                <div key={h.day} className="flex justify-between items-center border-b border-zinc-200 pb-3">
+                  <span className="font-black uppercase tracking-widest text-[10px] text-zinc-500">{h.day}</span>
+                  <span className={`font-heading text-lg md:text-2xl ${h.status === 'closed' ? 'text-zinc-300' : h.status === 'current' ? 'text-[#b32b2b]' : 'text-black font-black'}`}>
+                    {h.time}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -231,77 +290,85 @@ const App: React.FC = () => {
     ];
 
     return (
-      <div className="space-y-8 pb-10">
-        {/* Sub Header */}
-        <div className="bg-[#b32b2b] p-8 flex flex-col items-center justify-center text-center relative overflow-hidden">
-          <div className="absolute top-4 left-4">
-            <button onClick={() => setStep(0)} className="w-10 h-10 bg-black rounded-full flex items-center justify-center">
-              <ChevronLeft size={20} />
-            </button>
-          </div>
-          <div className="w-16 h-16 bg-[#b2c2ae] mb-4"></div>
-          <h2 className="text-3xl font-brand italic uppercase tracking-tighter">{selectedLocation.name}</h2>
-          <div className="flex items-center gap-2 text-[10px] font-bold text-yellow-400 mt-1 uppercase">
-            <MapPin size={10} />
+      <div className="min-h-screen bg-[#fbd600] py-16 md:py-24 px-6 md:px-12">
+        {/* Back Button */}
+        <button onClick={() => setStep(0)} className="flex items-center gap-2 text-black/70 uppercase text-[10px] md:text-xs font-black mb-12 hover:text-black transition-colors">
+          <ChevronLeft size={18} /> BACK
+        </button>
+
+        {/* Title */}
+        <div className="mb-20 md:mb-32 space-y-3">
+          <h1 className="text-7xl md:text-9xl font-heading text-[#b32b2b] italic leading-none">PRICING</h1>
+          <h1 className="text-5xl md:text-7xl font-heading text-black leading-none">MENU</h1>
+          <div className="flex items-center gap-2 text-xs md:text-sm font-black text-black uppercase tracking-widest mt-4">
+            <MapPin size={14} />
             <span>{selectedLocation.name}</span>
           </div>
         </div>
 
-        {/* Menu Sections */}
-        {categories.map(cat => (
-          <div key={cat.name} className="px-6 space-y-6">
-            <div className="flex items-center gap-2">
-              <div className="w-1 h-8 bg-yellow-400"></div>
-              <h3 className="text-3xl font-brand italic uppercase">{cat.name}</h3>
-            </div>
-            <div className="space-y-4">
-              {cat.services.map(s => (
-                <div key={s.id} className="bg-zinc-900/50 p-6 rounded-none border border-zinc-900 group">
-                  <div className="flex justify-between items-start mb-4">
-                    <div>
-                      <h4 className="text-lg font-black uppercase tracking-widest">{s.name}</h4>
-                      <p className="text-[10px] text-zinc-500 font-bold uppercase mt-1">{s.duration} mins • {s.description}</p>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-[9px] font-black uppercase text-zinc-500 block mb-1">From</span>
-                      <span className="text-2xl font-black text-yellow-400 italic leading-none">R{s.price}</span>
-                    </div>
-                  </div>
+        {/* Categories Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-16">
+          {categories.map(cat => (
+            <div key={cat.name} className="space-y-10">
+              {/* Category Header with Decorative Line */}
+              <div className="space-y-4">
+                <h3 className="text-5xl md:text-6xl font-heading italic uppercase text-black">{cat.name}</h3>
+                <div className="w-16 h-1 bg-black/20"></div>
+              </div>
+
+              {/* Service Cards */}
+              <div className="space-y-8">
+                {cat.services.map(s => (
                   <button
+                    key={s.id}
                     onClick={() => { setSelectedService(s); setStep(2); }}
-                    className={`w-full py-3 font-black uppercase text-xs tracking-widest transition-all ${s.id === 'full' ? 'bg-[#FFC107] text-black' : 'bg-white text-black hover:bg-zinc-200'}`}
+                    className="w-full bg-white p-8 md:p-10 border border-black/5 shadow-md hover:shadow-lg hover:translate-y-[-8px] transition-all duration-300 group relative overflow-hidden rounded-[3rem] text-left"
                   >
-                    Book Now
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-start gap-4">
+                        <div className="space-y-2">
+                          <h4 className="text-lg md:text-2xl font-black uppercase tracking-tight text-black">{s.name}</h4>
+                          <p className="text-[9px] md:text-[10px] text-zinc-500 font-bold uppercase tracking-widest">{s.duration} MINS • {s.description.toUpperCase()}</p>
+                        </div>
+                      </div>
+                      <div className="flex justify-between items-end gap-4 mt-6 pt-4 border-t border-black/5">
+                        <span className="text-4xl md:text-5xl font-heading text-[#b32b2b] italic leading-none">R{s.price}</span>
+                        <span className="text-[8px] font-black uppercase text-zinc-400 tracking-widest">FROM</span>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => { setSelectedService(s); setStep(2); }}
+                      className="w-full mt-6 py-4 md:py-5 bg-[#b32b2b] text-white font-black uppercase text-xs tracking-[0.2em] hover:bg-[#8e2222] transition-colors rounded-full"
+                    >
+                      BOOK THIS SESSION
+                    </button>
                   </button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Shop Details Footer */}
+        <div className="px-0 md:px-8 mt-32 md:mt-48">
+          <div className="bg-[#3e2723] p-12 md:p-16 text-white rounded-[3rem] diagonal-stripes flex flex-col md:flex-row justify-between items-center gap-12">
+            <div className="space-y-4 text-center md:text-left">
+              <h4 className="font-heading text-3xl md:text-4xl text-[#fbd600]">SHOP DETAILS</h4>
+              <p className="text-white/60 text-xs md:text-sm font-bold uppercase tracking-widest max-w-sm">Everything you need for a premium grooming experience in Durban.</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 w-full md:w-auto">
+              {[
+                { icon: <CheckCircle size={24} />, label: 'INSTANT CONFIRM' },
+                { icon: <Smartphone size={24} />, label: 'MOBILE BOOKING' },
+                { icon: <MapPin size={24} />, label: 'STREET PARKING' }
+              ].map(detail => (
+                <div key={detail.label} className="flex flex-col items-center gap-4">
+                  <div className="w-14 h-14 rounded-full bg-[#fbd600] flex items-center justify-center text-black">
+                    {detail.icon}
+                  </div>
+                  <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-white">{detail.label}</span>
                 </div>
               ))}
-            </div>
-          </div>
-        ))}
-
-        {/* Shop Details Summary */}
-        <div className="px-6">
-          <div className="bg-zinc-900 p-8 space-y-6">
-            <h4 className="text-sm font-black uppercase tracking-widest">Shop Details</h4>
-            <div className="space-y-5">
-              <div className="flex items-center gap-4 text-zinc-400">
-                <div className="w-6 h-6 rounded-full bg-yellow-400 flex items-center justify-center text-black">
-                  <CheckCircle size={14} />
-                </div>
-                <span className="text-xs font-bold uppercase tracking-wider">Instant Confirmation</span>
-              </div>
-              <div className="flex items-center gap-4 text-zinc-400">
-                <div className="w-6 h-6 rounded-full bg-yellow-400 flex items-center justify-center text-black">
-                  <Smartphone size={14} />
-                </div>
-                <span className="text-xs font-bold uppercase tracking-wider">Kid-friendly Atmosphere</span>
-              </div>
-              <div className="flex items-center gap-4 text-zinc-400">
-                <div className="w-6 h-6 rounded-full bg-yellow-400 flex items-center justify-center text-black">
-                  <MapPin size={14} />
-                </div>
-                <span className="text-xs font-bold uppercase tracking-wider">Street Parking</span>
-              </div>
             </div>
           </div>
         </div>

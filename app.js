@@ -152,8 +152,8 @@ const authService = {
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     // In production, the password check happens on the server
-    if (password === 'nev') {
-      const user = { name: 'Nev', phone: 'Admin', role: 'admin' };
+    if (password === 'fadezone') {
+      const user = { name: 'FadeZone', phone: 'Admin', role: 'admin' };
       localStorage.setItem('trimtime_user', JSON.stringify(user));
       state.user = user;
       return user;
@@ -195,119 +195,150 @@ function escapeHtml(str) {
 
 // ===== RENDER FUNCTIONS =====
 
+// ===== RENDER FUNCTIONS =====
+
 function renderLandingPage() {
   const container = document.getElementById('landing-view');
 
   container.innerHTML = `
-    <!-- Location Display -->
-    <div class="location-toggle">
-      <div class="toggle-buttons">
-        <button class="toggle-btn active" style="flex: 1; cursor: default;">
-          ${escapeHtml(state.selectedLocation.name)}
-        </button>
-      </div>
-    </div>
-
-    <!-- Legendary Styles Section -->
-    <div class="styles-section">
-      <div class="section-header">
-        <h2 class="section-title">See Our<br>Legendary<br>Styles</h2>
-        <p class="section-description">
-          Check out our Legendary styles that would best suite you.
+    <!-- Dynamic Hero Section -->
+    <div class="hero-section bg-[#fbd600] relative min-h-[500px] flex flex-col md:flex-row items-center justify-center p-6 diagonal-stripes overflow-hidden">
+      <!-- Brand Block (Left) - Sliding Entrance -->
+      <div class="brand-block z-10 bg-[#3e2723] p-10 jagged-edge">
+        <h2 class="text-6xl md:text-8xl font-heading text-[#fbd600] leading-none mb-2">
+          FADEZONE<br>GROOMING
+        </h2>
+        <p class="brand-tagline text-white/50 font-bold tracking-[0.4em] uppercase text-xs">
+          LEGENDARY GROOMING
         </p>
-        <div class="section-controls">
-          <button class="view-more-btn">
-            View More Styles 
-            <i data-feather="arrow-right"></i>
-          </button>
-          <div class="carousel-controls">
-            <button class="carousel-btn" onclick="scrollCarousel('left')">
-              <i data-feather="chevron-left"></i>
-            </button>
-            <button class="carousel-btn" onclick="scrollCarousel('right')">
-              <i data-feather="chevron-right"></i>
-            </button>
-          </div>
-        </div>
       </div>
 
-      <!-- Style Cards Carousel -->
-      <div class="carousel no-scrollbar" id="style-carousel">
-        <div class="style-card">
-          <img 
-            src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&q=80&w=600" 
-            alt="Adult Haircut Fade"
-          >
-          <div class="style-card-content">
-            <p class="style-card-label">Adult Haircut • Fade</p>
-            <p class="style-card-price">R150</p>
-          </div>
-        </div>
-        <div class="style-card">
-          <img 
-            src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&q=80&w=600" 
-            alt="Beard Shave Clipper"
-          >
-          <div class="style-card-content">
-            <p class="style-card-label">Beard Shave • Clipper</p>
-            <p class="style-card-price">R120</p>
-          </div>
-        </div>
-        <div class="style-card">
+      <!-- Bust (Right) - Image -->
+      <div class="hero-bust mt-8 md:mt-0 md:-ml-12">
+        <div class="bust-image-container w-64 h-64 md:w-96 md:h-96 rounded-full border-8 border-white overflow-hidden shadow-2xl">
           <img 
             src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80&w=600" 
-            alt="The Scholar"
+            class="w-full h-full object-cover"
+            alt="FadeZone Vibe"
           >
-          <div class="style-card-content">
-            <p class="style-card-label">The Scholar • Student</p>
-            <p class="style-card-price">R80</p>
-          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Opening Times & Location Info -->
-    <div class="info-grid">
-      <div class="info-section">
-        <h4>Opening Times</h4>
-        <div class="hours-list">
-          ${state.selectedLocation.hours.map(h => `
-            <div class="hours-item ${escapeHtml(h.status) === 'current' ? 'current' : ''}">
-              <div class="hours-day">
-                <div class="status-dot ${escapeHtml(h.status) === 'active' || escapeHtml(h.status) === 'current' ? 'active' : ''}"></div>
-                <span>${escapeHtml(h.day.slice(0, 3))}</span>
-              </div>
-              <span>${escapeHtml(h.time)}</span>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-      <div class="info-section">
-        <h4>The Spot</h4>
-        <div class="location-info">
-          <p>${escapeHtml(state.selectedLocation.address)}</p>
-          <div class="location-features">
-            <div class="feature-item">
-              <div class="feature-icon">
-                <i data-feather="check-circle"></i>
-              </div>
-              <span class="feature-label">Instant Confirm</span>
-            </div>
-            <div class="feature-item">
-              <div class="feature-icon">P</div>
-              <span class="feature-label">Street Parking</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Action Button -->
-    <div class="cta-container">
-      <button class="btn-primary" onclick="navigateToStep(1)">
-        Book an Appointment
-        <i data-feather="chevron-right"></i>
+      <!-- Floating Book Button -->
+      <button 
+        onclick="navigateToStep(1)"
+        class="btn-bubble hover:scale-110 active:scale-95 transition-all"
+      >
+        BOOK AN APPOINTMENT
       </button>
+    </div>
+
+    <!-- Brand Story Section -->
+    <div class="brand-story-section bg-[#e0f2f1] py-24 px-8 flex flex-col items-center text-center gap-12 sunburst-gradient">
+      <div class="pigeon-container w-64 h-64 rounded-full border-8 border-white overflow-hidden shadow-xl bg-white flex items-center justify-center relative">
+        <div class="absolute inset-0 sunburst-gradient opacity-50"></div>
+        <div class="text-6xl">🕊️</div>
+      </div>
+      
+      <div class="story-content max-w-xl space-y-8">
+        <h3 class="story-title text-3xl md:text-5xl font-heading text-[#b32b2b] italic leading-tight">
+          LOOKING TO THE INSPIRATION OF THE CITY IT WAS FOUNDED IN, FADEZONE GROOMING WAS BORN OUT OF A PASSION.
+        </h3>
+        <p class="story-text text-zinc-700 font-medium leading-relaxed">
+          Captivated by good design, good coffee and exceptional haircuts, Alex wanted to create a space that delivered an authentic, modern barber experience. Having established the shop in 2010 he has built that space that opens before your first meeting.
+        </p>
+        <div class="story-actions flex flex-col md:flex-row gap-4 justify-center pt-8">
+          <button 
+            onclick="navigateToStep(1)"
+            class="bg-[#b32b2b] text-white px-8 py-4 rounded-full font-black uppercase tracking-widest text-xs hover:bg-[#8e2222] transition-colors"
+          >
+            BOOK AN APPOINTMENT
+          </button>
+          <button class="bg-[#fbd600] text-black px-8 py-4 rounded-full font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 hover:bg-[#e6c400] transition-colors">
+            <span class="vid-play-icon"></span>
+            VIEW OUR VIDEO
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Legendary Styles Carousel -->
+    <div class="carousel-section bg-black py-24">
+      <div class="section-header px-8 mb-12 flex flex-col gap-4">
+        <h2 class="text-5xl md:text-7xl font-heading text-white leading-none">
+          SEE OUR<br>
+          <span class="text-[#fbd600] italic">LEGENDARY</span> STYLES
+        </h2>
+        <p class="text-zinc-500 font-bold uppercase tracking-widest text-[10px]">
+          SELECT A STYLE TO START YOUR BOOKING IMMEDIATELY.
+        </p>
+      </div>
+
+      <!-- Carousel Cards -->
+      <div class="carousel no-scrollbar" id="style-carousel" style="padding: 0 2rem; gap: 1.5rem;">
+        ${SERVICES.map(service => `
+          <div 
+            class="style-card min-w-[300px] h-[450px] relative rounded-[2.5rem] overflow-hidden snap-start group bg-zinc-900"
+            onclick="selectService('${service.id}')"
+            style="cursor: pointer;"
+          >
+            <img 
+              src="${service.id === 'fade' ? "https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&q=80&w=600" :
+      service.id === 'beard' ? "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&q=80&w=600" :
+        "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80&w=600"
+    }" 
+              class="w-full h-full object-cover grayscale transition-all duration-700"
+              alt="${service.name}"
+            >
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent p-10 flex flex-col justify-end items-start text-left">
+              <span class="text-[10px] font-black uppercase tracking-widest text-white/50 mb-2">
+                ${service.name.includes(' ') ? service.name.split(' ')[0] : 'Legendary'} • ${service.id.toUpperCase()}
+              </span>
+              <span class="text-5xl font-heading text-[#fbd600] italic leading-none">
+                R${service.price}
+              </span>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <!-- The Studio Section -->
+    <div class="studio-section bg-white py-24 px-8">
+      <div class="grid md:grid-cols-2 gap-16">
+        <div class="studio-info space-y-8">
+          <h2 class="text-6xl font-heading leading-none italic text-[#b32b2b]">THE STUDIO</h2>
+          <div class="location-box flex gap-6 items-start">
+            <div class="w-14 h-14 bg-[#fbd600] rounded-full flex items-center justify-center flex-shrink-0">
+              <i data-feather="map-pin" style="color: black;"></i>
+            </div>
+            <div>
+              <h4 class="text-2xl font-bold mb-2">${escapeHtml(state.selectedLocation.address)}</h4>
+              <button class="text-[#b32b2b] font-black uppercase tracking-widest text-[10px] border-b-2 border-[#b32b2b] pb-1">
+                GET DIRECTIONS
+              </button>
+            </div>
+          </div>
+          
+          <div class="badges flex flex-wrap gap-3">
+            <div class="badge px-6 py-3 border border-black/5 rounded-full text-[9px] font-black uppercase tracking-widest bg-zinc-50">KID FRIENDLY</div>
+            <div class="badge px-6 py-3 border border-black/5 rounded-full text-[9px] font-black uppercase tracking-widest bg-zinc-50">SECURE PARKING</div>
+            <div class="badge px-6 py-3 border border-black/5 rounded-full text-[9px] font-black uppercase tracking-widest bg-zinc-50">EXPERT BARBERS</div>
+          </div>
+        </div>
+
+        <div class="opening-times bg-zinc-50 p-10 rounded-[3rem] border border-black/5">
+          <h4 class="font-heading text-2xl mb-8 text-[#b32b2b]">OPENING TIMES</h4>
+          <div class="hours-list space-y-4">
+            ${state.selectedLocation.hours.map(h => `
+              <div class="hours-row flex justify-between items-center border-b border-black/5 pb-2">
+                <span class="font-black uppercase tracking-widest text-[10px] text-zinc-400">${h.day}</span>
+                <span class="font-heading text-xl ${h.status === 'closed' ? 'text-zinc-300' : 'text-black'}">${h.time}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
     </div>
   `;
 
@@ -324,76 +355,50 @@ function renderServiceMenu() {
   ];
 
   container.innerHTML = `
-    <!-- Sub Header -->
-    <div class="service-header">
-      <button class="back-btn" onclick="navigateToStep(0)">
-        <i data-feather="chevron-left"></i>
+    <!-- Header -->
+    <div class="service-view-header bg-[#b32b2b] p-12 flex flex-col items-center justify-center text-center relative overflow-hidden diagonal-stripes">
+      <button onclick="navigateToStep(0)" class="absolute top-6 left-6 w-12 h-12 bg-black rounded-full flex items-center justify-center text-white">
+        <i data-feather="chevron-left" style="color: white;"></i>
       </button>
-      <div class="shop-logo"></div>
-      <h2 class="shop-name">${state.selectedLocation.name}</h2>
-      <div class="shop-location">
-        <i data-feather="map-pin"></i>
+      <div class="font-heading text-4xl text-white mb-2 italic">SELECT SERVICE</div>
+      <div class="flex items-center gap-2 text-xs font-black text-[#fbd600] uppercase tracking-widest">
+        <i data-feather="map-pin" style="width: 12px;"></i>
         <span>${escapeHtml(state.selectedLocation.name)}</span>
       </div>
     </div>
 
-    <!-- Menu Sections -->
-    ${categories.map(cat => `
-      <div class="service-category">
-        <div class="category-header">
-          <div class="category-bar"></div>
-          <h3 class="category-title">${cat.name}</h3>
-        </div>
-        <div class="service-list">
-          ${cat.services.map(s => `
-            <div class="service-card">
-              <div class="service-card-header">
-                <div>
-                  <h4 class="service-name">${s.name}</h4>
-                  <p class="service-details">${s.duration} mins • ${s.description}</p>
+    <!-- Categories Grid -->
+    <div class="px-8 py-12 grid md:grid-cols-2 lg:grid-cols-3 gap-12 bg-white">
+      ${categories.map(cat => `
+        <div class="category-block space-y-8">
+          <div class="flex items-center gap-3">
+            <div class="w-2 h-10 bg-[#fbd600]"></div>
+            <h3 class="text-4xl font-heading italic uppercase text-black">${cat.name}</h3>
+          </div>
+          <div class="service-stack space-y-6">
+            ${cat.services.map(s => `
+              <div class="service-item bg-white p-8 border border-zinc-100 shadow-sm hover:shadow-xl transition-all duration-300 relative group">
+                <div class="flex justify-between items-start mb-6">
+                  <div class="space-y-1">
+                    <h4 class="text-xl font-black uppercase tracking-tight text-black">${s.name}</h4>
+                    <p class="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">${s.duration} MINS • ${s.description.toUpperCase()}</p>
+                  </div>
+                  <div class="text-right">
+                    <span class="text-[10px] font-heading text-zinc-300 block mb-0 leading-none">FROM</span>
+                    <span class="text-3xl font-heading text-[#b32b2b] italic leading-none">R${s.price}</span>
+                  </div>
                 </div>
-                <div class="service-price-container">
-                  <span class="price-label">From</span>
-                  <span class="service-price">R${s.price}</span>
-                </div>
+                <button
+                  onclick="selectService('${s.id}')"
+                  class="w-full py-4 bg-black text-white font-black uppercase text-xs tracking-[0.2em] hover:bg-[#b32b2b] transition-colors"
+                >
+                  BOOK NOW
+                </button>
               </div>
-              <button 
-                class="btn-book ${s.id === 'full' ? 'premium' : ''}"
-                onclick="selectService('${s.id}')"
-              >
-                Book Now
-              </button>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    `).join('')}
-
-    <!-- Shop Details Summary -->
-    <div class="shop-details">
-      <div class="shop-details-card">
-        <h4 class="shop-details-title">Shop Details</h4>
-        <div class="details-list">
-          <div class="detail-item">
-            <div class="detail-icon">
-              <i data-feather="check-circle"></i>
-            </div>
-            <span class="detail-label">Instant Confirmation</span>
-          </div>
-          <div class="detail-item">
-            <div class="detail-icon">
-              <i data-feather="smartphone"></i>
-            </div>
-            <span class="detail-label">Kid-friendly Atmosphere</span>
-          </div>
-          <div class="detail-item">
-            <div class="detail-icon">
-              <i data-feather="map-pin"></i>
-            </div>
-            <span class="detail-label">Street Parking</span>
+            `).join('')}
           </div>
         </div>
-      </div>
+      `).join('')}
     </div>
   `;
 
@@ -406,21 +411,29 @@ function renderTimeSelection() {
   const dateStr = formatDate(state.selectedDate);
 
   container.innerHTML = `
-    <div class="time-selection">
-      <button class="back-btn" onclick="navigateToStep(1)" style="margin-bottom: 1rem;">
-        <i data-feather="chevron-left"></i>
-      </button>
-      <div class="time-header">
-        <h2 class="time-title">Select Time</h2>
+    <div class="time-selection bg-[#000] min-h-screen pb-24">
+      <div class="bg-[#fbd600] p-12 flex flex-col items-center justify-center text-center relative overflow-hidden diagonal-stripes">
+        <button onclick="navigateToStep(1)" class="absolute top-6 left-6 w-12 h-12 bg-black rounded-full flex items-center justify-center text-white">
+          <i data-feather="chevron-left" style="color: white;"></i>
+        </button>
+        <div class="font-heading text-4xl text-black mb-2 italic">SELECT TIME</div>
+        <p class="text-[10px] font-black uppercase tracking-widest text-black/50">${dateStr.toUpperCase()}</p>
       </div>
-      <div class="time-grid-container">
-        <div class="time-grid">
+
+      <div class="px-8 py-12">
+        <div class="grid grid-cols-3 md:grid-cols-6 gap-3">
           ${slots.map(time => {
     const isOccupied = state.bookings.some(b => escapeHtml(b.date) === escapeHtml(dateStr) && escapeHtml(b.time) === escapeHtml(time));
     const isSelected = state.selectedTime === time;
     return `
               <button 
-                class="time-slot ${isSelected ? 'selected' : ''}"
+                class="time-slot-btn py-4 px-2 rounded-none border text-xs font-black transition-all uppercase tracking-widest text-center
+                ${isOccupied
+        ? 'bg-zinc-950 border-zinc-900 text-zinc-800 cursor-not-allowed line-through'
+        : isSelected
+          ? 'bg-[#fbd600] border-[#fbd600] text-black shadow-[0_0_20px_rgba(251,214,0,0.4)] scale-[1.05] z-10'
+          : 'bg-black border-zinc-800 text-zinc-400 hover:border-[#fbd600] hover:text-[#fbd600]'
+      }"
                 ${isOccupied ? 'disabled' : ''}
                 onclick="selectTime('${escapeHtml(time)}')"
               >
@@ -441,141 +454,116 @@ function renderBookingSummary() {
   const service = state.selectedService;
   const dateStr = formatDate(state.selectedDate);
 
-  // Pre-fill customer details from logged-in user
-  if (state.user && !state.customerName) {
-    state.customerName = state.user.name;
-  }
-  if (state.user && !state.customerPhone) {
-    state.customerPhone = state.user.phone;
-  }
+  if (state.user && !state.customerName) state.customerName = state.user.name;
+  if (state.user && !state.customerPhone) state.customerPhone = state.user.phone;
 
   container.innerHTML = `
-    <div class="booking-summary">
-      <button class="back-btn" onclick="navigateToStep(2)" style="margin-bottom: 1rem;">
-        <i data-feather="chevron-left"></i>
-      </button>
+    <div class="space-y-12 animate-in slide-in-from-bottom duration-500 pb-24 bg-[#e0f2f1] min-h-screen px-6 pt-12 sunburst-gradient">
+      <!-- Title -->
+      <h2 class="text-4xl font-heading text-[#b32b2b] text-center italic">BOOKING SUMMARY</h2>
 
-      <!-- Receipt Card -->
-      <div class="receipt-card">
-        <!-- Header -->
-        <div class="receipt-header">
-          <div>
-            <h3 class="receipt-title">Booking Summary</h3>
-            <p class="receipt-ref">Ref: #NZ-2941-DN</p>
-          </div>
-          <span class="receipt-badge">${escapeHtml(state.selectedLocation.name)}</span>
+      <!-- Physical Receipt Card -->
+      <div class="bg-white p-8 space-y-8 relative shadow-2xl mx-auto max-w-sm jagged-edge receipt-paper">
+        <!-- Receipt Header -->
+        <div class="text-center space-y-2">
+          <div class="font-heading text-2xl text-[#b32b2b]">FADEZONE GROOMING</div>
+          <div class="text-[9px] font-black uppercase tracking-[0.3em] text-zinc-400">EST. 2010 • DURBAN</div>
+          <div class="text-[8px] font-mono text-zinc-400">TXN #NZ-2941-DN</div>
         </div>
 
-        <!-- Location Section -->
-        <div class="receipt-location">
-          <div class="location-icon-box">
-            <div class="location-box"></div>
+        <div class="receipt-divider border-t-2 border-dashed border-zinc-100"></div>
+
+        <!-- Location & Time -->
+        <div class="grid grid-cols-2 gap-8">
+          <div class="space-y-1">
+            <p class="text-[8px] font-black uppercase tracking-widest text-zinc-400">DATE</p>
+            <p class="text-xs font-black uppercase text-black">${dateStr}</p>
           </div>
-          <div class="location-text">
-            <h5>Location</h5>
-            <p>${escapeHtml(state.selectedLocation.address)}</p>
+          <div class="space-y-1 text-right">
+            <p class="text-[8px] font-black uppercase tracking-widest text-zinc-400">TIME</p>
+            <p class="text-xs font-black uppercase text-black">${state.selectedTime}</p>
           </div>
         </div>
 
-        <div class="divider"></div>
+        <div class="space-y-1">
+          <p className="text-[8px] font-black uppercase tracking-widest text-zinc-400">LOCATION</p>
+          <p className="text-xs font-bold leading-tight uppercase text-black">424 COMMISSIONER STREET<br>KENSINGTON</p>
+        </div>
+
+        <div class="receipt-divider border-t-2 border-dashed border-zinc-100"></div>
 
         <!-- Service Details -->
-        <div class="receipt-service">
-          <h5>Service</h5>
-          <div class="service-info">
-            <div>
-              <h4>${escapeHtml(service.name)}</h4>
-              <p class="service-meta">${escapeHtml(service.duration)} Mins • All professionals</p>
+        <div class="space-y-6">
+          <div class="flex justify-between items-start">
+            <div class="space-y-1">
+              <p class="text-xs font-black uppercase tracking-tight text-black">${service.name}</p>
+              <p class="text-[9px] font-bold text-zinc-400 uppercase italic">${service.duration} MINS SESSION</p>
             </div>
-            <span class="service-amount">R ${service.price.toFixed(2)}</span>
+            <span class="text-xl font-heading text-[#b32b2b] italic">R${service.price}</span>
           </div>
 
-          <div class="receipt-totals">
-            <div class="total-row">
-              <span>Subtotal</span>
-              <span>R ${service.price.toFixed(2)}</span>
+          <!-- Pricing Math -->
+          <div class="space-y-2 pt-4 border-t border-zinc-100">
+            <div class="flex justify-between text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
+              <span>SUBTOTAL</span>
+              <span>R${service.price}</span>
             </div>
-            <div class="total-row">
-              <span>Tax (Incl.)</span>
-              <span>R 0.00</span>
+            <div class="flex justify-between text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
+              <span>SERVICE FEE</span>
+              <span>R0</span>
             </div>
-          </div>
-
-          <div class="grand-total">
-            <span>Total</span>
-            <span>R ${service.price.toFixed(2)}</span>
+            <div class="flex justify-between text-xl font-heading text-black mt-4 pt-4 border-t-2 border-black italic">
+              <span>TOTAL</span>
+              <span>R${service.price}</span>
+            </div>
           </div>
         </div>
 
-        <div class="divider"></div>
+        <div class="receipt-divider border-t-2 border-dashed border-zinc-100"></div>
 
-        <!-- Date Time Section -->
-        <div class="receipt-datetime">
-          <span>Date: ${escapeHtml(dateStr)}</span>
-          <span>Time: ${escapeHtml(state.selectedTime)}</span>
-        </div>
-
-        <!-- Barcode Element -->
-        <div class="barcode-container">
-          <div class="barcode-pattern"></div>
-          <p class="barcode-text">Fadezone Grooming Systems</p>
+        <!-- Barcode -->
+        <div class="barcode-stack space-y-4 text-center pb-4">
+          <div class="barcode-lines h-16 w-full flex items-center justify-center gap-[2px]">
+            ${[...Array(20)].map(() => `<div class="bg-black h-full" style="width:${Math.random() * 4 + 1}px; opacity:${Math.random() > 0.3 ? 1 : 0.4}"></div>`).join('')}
+          </div>
+          <p class="text-[8px] font-black uppercase tracking-[0.4em] text-zinc-400">FADEZONE GROOMING SYSTEMS</p>
         </div>
       </div>
 
-      <!-- Inputs -->
-      <div class="form-group">
-        <input 
-          id="customer-name"
-          type="text" 
-          class="input-field"
-          placeholder="ENTER YOUR NAME"
-          value="${escapeHtml(state.customerName)}"
-          oninput="updateCustomerName(this.value)"
-        >
-        <input 
-          id="customer-phone"
-          type="tel" 
-          class="input-field"
-          placeholder="PHONE NUMBER"
-          value="${escapeHtml(state.customerPhone)}"
-          oninput="updateCustomerPhone(this.value)"
-        >
-      </div>
+      <!-- Guest Details Input -->
+      <div class="max-w-sm mx-auto space-y-6 pt-8">
+        <h4 class="text-center text-[10px] font-black uppercase tracking-[0.2em] text-black/50">GUEST DETAILS</h4>
+        <div class="space-y-3">
+          <input 
+            id="customer-name"
+            type="text" 
+            class="input-field-new"
+            placeholder="FULL NAME"
+            value="${escapeHtml(state.customerName)}"
+            oninput="updateCustomerName(this.value)"
+          >
+          <input 
+            id="customer-phone"
+            type="tel" 
+            class="input-field-new"
+            placeholder="PHONE NUMBER"
+            value="${escapeHtml(state.customerPhone)}"
+            oninput="updateCustomerPhone(this.value)"
+          >
+        </div>
 
-      <!-- Action Buttons -->
-      <div class="action-buttons">
-        <button class="btn-icon">
-          <i data-feather="phone"></i>
-        </button>
+        <!-- Confirm Button -->
         <button 
-          id="whatsapp-confirm-btn"
-          class="btn-whatsapp"
-          ${!state.customerName.trim() || !state.customerPhone.trim() ? 'disabled' : ''}
+          id="confirm-btn"
           onclick="confirmBooking()"
+          class="w-full py-6 rounded-full text-sm font-black uppercase tracking-widest transition-all bg-[#b32b2b] text-white shadow-2xl hover:scale-105 active:scale-95"
         >
-          <i data-feather="message-square"></i>
-          Confirm Via WhatsApp
+          CONFIRM VIA WHATSAPP
         </button>
-      </div>
 
-      <!-- Bottom Features -->
-      <div class="features">
-        <div class="feature">
-          <div class="feature-box">✓</div>
-          Instant Confirm
-        </div>
-        <div class="feature">
-          <div class="feature-box">☺</div>
-          Kid Friendly
-        </div>
-        <div class="feature">
-          <div class="feature-box">P</div>
-          Parking
-        </div>
-      </div>
-
-      <div class="disclaimer">
-        By confirming you agree to our 24h cancellation policy. Late arrivals may forfeit their slot.
+        <p class="text-[8px] text-center text-black/40 font-bold uppercase tracking-widest leading-relaxed px-6">
+          By confirming you agree to our 24h cancellation policy. Late arrivals may forfeit their slot and deposit.
+        </p>
       </div>
     </div>
   `;
@@ -608,7 +596,7 @@ function renderAuthPage() {
 
         <div class="auth-footer">
           <button class="link-btn" onclick="toggleAdminLogin()">
-            ${state.isAdminLogin ? 'Back to Client Booking' : 'Are you Nev? (Admin Login)'}
+            ${state.isAdminLogin ? 'Back to Client Booking' : 'Are you looking for Admin Login?'}
           </button>
         </div>
       </div>
@@ -977,7 +965,7 @@ function handleReviewSubmit(e) {
     comment,
     date: new Date().toISOString()
   });
-  alert('Lekker Nev! Thanks for the feedback.');
+  alert('Lekker FadeZone! Thanks for the feedback.');
   navigateToStep(0);
 }
 
