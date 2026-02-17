@@ -23,7 +23,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
   const isFormValid = customerName.trim() && customerPhone.trim();
 
   return (
-  return (
+
     <div className="space-y-8 animate-in slide-in-from-bottom duration-500 pb-10">
       {/* Receipt Card - Redesigned to match screenshot 135050 */}
       <div className="bg-[#111] border-2 border-[#FFC107] p-8 space-y-6 relative overflow-hidden shadow-2xl">
