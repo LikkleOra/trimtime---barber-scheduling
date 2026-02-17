@@ -102,8 +102,29 @@ const App: React.FC = () => {
   const handleConfirm = () => {
     if (!selectedService || !selectedTime) return;
     const dateStr = selectedDate.toISOString().split('T')[0];
-    const msg = `Lekker Fadezone! Booking: ${selectedService.name} on ${dateStr} at ${selectedTime}. Customer: ${customerName}. Vibe the vibe!`;
-    const whatsappUrl = `https://wa.me/${BARBER_CONFIG.phone}?text=${encodeURIComponent(msg)}`;
+
+    // Stylish Message Construction
+    const msg = `
+*FADEZONE BOOKING CONFIRMED* ✂️🔥
+
+*Service:* ${selectedService.name}
+*Date:* ${dateStr}
+*Time:* ${selectedTime}
+*Client:* ${customerName}
+*Price:* R${selectedService.price}
+
+Vibe the vibe! We'll see you soon. 
+📍 *424 Commissioner St, Kensington*
+
+_Need to book again?_
+https://trimtime-barber.netlify.app/
+    `.trim();
+
+    // Primary number as per request (one of the two provided)
+    // "078596289" seems short/invalid, "0812687806" is valid length. Using the valid one for the link.
+    const primaryNumber = "27812687806"; // 081... -> 2781...
+
+    const whatsappUrl = `https://wa.me/${primaryNumber}?text=${encodeURIComponent(msg)}`;
     window.open(whatsappUrl, '_blank');
 
     bookingService.addBooking({

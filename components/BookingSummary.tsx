@@ -23,127 +23,111 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
   const isFormValid = customerName.trim() && customerPhone.trim();
 
   return (
+  return (
     <div className="space-y-8 animate-in slide-in-from-bottom duration-500 pb-10">
-      {/* Receipt Card */}
-      <div className="bg-[#111] border-2 border-[#FFC107] p-8 space-y-8 relative overflow-hidden">
+      {/* Receipt Card - Redesigned to match screenshot 135050 */}
+      <div className="bg-[#111] border-2 border-[#FFC107] p-8 space-y-6 relative overflow-hidden shadow-2xl">
         {/* Header */}
-        <div className="flex justify-between items-start">
+        <div className="flex justify-between items-start border-b border-dashed border-zinc-800 pb-6">
           <div>
-            <h3 className="text-2xl font-mono-brand font-bold uppercase tracking-tighter">Booking Summary</h3>
-            <p className="text-[10px] font-mono-brand text-zinc-500 uppercase mt-1">Ref: #NZ-2941-DN</p>
+            <h3 className="text-3xl font-brand italic uppercase text-white tracking-tighter">Booking Summary</h3>
+            <p className="text-[10px] font-black text-zinc-500 uppercase mt-1 tracking-widest">Ref: #FZ-{Math.floor(Math.random() * 9000) + 1000}</p>
           </div>
-          <span className="bg-black text-white px-3 py-1 text-[9px] font-mono-brand font-bold uppercase">Durban North</span>
+          <div className="bg-zinc-900 border border-zinc-800 px-4 py-2 rotate-1">
+            <span className="text-[10px] font-black uppercase text-[#FFC107] tracking-widest">Durban North</span>
+          </div>
         </div>
 
-        {/* Location Section */}
-        <div className="flex gap-4">
-          <div className="w-10 h-10 bg-zinc-900 flex items-center justify-center">
-             <div className="w-4 h-4 border border-zinc-700"></div>
+        {/* Details Grid */}
+        <div className="grid grid-cols-2 gap-8 py-4">
+          {/* Service */}
+          <div className="space-y-1">
+            <p className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">Service</p>
+            <p className="text-xl font-brand italic text-white uppercase leading-none tracking-tight">{service.name}</p>
+            <p className="text-[10px] font-bold text-zinc-500 uppercase">{service.duration} Mins • Master Barber</p>
+          </div>
+
+          {/* Price */}
+          <div className="space-y-1 text-right">
+            <p className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">Total</p>
+            <p className="text-3xl font-brand italic text-[#FFC107] leading-none">R{service.price}</p>
+          </div>
+
+          {/* Date */}
+          <div className="space-y-1">
+            <p className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">Date</p>
+            <p className="text-lg font-black text-white uppercase tracking-tight">{date}</p>
+          </div>
+
+          {/* Time */}
+          <div className="space-y-1 text-right">
+            <p className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">Time</p>
+            <p className="text-lg font-black text-white uppercase tracking-tight">{time}</p>
+          </div>
+        </div>
+
+        {/* Location Box */}
+        <div className="bg-zinc-900/50 p-4 border border-zinc-800 flex items-center gap-4">
+          <div className="w-10 h-10 bg-[#FFC107] flex items-center justify-center text-black font-black italic rounded-lg">
+            LOC
           </div>
           <div>
-            <p className="text-[10px] font-mono-brand text-zinc-500 uppercase">Location</p>
-            <p className="text-sm font-bold leading-snug">28 Mackeurtan Avenue, Durban North</p>
+            <p className="text-[9px] font-black text-zinc-500 uppercase tracking-widest">Grooming HQ</p>
+            <p className="text-xs font-bold text-white uppercase tracking-wider">424 Commissioner St, Kensington</p>
           </div>
         </div>
 
-        <div className="border-t border-dashed border-zinc-800" />
-
-        {/* Service Details */}
-        <div className="space-y-4">
-          <div>
-            <p className="text-[9px] font-mono-brand text-zinc-500 uppercase tracking-widest">Service</p>
-            <div className="flex justify-between items-end mt-1">
-              <div>
-                <h4 className="text-lg font-bold font-mono-brand">{service.name}</h4>
-                <p className="text-[10px] font-mono-brand italic text-zinc-500">{service.duration} Mins • All professionals</p>
-              </div>
-              <span className="text-lg font-bold font-mono-brand tracking-tighter">R {service.price.toFixed(2)}</span>
-            </div>
-          </div>
-
-          <div className="space-y-1 pt-4 border-t border-zinc-900">
-            <div className="flex justify-between text-[11px] font-mono-brand text-zinc-500 uppercase">
-              <span>Subtotal</span>
-              <span>R {service.price.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between text-[11px] font-mono-brand text-zinc-500 uppercase">
-              <span>Tax (Incl.)</span>
-              <span>R 0.00</span>
-            </div>
-          </div>
-
-          <div className="border-t-2 border-white pt-4 flex justify-between items-end">
-            <span className="text-2xl font-bold font-mono-brand uppercase">Total</span>
-            <span className="text-2xl font-bold font-mono-brand tracking-tighter">R {service.price.toFixed(2)}</span>
-          </div>
-        </div>
-
-        <div className="border-t border-dashed border-zinc-800" />
-
-        {/* Date Time Section */}
-        <div className="flex justify-between text-[9px] font-mono-brand font-bold uppercase text-zinc-400">
-          <span>Date: {date}</span>
-          <span>Time: {time} PM</span>
-        </div>
-
-        {/* Barcode Element */}
-        <div className="space-y-4 text-center">
-          <div className="barcode-pattern" />
-          <p className="text-[9px] font-mono-brand text-zinc-500 uppercase tracking-[0.3em]">Fadezone Grooming Systems</p>
+        {/* Barcode / Footer */}
+        <div className="border-t border-dashed border-zinc-800 pt-6 text-center space-y-2">
+          <div className="h-8 bg-[url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAACCAYAAAB/qH1jAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3gYIFgo2jU95yQAAABl0RVh0Q29tbWVudABDcmVhdGVkIHdpdGggR0lNUFeBDhcAAAASSURBVAjXY2BgYHBgYGBgYAAAAAUAAc1ibO4AAAAASUVORK5CYII=')] opacity-30 bg-repeat-x"></div>
+          <p className="text-[8px] font-black text-zinc-600 uppercase tracking-[0.5em]">Authentic Fadezone Experience</p>
         </div>
       </div>
 
       {/* Inputs */}
       <div className="space-y-4 px-2">
-        <input 
-          type="text" 
-          placeholder="ENTER YOUR NAME"
-          value={customerName}
-          onChange={(e) => onNameChange(e.target.value.toUpperCase())}
-          className="w-full bg-zinc-900 border border-zinc-800 p-4 text-xs font-black tracking-widest uppercase focus:outline-none focus:border-[#FFC107] transition-all"
-        />
-        <input 
-          type="tel" 
-          placeholder="PHONE NUMBER"
-          value={customerPhone}
-          onChange={(e) => onPhoneChange(e.target.value)}
-          className="w-full bg-zinc-900 border border-zinc-800 p-4 text-xs font-black tracking-widest uppercase focus:outline-none focus:border-[#FFC107] transition-all"
-        />
+        <div className="space-y-2">
+          <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest ml-1">Your Name</label>
+          <input
+            type="text"
+            placeholder="ENTER FULL NAME"
+            value={customerName}
+            onChange={(e) => onNameChange(e.target.value.toUpperCase())}
+            className="w-full bg-white border-4 border-black p-4 text-sm font-black tracking-widest uppercase focus:outline-none focus:border-[#FFC107] focus:bg-zinc-50 transition-all placeholder:text-zinc-300 text-black"
+          />
+        </div>
+        <div className="space-y-2">
+          <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest ml-1">Mobile Number</label>
+          <input
+            type="tel"
+            placeholder="08X XXX XXXX"
+            value={customerPhone}
+            onChange={(e) => onPhoneChange(e.target.value)}
+            className="w-full bg-white border-4 border-black p-4 text-sm font-black tracking-widest uppercase focus:outline-none focus:border-[#FFC107] focus:bg-zinc-50 transition-all placeholder:text-zinc-300 text-black"
+          />
+        </div>
       </div>
 
       {/* Action Buttons */}
-      <div className="flex gap-3 px-2">
-        <button className="w-20 h-16 bg-[#1a1a1a] flex items-center justify-center rounded-xl border border-zinc-800">
-          <Phone size={24} className="text-white" />
+      <div className="flex gap-3 px-2 pt-4">
+        <button className="w-20 bg-zinc-900 flex items-center justify-center border-2 border-zinc-800 hover:border-white transition-colors group">
+          <Phone size={24} className="text-zinc-500 group-hover:text-white transition-colors" />
         </button>
-        <button 
+        <button
           disabled={!isFormValid}
           onClick={onConfirm}
-          className={`flex-1 flex items-center justify-center gap-3 py-5 rounded-xl text-[13px] font-black uppercase tracking-widest transition-all ${isFormValid ? 'bg-[#25D366] text-white shadow-[0_10px_20px_rgba(37,211,102,0.2)]' : 'bg-zinc-900 text-zinc-700'}`}
+          className={`flex-1 flex items-center justify-center gap-3 py-6 text-sm font-black uppercase tracking-widest transition-all
+            ${isFormValid
+              ? 'bg-[#25D366] text-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]'
+              : 'bg-zinc-200 text-zinc-400 cursor-not-allowed'}`}
         >
-          <MessageSquare size={20} fill="white" />
+          <MessageSquare size={20} fill="currentColor" />
           Confirm Via WhatsApp
         </button>
       </div>
 
-      {/* Bottom Features */}
-      <div className="flex justify-between px-6 py-4">
-        <div className="flex items-center gap-2 text-[8px] font-black text-zinc-600 uppercase">
-           <div className="w-4 h-4 border border-zinc-800 flex items-center justify-center">✓</div>
-           Instant Confirm
-        </div>
-        <div className="flex items-center gap-2 text-[8px] font-black text-zinc-600 uppercase">
-           <div className="w-4 h-4 border border-zinc-800 flex items-center justify-center">☺</div>
-           Kid Friendly
-        </div>
-        <div className="flex items-center gap-2 text-[8px] font-black text-zinc-600 uppercase">
-           <div className="w-4 h-4 border border-zinc-800 flex items-center justify-center font-bold">P</div>
-           Parking
-        </div>
-      </div>
-
-      <div className="text-[8px] text-center text-zinc-700 font-bold uppercase tracking-widest leading-relaxed px-12">
-        By confirming you agree to our 24h cancellation policy. Late arrivals may forfeit their slot.
+      <div className="text-[9px] text-center text-zinc-400 font-bold uppercase tracking-widest px-12 opacity-50">
+        Strict 24h cancellation policy applies. Late arrivals may forfeit their slot.
       </div>
     </div>
   );
