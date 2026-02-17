@@ -124,7 +124,7 @@ Vibe the vibe! We'll see you soon.
 📍 *424 Commissioner St, Kensington*
 
 _Need to book again?_
-https://trimtime-barber.netlify.app/
+https://fadezone-grooming.netlify.app/
     `.trim();
 
     // Store in DB (or mock DB)
