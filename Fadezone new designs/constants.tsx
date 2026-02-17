@@ -3,39 +3,67 @@ import { Service } from './types';
 
 export const SERVICES: Service[] = [
   {
-    id: 'scholar',
-    name: 'THE SCHOLAR',
-    price: 150,
-    duration: 30,
-    description: 'High schoolers & students'
+    id: 'haircut',
+    name: 'HAIR CUT',
+    price: 70,
+    duration: 25,
+    description: 'Classic haircut'
   },
   {
-    id: 'fade',
-    name: 'THE FADE',
-    price: 220,
-    duration: 45,
-    description: 'Skin fade or taper'
+    id: 'haircut-dye',
+    name: 'HAIRCUT WITH BLACK DYE',
+    price: 120,
+    duration: 40,
+    description: 'Haircut + black dye'
   },
   {
-    id: 'buzz',
-    name: 'BUZZ CUT',
-    price: 130,
+    id: 'chiskop',
+    name: 'CHISKOP',
+    price: 30,
+    duration: 15,
+    description: 'Short buzz cut'
+  },
+  {
+    id: 'brush-cut',
+    name: 'BRUSH CUT',
+    price: 50,
     duration: 20,
-    description: 'One length all over'
+    description: 'Brush cut style'
   },
   {
-    id: 'beard',
-    name: 'THE BEARD',
-    price: 110,
+    id: 'kids-haircut',
+    name: 'KIDS HAIR CUT',
+    price: 50,
+    duration: 20,
+    description: 'Children haircut'
+  },
+  {
+    id: 'ladies-haircut',
+    name: 'LADIES HAIR CUT',
+    price: 80,
     duration: 30,
-    description: 'Shape, trim & hot towel'
+    description: 'Ladies haircut'
   },
   {
-    id: 'full',
-    name: 'THE FULL WORKS',
-    price: 320,
+    id: 'shave-beard',
+    name: 'SHAVING BEARD',
+    price: 20,
+    duration: 15,
+    description: 'Beard shave'
+  },
+  {
+    id: 'shave-trim',
+    name: 'SHAVING AND TRIMMING',
+    price: 20,
+    duration: 20,
+    description: 'Shave and trim service'
+  },
+  {
+    id: 'unique-haircut',
+    name: 'UNIQUE HAIRCUT AND COLOURED DYE',
+    price: 250,
     duration: 60,
-    description: 'Haircut, Beard & Wash'
+    description: 'Custom haircut with coloured dye'
   }
 ];
 
@@ -46,14 +74,14 @@ export const WORKING_HOURS = {
 };
 
 export const BARBER_CONFIG = {
-  name: 'Nev',
+  name: 'Alex',
   phone: '27721234567',
-  shopName: 'Nev the Barber',
+  shopName: 'FADEZONE Grooming',
   locations: [
     { 
-      id: 'dn',
-      name: 'Durban North', 
-      address: '28 Mackeurtan Avenue, Durban North',
+      id: 'kensington',
+      name: 'Kensington', 
+      address: '424 Commissioner Street, Kensington, Johannesburg',
       hours: [
         { day: 'Monday', time: '07:00 - 12:00', status: 'active' },
         { day: 'Tuesday', time: '07:00 - 17:00', status: 'active' },

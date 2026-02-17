@@ -19,6 +19,9 @@ const App: React.FC = () => {
   const [notes, setNotes] = useState('');
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [step, setStep] = useState<0 | 1 | 2 | 3>(0);
+  const [staffPassword, setStaffPassword] = useState('');
+  const [authError, setAuthError] = useState('');
+  const [isStaffAuthenticated, setIsStaffAuthenticated] = useState(false);
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -64,9 +67,9 @@ const App: React.FC = () => {
   const renderLanding = () => (
     <div className="min-h-screen bg-[#fbd600]">
       {/* Animated Hero Section */}
-      <section className="relative min-h-[90vh] flex flex-col items-center justify-center overflow-hidden diagonal-stripes">
-        <div className="absolute top-10 right-10 md:top-20 md:right-20 z-20">
-          <button 
+      <section className="relative h-[calc(100vh-120px)] flex flex-col items-center justify-center overflow-hidden diagonal-stripes">
+        <div className="absolute top-4 right-4 md:top-10 md:right-10 z-20">
+          <button
             onClick={() => setStep(1)}
             className="bg-[#b32b2b] text-white px-8 py-4 rounded-full font-black italic uppercase tracking-tighter text-sm md:text-base shadow-2xl hover:scale-110 transition-transform flex items-center gap-2 border-2 border-white/20"
           >
@@ -74,10 +77,10 @@ const App: React.FC = () => {
           </button>
         </div>
 
-        <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-0 z-10 w-full px-6 max-w-7xl">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-0 z-10 w-full px-6 max-w-6xl">
           <div className="animate-slide-left">
             <div className="bg-[#3e2723] p-6 md:p-12 jagged-edge shadow-2xl">
-               <h1 className="text-6xl md:text-[12rem] font-brand italic text-[#fbd600] leading-none uppercase tracking-tighter flex flex-col">
+               <h1 className="text-6xl md:text-[8rem] font-brand italic text-[#fbd600] leading-none uppercase tracking-tighter flex flex-col">
                   <span>NEV</span>
                   <div className="flex items-center gap-4">
                     <span className="text-3xl md:text-6xl text-white">THE</span>
@@ -89,9 +92,9 @@ const App: React.FC = () => {
           <div className="animate-slide-right md:-ml-20">
             <div className="relative group">
               <div className="absolute -inset-4 bg-[#fbd600] rounded-full blur-2xl opacity-50"></div>
-              <img 
-                src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&q=80&w=600" 
-                className="w-56 h-72 md:w-[450px] md:h-[600px] object-cover rounded-full border-[12px] border-white shadow-2xl relative z-10 grayscale hover:grayscale-0 transition-all duration-700"
+              <img
+                src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&q=80&w=600"
+                className="w-56 h-72 md:w-[350px] md:h-[500px] object-cover rounded-full border-[12px] border-white shadow-2xl relative z-10 grayscale hover:grayscale-0 transition-all duration-700"
                 alt="The Barber"
               />
             </div>
@@ -140,39 +143,39 @@ const App: React.FC = () => {
       </section>
 
       {/* Legendary Styles Section */}
-      <section className="bg-black py-32 px-6">
-        <div className="max-w-7xl mx-auto space-y-16">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-zinc-900 pb-12">
+      <section className="bg-black py-24 px-6">
+        <div className="max-w-6xl mx-auto space-y-12">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-zinc-900 pb-8">
             <div>
-              <h3 className="text-6xl md:text-9xl font-brand italic text-white leading-none uppercase tracking-tighter">
+              <h3 className="text-5xl md:text-7xl font-brand italic text-white leading-none uppercase tracking-tighter">
                 See Our<br /><span className="text-[#fbd600]">Legendary</span> Styles
               </h3>
-              <p className="text-zinc-500 mt-6 max-w-lg text-sm md:text-base uppercase font-bold tracking-widest">Select a style to start your booking immediately.</p>
+              <p className="text-zinc-500 mt-4 max-w-lg text-sm md:text-base uppercase font-bold tracking-widest">Select a style to start your booking immediately.</p>
             </div>
             <div className="flex gap-4">
-              <button onClick={() => scroll('left')} className="w-16 h-16 border-2 border-zinc-800 rounded-full flex items-center justify-center text-white hover:bg-zinc-900 hover:border-[#fbd600] transition-all"><ChevronLeft size={32} /></button>
-              <button onClick={() => scroll('right')} className="w-16 h-16 border-2 border-zinc-800 rounded-full flex items-center justify-center text-white hover:bg-zinc-900 hover:border-[#fbd600] transition-all"><ChevronRight size={32} /></button>
+              <button onClick={() => scroll('left')} className="w-14 h-14 border-2 border-zinc-800 rounded-full flex items-center justify-center text-white hover:bg-zinc-900 hover:border-[#fbd600] transition-all"><ChevronLeft size={28} /></button>
+              <button onClick={() => scroll('right')} className="w-14 h-14 border-2 border-zinc-800 rounded-full flex items-center justify-center text-white hover:bg-zinc-900 hover:border-[#fbd600] transition-all"><ChevronRight size={28} /></button>
             </div>
           </div>
 
-          <div ref={scrollRef} className="flex overflow-x-auto gap-10 no-scrollbar snap-x snap-mandatory py-4">
+          <div ref={scrollRef} className="flex overflow-x-auto gap-8 no-scrollbar snap-x snap-mandatory py-4">
             {[
               { id: 'fade', name: 'Adult Haircut • Fade', price: 'R220', img: 'https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&q=80&w=800' },
               { id: 'beard', name: 'Beard Shave • Clipper', price: 'R110', img: 'https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&q=80&w=800' },
               { id: 'scholar', name: 'The Scholar • Student', price: 'R150', img: 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80&w=800' },
               { id: 'full', name: 'The Full Works', price: 'R320', img: 'https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&q=80&w=800' }
             ].map((style) => (
-              <button 
-                key={style.id} 
-                onClick={() => { 
+              <button
+                key={style.id}
+                onClick={() => {
                   const s = SERVICES.find(sv => sv.id === style.id);
-                  if (s) { 
-                    setSelectedService(s); 
-                    setStep(2); 
+                  if (s) {
+                    setSelectedService(s);
+                    setStep(2);
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }
                 }}
-                className="min-w-[340px] md:min-w-[500px] h-[600px] relative overflow-hidden rounded-[4rem] snap-start group bg-zinc-900 border-2 border-white/5 shadow-2xl text-left"
+                className="min-w-[340px] md:min-w-[500px] h-[450px] relative overflow-hidden rounded-[4rem] snap-start group bg-zinc-900 border-2 border-white/5 shadow-2xl text-left"
               >
                 <img src={style.img} className="w-full h-full object-cover grayscale opacity-60 transition-all duration-1000 group-hover:scale-110 group-hover:grayscale-0 group-hover:opacity-100" alt={style.name} />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent flex flex-col justify-end p-12">
@@ -240,18 +243,18 @@ const App: React.FC = () => {
     ];
 
     return (
-      <div className="bg-[#fbd600] min-h-screen py-16 px-6">
-        <div className="max-w-6xl mx-auto space-y-16">
+      <div className="bg-[#fbd600] min-h-screen py-4 px-6">
+        <div className="max-w-6xl mx-auto space-y-[50px]">
           <button onClick={() => setStep(0)} className="flex items-center gap-3 text-[#3e2723] font-black uppercase text-xs tracking-[0.3em] hover:scale-105 transition-transform"><ChevronLeft size={20}/> Return Home</button>
           
-          <div className="text-center space-y-4">
-            <h2 className="text-7xl md:text-9xl font-brand italic uppercase text-[#b32b2b] tracking-tighter leading-none">PRICING MENU</h2>
+          <div className="text-center space-y-1">
+            <h2 className="text-4xl md:text-5xl font-brand italic uppercase text-[#b32b2b] tracking-tighter leading-none">PRICING MENU</h2>
             <p className="text-xs font-black uppercase tracking-[0.5em] text-[#3e2723]/60">Choose your legendary service</p>
           </div>
 
-          <div className="space-y-24">
+          <div className="space-y-[50px]">
             {categories.map(cat => (
-              <div key={cat.name} className="space-y-10">
+              <div key={cat.name} className="space-y-[50px]">
                 <div className="flex items-center gap-6">
                   <h3 className="text-4xl md:text-6xl font-brand italic uppercase text-[#3e2723]">{cat.name}</h3>
                   <div className="flex-1 h-1 bg-[#3e2723]/10 rounded-full"></div>
@@ -335,7 +338,7 @@ const App: React.FC = () => {
               </div>
             )}
           </>
-        ) : (
+        ) : !isStaffAuthenticated ? (
           <div className="min-h-screen bg-black flex items-center justify-center p-6">
             <div className="max-w-xl w-full bg-zinc-900/50 p-16 rounded-[4rem] border border-white/5 space-y-12 shadow-[0_0_100px_rgba(251,214,0,0.05)]">
               <div className="text-center space-y-4">
@@ -343,10 +346,90 @@ const App: React.FC = () => {
                 <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-[0.4em]">Authorized access only</p>
               </div>
               <div className="space-y-8">
-                <input type="password" placeholder="PORTAL ACCESS KEY" className="w-full bg-black border-2 border-zinc-800 p-6 rounded-3xl font-mono text-sm uppercase tracking-[0.3em] focus:border-[#fbd600] outline-none text-white text-center shadow-inner" />
-                <button className="w-full bg-[#fbd600] text-black py-6 rounded-3xl font-black uppercase text-xs tracking-widest hover:bg-white transition-all shadow-xl">Secure Authenticate</button>
+                <input 
+                  type="password" 
+                  placeholder="PORTAL ACCESS KEY" 
+                  value={staffPassword}
+                  onChange={(e) => {
+                    setStaffPassword(e.target.value);
+                    setAuthError('');
+                  }}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      if (staffPassword === 'Alex') {
+                        setIsStaffAuthenticated(true);
+                        setAuthError('');
+                      } else {
+                        setAuthError('Invalid access key');
+                        setStaffPassword('');
+                      }
+                    }
+                  }}
+                  className="w-full bg-black border-2 border-zinc-800 p-6 rounded-3xl font-mono text-sm uppercase tracking-[0.3em] focus:border-[#fbd600] outline-none text-white text-center shadow-inner" 
+                />
+                {authError && <p className="text-red-500 text-xs font-bold text-center">{authError}</p>}
+                <button 
+                  onClick={() => {
+                    if (staffPassword === 'Alex') {
+                      setIsStaffAuthenticated(true);
+                      setAuthError('');
+                    } else {
+                      setAuthError('Invalid access key');
+                      setStaffPassword('');
+                    }
+                  }}
+                  className="w-full bg-[#fbd600] text-black py-6 rounded-3xl font-black uppercase text-xs tracking-widest hover:bg-white transition-all shadow-xl">Secure Authenticate</button>
               </div>
               <p className="text-[9px] text-zinc-700 font-bold uppercase tracking-widest text-center">Protected by Fadezone Grooming Systems v2.0</p>
+            </div>
+          </div>
+        ) : (
+          <div className="min-h-screen bg-black p-6 md:p-12">
+            <div className="max-w-7xl mx-auto">
+              <div className="flex justify-between items-center mb-12">
+                <h2 className="text-5xl md:text-7xl font-brand italic uppercase text-[#fbd600]">STAFF DASHBOARD</h2>
+                <button 
+                  onClick={() => {
+                    setIsStaffAuthenticated(false);
+                    setStaffPassword('');
+                  }}
+                  className="bg-red-600 text-white px-8 py-4 rounded-full font-black uppercase text-xs tracking-widest hover:bg-red-700 transition-all"
+                >
+                  Logout
+                </button>
+              </div>
+              <div className="bg-zinc-900 p-12 rounded-[4rem] border border-white/5 shadow-2xl">
+                <h3 className="text-3xl font-black uppercase text-[#fbd600] mb-8">UPCOMING BOOKINGS</h3>
+                {bookings.length === 0 ? (
+                  <p className="text-zinc-400 text-center py-12">No bookings yet</p>
+                ) : (
+                  <div className="space-y-6">
+                    {bookings.map((booking) => {
+                      const service = SERVICES.find(s => s.id === booking.serviceId);
+                      return (
+                        <div key={booking.id} className="bg-black p-8 rounded-2xl border border-zinc-800 space-y-4">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <p className="text-[#fbd600] font-black text-lg">{service?.name || 'Unknown Service'}</p>
+                              <p className="text-white font-bold">{booking.customerName}</p>
+                              <p className="text-zinc-400 text-sm">{booking.customerPhone}</p>
+                            </div>
+                            <div className="text-right">
+                              <p className="text-white font-black">{booking.date}</p>
+                              <p className="text-[#fbd600] font-bold text-lg">{booking.time}</p>
+                            </div>
+                          </div>
+                          <div className="flex gap-4 pt-4 border-t border-zinc-800">
+                            <span className={`px-4 py-2 rounded-lg text-xs font-bold uppercase ${booking.status === 'confirmed' ? 'bg-green-900 text-green-200' : 'bg-yellow-900 text-yellow-200'}`}>
+                              {booking.status}
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )}
