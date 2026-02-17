@@ -99,7 +99,14 @@ const App: React.FC = () => {
     return () => window.removeEventListener('storage', refreshBookings);
   }, [refreshBookings]);
 
+  const [showConsultantModal, setShowConsultantModal] = useState(false);
+
   const handleConfirm = () => {
+    if (!selectedService || !selectedTime) return;
+    setShowConsultantModal(true);
+  };
+
+  const processBooking = (consultantNumber: string) => {
     if (!selectedService || !selectedTime) return;
     const dateStr = selectedDate.toISOString().split('T')[0];
 
@@ -120,13 +127,7 @@ _Need to book again?_
 https://trimtime-barber.netlify.app/
     `.trim();
 
-    // Primary number as per request (one of the two provided)
-    // "078596289" seems short/invalid, "0812687806" is valid length. Using the valid one for the link.
-    const primaryNumber = "27812687806"; // 081... -> 2781...
-
-    const whatsappUrl = `https://wa.me/${primaryNumber}?text=${encodeURIComponent(msg)}`;
-    window.open(whatsappUrl, '_blank');
-
+    // Store in DB (or mock DB)
     bookingService.addBooking({
       id: Math.random().toString(36).substr(2, 9),
       serviceId: selectedService.id,
@@ -137,6 +138,12 @@ https://trimtime-barber.netlify.app/
       status: 'confirmed'
     });
 
+    // Open WhatsApp
+    const whatsappUrl = `https://wa.me/${consultantNumber}?text=${encodeURIComponent(msg)}`;
+    window.open(whatsappUrl, '_blank');
+
+    // Reset UI
+    setShowConsultantModal(false);
     setStep(0);
     setSelectedService(null);
   };
@@ -404,7 +411,7 @@ https://trimtime-barber.netlify.app/
               </div>
             )}
             {step === 3 && selectedService && selectedTime && (
-              <div className="min-h-screen bg-[#fbd600] py-24 px-6">
+              <div className="min-h-screen bg-[#fbd600] py-24 px-6 md:px-6 relative">
                 <div className="max-w-3xl mx-auto space-y-12">
                   <button onClick={() => setStep(2)} className="flex items-center gap-3 text-[#3e2723] font-black uppercase text-xs tracking-[0.3em]"><ChevronLeft size={20} /> Back to Time</button>
                   <div className="text-center space-y-4">
@@ -426,6 +433,40 @@ https://trimtime-barber.netlify.app/
                     />
                   </div>
                 </div>
+
+                {/* Consultant Selection Modal */}
+                {showConsultantModal && (
+                  <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/90 backdrop-blur-sm animate-in fade-in duration-200">
+                    <div className="bg-white rounded-[2rem] p-8 max-w-sm w-full space-y-6 text-center border-4 border-[#FFC107]">
+                      <div className="space-y-2">
+                        <h3 className="text-2xl font-brand italic uppercase text-[#b32b2b]">Select Consultant</h3>
+                        <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Choose your preferred barber</p>
+                      </div>
+
+                      <div className="space-y-3">
+                        <button
+                          onClick={() => processBooking('27785962689')}
+                          className="w-full bg-zinc-900 text-white py-4 rounded-xl font-black uppercase text-xs tracking-widest hover:bg-[#FFC107] hover:text-black transition-all flex items-center justify-center gap-2"
+                        >
+                          <Smartphone size={16} /> WA: 078 596 2689
+                        </button>
+                        <button
+                          onClick={() => processBooking('27812687806')}
+                          className="w-full bg-zinc-900 text-white py-4 rounded-xl font-black uppercase text-xs tracking-widest hover:bg-[#FFC107] hover:text-black transition-all flex items-center justify-center gap-2"
+                        >
+                          <Smartphone size={16} /> WA: 081 268 7806
+                        </button>
+                      </div>
+
+                      <button
+                        onClick={() => setShowConsultantModal(false)}
+                        className="text-[10px] font-black uppercase tracking-widest text-zinc-400 hover:text-black border-b border-zinc-200"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </>
