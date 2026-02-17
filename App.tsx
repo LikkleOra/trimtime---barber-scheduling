@@ -23,7 +23,71 @@ const App: React.FC = () => {
   const [authError, setAuthError] = useState('');
   const [isStaffAuthenticated, setIsStaffAuthenticated] = useState(false);
 
+  // Calendar State
+  const [viewDate, setViewDate] = useState(new Date());
+
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  const getDaysInMonth = (date: Date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const days = new Date(year, month + 1, 0).getDate();
+    const firstDay = new Date(year, month, 1).getDay();
+    return { days, firstDay, year, month };
+  };
+
+  const renderCalendar = () => {
+    const { days, firstDay, year, month } = getDaysInMonth(viewDate);
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const daysOfWeek = ["S", "M", "T", "W", "T", "F", "S"];
+
+    const changeMonth = (offset: number) => {
+      const newDate = new Date(viewDate.setMonth(viewDate.getMonth() + offset));
+      setViewDate(new Date(newDate));
+    };
+
+    return (
+      <div className="w-full">
+        {/* Calendar Header */}
+        <div className="bg-black text-white p-6 flex justify-between items-center mb-6">
+          <button onClick={() => changeMonth(-1)} className="hover:text-[#fbd600] transition-colors"><ChevronLeft size={20} /></button>
+          <span className="font-black italic uppercase tracking-widest text-lg">{monthNames[month]} {year}</span>
+          <button onClick={() => changeMonth(1)} className="hover:text-[#fbd600] transition-colors"><ChevronRight size={20} /></button>
+        </div>
+
+        {/* Days Grid */}
+        <div className="grid grid-cols-7 gap-2 text-center mb-4">
+          {daysOfWeek.map(d => (
+            <span key={d} className="text-zinc-400 font-bold text-xs uppercase">{d}</span>
+          ))}
+        </div>
+
+        {/* Dates Grid */}
+        <div className="grid grid-cols-7 gap-2">
+          {Array.from({ length: firstDay }).map((_, i) => <div key={`empty-${i}`} />)}
+          {Array.from({ length: days }).map((_, i) => {
+            const day = i + 1;
+            const isSelected = selectedDate.getDate() === day && selectedDate.getMonth() === month && selectedDate.getFullYear() === year;
+            const isToday = new Date().getDate() === day && new Date().getMonth() === month && new Date().getFullYear() === year;
+
+            return (
+              <button
+                key={day}
+                onClick={() => setSelectedDate(new Date(year, month, day))}
+                className={`
+                  h-12 w-full flex items-center justify-center font-bold text-sm transition-all
+                  ${isSelected ? 'bg-black text-[#fbd600] shadow-lg scale-110' : 'hover:bg-zinc-100 text-zinc-900'}
+                  ${isToday && !isSelected ? 'border-b-2 border-[#b32b2b]' : ''}
+                `}
+              >
+                {day}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
 
   const refreshBookings = useCallback(() => {
     setBookings(bookingService.getBookings());
@@ -38,7 +102,7 @@ const App: React.FC = () => {
   const handleConfirm = () => {
     if (!selectedService || !selectedTime) return;
     const dateStr = selectedDate.toISOString().split('T')[0];
-    const msg = `Lekker Nev! Booking: ${selectedService.name} on ${dateStr} at ${selectedTime}. Customer: ${customerName}. Vibe the vibe!`;
+    const msg = `Lekker Fadezone! Booking: ${selectedService.name} on ${dateStr} at ${selectedTime}. Customer: ${customerName}. Vibe the vibe!`;
     const whatsappUrl = `https://wa.me/${BARBER_CONFIG.phone}?text=${encodeURIComponent(msg)}`;
     window.open(whatsappUrl, '_blank');
 
@@ -79,62 +143,68 @@ const App: React.FC = () => {
 
   const renderLanding = () => (
     <div className="min-h-screen bg-[#fbd600]">
-      {/* Animated Hero Section */}
-      <section id="hero-section" className="relative min-h-[60vh] md:min-h-[calc(100vh-100px)] flex flex-col items-center justify-center overflow-hidden diagonal-stripes py-8 md:py-0">
-        <div className="absolute top-4 right-4 md:top-10 md:right-10 z-20">
-          <button
-            onClick={() => setStep(1)}
-            className="bg-[#b32b2b] text-white px-5 py-3 md:px-8 md:py-4 rounded-full font-black italic uppercase tracking-tighter text-xs md:text-base shadow-2xl hover:scale-110 transition-transform flex items-center gap-2 border-2 border-white/20"
-          >
-            Book Now
-          </button>
+      {/* Hero Section Redesign */}
+      <section id="hero-section" className="relative min-h-screen lg:h-[85vh] bg-[#fbd600] diagonal-stripes flex items-center overflow-hidden pt-20">
+        <div className="hidden lg:block absolute left-8 top-1/2 -translate-y-1/2 -rotate-90 origin-left">
+          <p className="font-black uppercase tracking-[0.4em] text-[10px] md:text-xs">EST 2024 • DURBAN</p>
         </div>
 
-        <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 z-10 w-full px-4 md:px-6 max-w-6xl">
-          <div className="animate-slide-left">
-            <img
-              src="/fadezone-logo.png"
-              className="w-48 h-48 md:w-72 md:h-72 lg:w-[380px] lg:h-[380px] object-contain drop-shadow-2xl"
-              alt="Fadezone Grooming Logo"
-            />
-          </div>
-          <div className="animate-slide-right">
-            <div className="relative group">
-              <div className="absolute -inset-4 bg-[#fbd600] rounded-full blur-2xl opacity-50"></div>
-              <img
-                src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&q=80&w=600"
-                className="w-44 h-56 md:w-64 md:h-80 lg:w-[350px] lg:h-[460px] object-cover rounded-full border-[8px] md:border-[12px] border-white shadow-2xl relative z-10 grayscale hover:grayscale-0 transition-all duration-700"
-                alt="The Barber"
-              />
+        <div className="grid lg:grid-cols-2 w-full h-full max-w-7xl mx-auto px-6 gap-8 md:gap-0">
+          {/* Left Content */}
+          <div className="flex flex-col justify-center items-start relative z-10 py-12 lg:py-0">
+            <div className="bg-[#3e2723] p-6 lg:p-10 -skew-x-3 transform rotate-[-2deg] shadow-2xl mb-4 relative">
+              {/* Jagged edge CSS would be ideal here, but using a simple box for now as per constraints */}
+              <h1 className="text-6xl lg:text-[9rem] font-brand italic text-[#fbd600] leading-none uppercase tracking-tighter skew-x-3">
+                FADEZONE
+              </h1>
             </div>
+            <div className="bg-black px-6 py-3 skew-x-[-10deg] ml-4">
+              <p className="text-white font-black uppercase tracking-[0.3em] text-xs lg:text-sm skew-x-[10deg]">Master Class Barbering</p>
+            </div>
+          </div>
+
+          {/* Right Image */}
+          <div className="relative h-[50vh] lg:h-full w-full lg:-mt-0">
+            <div className="absolute inset-0 bg-gradient-to-r from-[#fbd600] via-transparent to-transparent z-10 lg:w-32"></div>
+            <img
+              src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80"
+              className="w-full h-full object-cover grayscale contrast-125 border-l-4 border-black"
+              alt="Barber"
+            />
+            {/* Floating CTA */}
+            <button
+              onClick={() => setStep(1)}
+              className="absolute bottom-10 right-10 lg:-left-16 lg:bottom-32 bg-[#b32b2b] text-white px-8 py-5 font-black uppercase italic tracking-tighter shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all flex items-center gap-2 group z-20 text-lg md:text-xl"
+            >
+              Book A Fade <ChevronRight className="group-hover:translate-x-1 transition-transform" />
+            </button>
           </div>
         </div>
       </section>
 
-      {/* About Section */}
-      <section id="about-section" className="bg-[#e0f2f1] py-16 md:py-24 px-4 md:px-20 relative overflow-hidden">
-        <div className="max-w-5xl mx-auto">
-          <div className="space-y-6 md:space-y-8 relative z-10 text-center">
-            <h2 className="text-2xl md:text-3xl font-black italic uppercase text-[#b32b2b] leading-tight tracking-tighter">
-              Precision Cuts, Fresh Fades
-            </h2>
-            <p className="text-sm md:text-lg font-medium text-zinc-700 leading-relaxed max-w-2xl mx-auto">
-              Captivated by good design, good coffee and exceptional haircuts, Fadezone was created to deliver an authentic, modern barber experience. We've built a space where every cut is a masterpiece and every client leaves looking sharp.
-            </p>
-            <div className="flex justify-center pt-4 md:pt-6">
-              <button
-                onClick={() => setStep(1)}
-                className="bg-[#b32b2b] text-white px-8 py-4 md:px-12 md:py-5 rounded-full font-black italic uppercase tracking-tighter shadow-2xl hover:scale-105 transition-all active:scale-95 text-sm md:text-base"
-              >
-                Book An Appointment
-              </button>
-            </div>
+      {/* About Section Redesign */}
+      <section id="about-section" className="bg-[#e0f2f1] py-20 md:py-32 px-6 md:px-20 relative overflow-hidden">
+        <div className="absolute top-0 left-10 bg-[#fbd600] px-4 py-2">
+          <span className="font-black uppercase tracking-widest text-xs">Since 2024</span>
+        </div>
+        <div className="max-w-4xl mx-auto space-y-8">
+          <h2 className="text-4xl md:text-6xl lg:text-7xl font-brand italic uppercase text-black leading-[0.9] tracking-tighter">
+            The Standard.<br />No Compromise.
+          </h2>
+          <div className="flex items-center gap-4">
+            <div className="w-1 h-12 bg-[#b32b2b]"></div>
+            <h3 className="text-xl md:text-2xl font-black italic uppercase text-[#b32b2b] tracking-wider">
+              DURBAN’S FINEST GROOMING HUB
+            </h3>
           </div>
+          <p className="text-lg md:text-xl font-serif italic text-zinc-600 leading-relaxed max-w-2xl border-l border-zinc-300 pl-6 py-2">
+            "FADEZONE isn't just about the cut; it's about the transformation. We blend traditional craft with modern aesthetics to give every gentleman the look they deserve."
+          </p>
         </div>
       </section>
 
       {/* Services / Prices Section */}
-      <section id="prices-section" className="bg-black py-16 md:py-24 px-4 md:px-6">
+      <section id="prices-section" className="bg-black py-16 md:py-24 px-6 md:px-6">
         <div className="max-w-6xl mx-auto space-y-10 md:space-y-12">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6 border-b border-zinc-900 pb-6 md:pb-8">
             <div>
@@ -144,8 +214,8 @@ const App: React.FC = () => {
               <p className="text-zinc-500 mt-3 md:mt-4 max-w-lg text-xs md:text-base uppercase font-bold tracking-widest">Select a style to start your booking immediately.</p>
             </div>
             <div className="flex gap-3 md:gap-4">
-              <button onClick={() => scroll('left')} className="w-10 h-10 md:w-14 md:h-14 border-2 border-zinc-800 rounded-full flex items-center justify-center text-white hover:bg-zinc-900 hover:border-[#fbd600] transition-all"><ChevronLeft size={22} /></button>
-              <button onClick={() => scroll('right')} className="w-10 h-10 md:w-14 md:h-14 border-2 border-zinc-800 rounded-full flex items-center justify-center text-white hover:bg-zinc-900 hover:border-[#fbd600] transition-all"><ChevronRight size={22} /></button>
+              <button onClick={() => scroll('left')} className="w-12 h-12 md:w-14 md:h-14 border-2 border-zinc-800 rounded-full flex items-center justify-center text-white hover:bg-zinc-900 hover:border-[#fbd600] transition-all"><ChevronLeft size={22} /></button>
+              <button onClick={() => scroll('right')} className="w-12 h-12 md:w-14 md:h-14 border-2 border-zinc-800 rounded-full flex items-center justify-center text-white hover:bg-zinc-900 hover:border-[#fbd600] transition-all"><ChevronRight size={22} /></button>
             </div>
           </div>
 
@@ -158,7 +228,7 @@ const App: React.FC = () => {
                   setStep(2);
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
-                className="min-w-[260px] md:min-w-[340px] lg:min-w-[400px] h-[300px] md:h-[380px] lg:h-[450px] relative overflow-hidden rounded-2xl md:rounded-[3rem] snap-start group bg-zinc-900 border-2 border-white/5 shadow-2xl text-left flex-shrink-0"
+                className="min-w-[90vw] md:min-w-[45vw] lg:min-w-[30%] h-[300px] md:h-[380px] lg:h-[450px] relative overflow-hidden rounded-2xl md:rounded-[3rem] snap-center md:snap-start group bg-zinc-900 border-2 border-white/5 shadow-2xl text-left flex-shrink-0"
               >
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/30"></div>
                 <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8 lg:p-12">
@@ -176,7 +246,7 @@ const App: React.FC = () => {
       </section>
 
       {/* Modern Location/Hours Footer Info */}
-      <section id="contact-section" className="bg-white py-16 md:py-32 px-4 md:px-20 border-t border-zinc-100">
+      <section id="contact-section" className="bg-white py-16 md:py-32 px-6 md:px-20 border-t border-zinc-100">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-32">
           <div className="space-y-12">
             <h4 className="text-5xl md:text-7xl font-brand italic uppercase text-[#b32b2b] tracking-tighter">The Studio</h4>
@@ -216,7 +286,7 @@ const App: React.FC = () => {
           </div>
         </div>
       </section>
-    </div>
+    </div >
   );
 
   const renderServiceMenu = () => {
@@ -227,7 +297,7 @@ const App: React.FC = () => {
     ];
 
     return (
-      <div className="bg-[#fbd600] min-h-screen py-4 px-4 md:px-6">
+      <div className="bg-[#fbd600] min-h-screen py-4 px-6 md:px-6">
         <div className="max-w-6xl mx-auto space-y-8 md:space-y-[50px]">
           <button onClick={() => setStep(0)} className="flex items-center gap-2 md:gap-3 text-[#3e2723] font-black uppercase text-xs tracking-[0.3em] hover:scale-105 transition-transform"><ChevronLeft size={18} /> Return Home</button>
 
@@ -278,32 +348,36 @@ const App: React.FC = () => {
             {step === 0 && renderLanding()}
             {step === 1 && renderServiceMenu()}
             {step === 2 && (
-              <div className="min-h-screen bg-[#fbd600] py-6 md:py-24 px-4 md:px-6">
-                <div className="max-w-4xl mx-auto space-y-8 md:space-y-12">
-                  <button onClick={() => setStep(1)} className="flex items-center gap-3 text-[#3e2723] font-black uppercase text-xs tracking-[0.3em]"><ChevronLeft size={20} /> Back to Menu</button>
-                  <div className="text-center space-y-2 md:space-y-4">
-                    <h2 className="text-4xl md:text-8xl font-brand italic uppercase text-[#b32b2b] leading-none">SELECT TIME</h2>
-                    <p className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] md:tracking-[0.5em] text-[#3e2723]/60">Available slots for {selectedDate.toDateString()}</p>
+              <div className="min-h-screen bg-[#fbd600] pt-24 pb-12 px-6">
+                <div className="max-w-7xl mx-auto">
+                  <button onClick={() => setStep(1)} className="mb-8 flex items-center gap-3 text-black font-black uppercase text-xs tracking-[0.3em] hover:text-[#b32b2b] transition-colors"><ChevronLeft size={20} /> Back to Menu</button>
 
-                    {/* Date Picker */}
-                    <div className="flex justify-center mt-4">
-                      <input
-                        type="date"
-                        value={selectedDate.toISOString().split('T')[0]}
-                        min={new Date().toISOString().split('T')[0]}
-                        onChange={(e) => setSelectedDate(new Date(e.target.value))}
-                        className="bg-white text-[#3e2723] font-black uppercase tracking-widest p-4 rounded-xl border-2 border-[#3e2723]/10 focus:border-[#b32b2b] outline-none shadow-xl"
-                      />
+                  <div className="grid lg:grid-cols-2 gap-12 lg:gap-24">
+                    {/* Left: Select Date */}
+                    <div className="space-y-6">
+                      <h2 className="text-4xl md:text-5xl font-brand italic uppercase text-[#b32b2b] tracking-tighter">1. Select Date</h2>
+                      <div className="bg-white p-4 md:p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-2 border-black">
+                        {renderCalendar()}
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="bg-white p-6 md:p-16 rounded-[2rem] md:rounded-[4rem] shadow-2xl border border-white">
-                    <TimeGrid
-                      selectedDate={selectedDate}
-                      selectedTime={selectedTime}
-                      onTimeSelect={(t) => { setSelectedTime(t); setStep(3); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                      bookings={bookings}
-                    />
+                    {/* Right: Select Time */}
+                    <div className="space-y-6">
+                      <h2 className="text-4xl md:text-5xl font-brand italic uppercase text-[#b32b2b] tracking-tighter">2. Select Time</h2>
+                      <div className="flex justify-end border-b-2 border-black/10 pb-4">
+                        <span className="font-black uppercase tracking-[0.2em] text-zinc-500 text-xs">
+                          {selectedDate.toDateString()}
+                        </span>
+                      </div>
+                      <div className="bg-white p-6 md:p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-2 border-black">
+                        <TimeGrid
+                          selectedDate={selectedDate}
+                          selectedTime={selectedTime}
+                          onTimeSelect={(t) => { setSelectedTime(t); setStep(3); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                          bookings={bookings}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

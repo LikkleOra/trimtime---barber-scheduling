@@ -39,13 +39,12 @@ const TimeGrid: React.FC<TimeGridProps> = ({ selectedDate, selectedTime, onTimeS
             disabled={isOccupied}
             onClick={() => onTimeSelect(time)}
             className={`
-              py-3 md:py-4 px-1 md:px-2 rounded-lg md:rounded-xl border text-[10px] md:text-xs font-black transition-all uppercase tracking-widest
+              py-4 px-2 min-h-[48px] rounded-lg border-2 text-xs font-black transition-all uppercase tracking-widest
               ${isOccupied
-                ? 'bg-zinc-950 border-zinc-900 text-zinc-800 cursor-not-allowed line-through'
+                ? 'bg-zinc-100 border-zinc-100 text-zinc-300 cursor-not-allowed line-through opacity-50'
                 : isSelected
-                  ? 'bg-[#FFC107] border-[#FFC107] text-black shadow-[0_0_15px_rgba(255,193,7,0.3)] scale-[1.05] z-10'
-                  : 'bg-black border-zinc-800 text-zinc-400 hover:border-zinc-600 hover:text-zinc-200'
-              }
+                  ? 'bg-[#fbd600] border-[#fbd600] text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] scale-105 z-10 transform -translate-y-1'
+                  : 'bg-black border-black text-white hover:bg-zinc-900 hover:border-zinc-800 hover:-translate-y-1 hover:shadow-lg'}
             `}
           >
             {time}

@@ -25,45 +25,45 @@ export const SERVICES: Service[] = [
   },
   {
     id: 'kids-haircut',
-    name: 'KIDS HAIR CUT',
+    name: 'KIDS CUT',
     price: 50,
     duration: 30,
     description: 'Children haircut'
   },
   {
     id: 'ladies-haircut',
-    name: 'LADIES HAIR CUT',
+    name: 'LADIES CUT',
     price: 80,
     duration: 45,
     description: 'Ladies haircut'
   },
   {
     id: 'haircut-dye',
-    name: 'HAIRCUT WITH BLACK DYE',
+    name: 'BLACK DYE',
     price: 120,
     duration: 60,
     description: 'Haircut + black dye'
   },
   {
     id: 'unique-haircut',
-    name: 'UNIQUE HAIRCUT AND COLOURED DYE',
+    name: 'UNIQUE COLOURED DYE',
     price: 250,
     duration: 90,
     description: 'Custom haircut with coloured dye'
   },
   {
     id: 'shave-beard',
-    name: 'SHAVING BEARD',
+    name: 'BEARD SHAVE',
     price: 20,
     duration: 15,
     description: 'Beard shave'
   },
   {
     id: 'shave-trim',
-    name: 'SHAVING AND TRIMMING',
+    name: 'TRIMMING',
     price: 20,
     duration: 20,
-    description: 'Shave and trim service'
+    description: 'Trimming service'
   }
 ];
 
