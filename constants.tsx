@@ -6,43 +6,50 @@ export const SERVICES: Service[] = [
     id: 'haircut',
     name: 'HAIR CUT',
     price: 70,
-    duration: 25,
+    duration: 30,
     description: 'Classic haircut'
-  },
-  {
-    id: 'haircut-dye',
-    name: 'HAIRCUT WITH BLACK DYE',
-    price: 120,
-    duration: 40,
-    description: 'Haircut + black dye'
   },
   {
     id: 'chiskop',
     name: 'CHISKOP',
     price: 30,
-    duration: 15,
+    duration: 20,
     description: 'Short buzz cut'
   },
   {
     id: 'brush-cut',
     name: 'BRUSH CUT',
     price: 50,
-    duration: 20,
+    duration: 25,
     description: 'Brush cut style'
   },
   {
     id: 'kids-haircut',
     name: 'KIDS HAIR CUT',
     price: 50,
-    duration: 20,
+    duration: 30,
     description: 'Children haircut'
   },
   {
     id: 'ladies-haircut',
     name: 'LADIES HAIR CUT',
     price: 80,
-    duration: 30,
+    duration: 45,
     description: 'Ladies haircut'
+  },
+  {
+    id: 'haircut-dye',
+    name: 'HAIRCUT WITH BLACK DYE',
+    price: 120,
+    duration: 60,
+    description: 'Haircut + black dye'
+  },
+  {
+    id: 'unique-haircut',
+    name: 'UNIQUE HAIRCUT AND COLOURED DYE',
+    price: 250,
+    duration: 90,
+    description: 'Custom haircut with coloured dye'
   },
   {
     id: 'shave-beard',
@@ -57,20 +64,13 @@ export const SERVICES: Service[] = [
     price: 20,
     duration: 20,
     description: 'Shave and trim service'
-  },
-  {
-    id: 'unique-haircut',
-    name: 'UNIQUE HAIRCUT AND COLOURED DYE',
-    price: 250,
-    duration: 60,
-    description: 'Custom haircut with coloured dye'
   }
 ];
 
 export const WORKING_HOURS = {
-  start: 7, 
-  end: 17,  
-  interval: 30 
+  start: 7,
+  end: 17,
+  interval: 30
 };
 
 export const BARBER_CONFIG = {
@@ -78,9 +78,9 @@ export const BARBER_CONFIG = {
   phone: '27721234567',
   shopName: 'FADEZONE Grooming',
   locations: [
-    { 
+    {
       id: 'kensington',
-      name: 'Kensington', 
+      name: 'Kensington',
       address: '424 Commissioner Street, Kensington, Johannesburg',
       hours: [
         { day: 'Monday', time: '07:00 - 12:00', status: 'active' },
@@ -92,9 +92,9 @@ export const BARBER_CONFIG = {
         { day: 'Sunday', time: 'CLOSED', status: 'closed' }
       ]
     },
-    { 
+    {
       id: 'gw',
-      name: 'Glenwood', 
+      name: 'Glenwood',
       address: '123 Helen Joseph Rd, Glenwood',
       hours: [] // Assume similar
     }

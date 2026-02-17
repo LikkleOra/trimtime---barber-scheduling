@@ -28,7 +28,7 @@ const TimeGrid: React.FC<TimeGridProps> = ({ selectedDate, selectedTime, onTimeS
   const dateStr = selectedDate.toISOString().split('T')[0];
 
   return (
-    <div className="grid grid-cols-3 gap-3">
+    <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 md:gap-4">
       {slots.map((time) => {
         const isOccupied = bookings.some(b => b.date === dateStr && b.time === time);
         const isSelected = selectedTime === time;
@@ -39,12 +39,12 @@ const TimeGrid: React.FC<TimeGridProps> = ({ selectedDate, selectedTime, onTimeS
             disabled={isOccupied}
             onClick={() => onTimeSelect(time)}
             className={`
-              py-4 px-2 rounded-none border text-xs font-black transition-all uppercase tracking-widest
-              ${isOccupied 
-                ? 'bg-zinc-950 border-zinc-900 text-zinc-800 cursor-not-allowed line-through' 
+              py-3 md:py-4 px-1 md:px-2 rounded-lg md:rounded-xl border text-[10px] md:text-xs font-black transition-all uppercase tracking-widest
+              ${isOccupied
+                ? 'bg-zinc-950 border-zinc-900 text-zinc-800 cursor-not-allowed line-through'
                 : isSelected
                   ? 'bg-[#FFC107] border-[#FFC107] text-black shadow-[0_0_15px_rgba(255,193,7,0.3)] scale-[1.05] z-10'
-                  : 'bg-black border-zinc-800 text-zinc-400 hover:border-zinc-600'
+                  : 'bg-black border-zinc-800 text-zinc-400 hover:border-zinc-600 hover:text-zinc-200'
               }
             `}
           >

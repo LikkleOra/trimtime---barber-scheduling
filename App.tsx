@@ -133,47 +133,40 @@ const App: React.FC = () => {
         </div>
       </section>
 
-      {/* Legendary Styles Section */}
+      {/* Services / Prices Section */}
       <section id="prices-section" className="bg-black py-16 md:py-24 px-4 md:px-6">
-        <div className="max-w-6xl mx-auto space-y-12">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-zinc-900 pb-8">
+        <div className="max-w-6xl mx-auto space-y-10 md:space-y-12">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6 border-b border-zinc-900 pb-6 md:pb-8">
             <div>
-              <h3 className="text-5xl md:text-7xl font-brand italic text-white leading-none uppercase tracking-tighter">
+              <h3 className="text-3xl md:text-5xl lg:text-7xl font-brand italic text-white leading-none uppercase tracking-tighter">
                 See Our<br /><span className="text-[#fbd600]">Legendary</span> Styles
               </h3>
-              <p className="text-zinc-500 mt-4 max-w-lg text-sm md:text-base uppercase font-bold tracking-widest">Select a style to start your booking immediately.</p>
+              <p className="text-zinc-500 mt-3 md:mt-4 max-w-lg text-xs md:text-base uppercase font-bold tracking-widest">Select a style to start your booking immediately.</p>
             </div>
-            <div className="flex gap-4">
-              <button onClick={() => scroll('left')} className="w-14 h-14 border-2 border-zinc-800 rounded-full flex items-center justify-center text-white hover:bg-zinc-900 hover:border-[#fbd600] transition-all"><ChevronLeft size={28} /></button>
-              <button onClick={() => scroll('right')} className="w-14 h-14 border-2 border-zinc-800 rounded-full flex items-center justify-center text-white hover:bg-zinc-900 hover:border-[#fbd600] transition-all"><ChevronRight size={28} /></button>
+            <div className="flex gap-3 md:gap-4">
+              <button onClick={() => scroll('left')} className="w-10 h-10 md:w-14 md:h-14 border-2 border-zinc-800 rounded-full flex items-center justify-center text-white hover:bg-zinc-900 hover:border-[#fbd600] transition-all"><ChevronLeft size={22} /></button>
+              <button onClick={() => scroll('right')} className="w-10 h-10 md:w-14 md:h-14 border-2 border-zinc-800 rounded-full flex items-center justify-center text-white hover:bg-zinc-900 hover:border-[#fbd600] transition-all"><ChevronRight size={22} /></button>
             </div>
           </div>
 
-          <div ref={scrollRef} className="flex overflow-x-auto gap-8 no-scrollbar snap-x snap-mandatory py-4">
-            {[
-              { id: 'fade', name: 'Adult Haircut • Fade', price: 'R220', img: 'https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&q=80&w=800' },
-              { id: 'beard', name: 'Beard Shave • Clipper', price: 'R110', img: 'https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&q=80&w=800' },
-              { id: 'scholar', name: 'The Scholar • Student', price: 'R150', img: 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80&w=800' },
-              { id: 'full', name: 'The Full Works', price: 'R320', img: 'https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&q=80&w=800' }
-            ].map((style) => (
+          <div ref={scrollRef} className="flex overflow-x-auto gap-4 md:gap-8 no-scrollbar snap-x snap-mandatory py-4">
+            {SERVICES.map((service) => (
               <button
-                key={style.id}
+                key={service.id}
                 onClick={() => {
-                  const s = SERVICES.find(sv => sv.id === style.id);
-                  if (s) {
-                    setSelectedService(s);
-                    setStep(2);
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }
+                  setSelectedService(service);
+                  setStep(2);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
-                className="min-w-[340px] md:min-w-[500px] h-[450px] relative overflow-hidden rounded-[4rem] snap-start group bg-zinc-900 border-2 border-white/5 shadow-2xl text-left"
+                className="min-w-[260px] md:min-w-[340px] lg:min-w-[400px] h-[300px] md:h-[380px] lg:h-[450px] relative overflow-hidden rounded-2xl md:rounded-[3rem] snap-start group bg-zinc-900 border-2 border-white/5 shadow-2xl text-left flex-shrink-0"
               >
-                <img src={style.img} className="w-full h-full object-cover grayscale opacity-60 transition-all duration-1000 group-hover:scale-110 group-hover:grayscale-0 group-hover:opacity-100" alt={style.name} />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent flex flex-col justify-end p-12">
-                  <p className="text-sm font-black uppercase tracking-[0.4em] text-zinc-400 mb-2 group-hover:text-white transition-colors">{style.name}</p>
-                  <p className="text-6xl md:text-8xl font-brand text-[#fbd600] italic leading-none">{style.price}</p>
-                  <div className="mt-8 opacity-0 group-hover:opacity-100 transition-all transform translate-y-4 group-hover:translate-y-0 flex items-center gap-3 text-white font-black uppercase text-xs tracking-[0.3em]">
-                    Start Booking <ArrowRight size={20} className="text-[#fbd600]" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/30"></div>
+                <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8 lg:p-12">
+                  <p className="text-[10px] md:text-sm font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-zinc-400 mb-1 md:mb-2 group-hover:text-white transition-colors">{service.name}</p>
+                  <p className="text-xs md:text-sm text-zinc-500 font-bold uppercase tracking-widest mb-2">{service.duration} MIN</p>
+                  <p className="text-4xl md:text-6xl lg:text-7xl font-brand text-[#fbd600] italic leading-none">R{service.price}</p>
+                  <div className="mt-4 md:mt-8 opacity-0 group-hover:opacity-100 transition-all transform translate-y-4 group-hover:translate-y-0 flex items-center gap-3 text-white font-black uppercase text-[10px] md:text-xs tracking-[0.3em]">
+                    Book Now <ArrowRight size={16} className="text-[#fbd600]" />
                   </div>
                 </div>
               </button>
@@ -228,41 +221,41 @@ const App: React.FC = () => {
 
   const renderServiceMenu = () => {
     const categories = [
-      { name: 'Hair', services: SERVICES.filter(s => ['scholar', 'fade', 'buzz'].includes(s.id)) },
-      { name: 'Beard', services: SERVICES.filter(s => s.id === 'beard') },
-      { name: 'Combo', services: SERVICES.filter(s => s.id === 'full') }
+      { name: 'Haircuts', services: SERVICES.filter(s => ['haircut', 'chiskop', 'brush-cut', 'kids-haircut', 'ladies-haircut'].includes(s.id)) },
+      { name: 'Dye & Treatments', services: SERVICES.filter(s => ['haircut-dye', 'unique-haircut'].includes(s.id)) },
+      { name: 'Shaving', services: SERVICES.filter(s => ['shave-beard', 'shave-trim'].includes(s.id)) }
     ];
 
     return (
-      <div className="bg-[#fbd600] min-h-screen py-4 px-6">
-        <div className="max-w-6xl mx-auto space-y-[50px]">
-          <button onClick={() => setStep(0)} className="flex items-center gap-3 text-[#3e2723] font-black uppercase text-xs tracking-[0.3em] hover:scale-105 transition-transform"><ChevronLeft size={20} /> Return Home</button>
+      <div className="bg-[#fbd600] min-h-screen py-4 px-4 md:px-6">
+        <div className="max-w-6xl mx-auto space-y-8 md:space-y-[50px]">
+          <button onClick={() => setStep(0)} className="flex items-center gap-2 md:gap-3 text-[#3e2723] font-black uppercase text-xs tracking-[0.3em] hover:scale-105 transition-transform"><ChevronLeft size={18} /> Return Home</button>
 
           <div className="text-center space-y-1">
-            <h2 className="text-4xl md:text-5xl font-brand italic uppercase text-[#b32b2b] tracking-tighter leading-none">PRICING MENU</h2>
-            <p className="text-xs font-black uppercase tracking-[0.5em] text-[#3e2723]/60">Choose your legendary service</p>
+            <h2 className="text-3xl md:text-5xl font-brand italic uppercase text-[#b32b2b] tracking-tighter leading-none">PRICING MENU</h2>
+            <p className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] md:tracking-[0.5em] text-[#3e2723]/60">Choose your legendary service</p>
           </div>
 
-          <div className="space-y-[50px]">
+          <div className="space-y-8 md:space-y-[50px]">
             {categories.map(cat => (
-              <div key={cat.name} className="space-y-[50px]">
-                <div className="flex items-center gap-6">
-                  <h3 className="text-4xl md:text-6xl font-brand italic uppercase text-[#3e2723]">{cat.name}</h3>
+              <div key={cat.name} className="space-y-4 md:space-y-[50px]">
+                <div className="flex items-center gap-4 md:gap-6">
+                  <h3 className="text-2xl md:text-4xl lg:text-6xl font-brand italic uppercase text-[#3e2723] whitespace-nowrap">{cat.name}</h3>
                   <div className="flex-1 h-1 bg-[#3e2723]/10 rounded-full"></div>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
                   {cat.services.map(s => (
-                    <div key={s.id} className="bg-white p-10 rounded-[3rem] shadow-2xl hover:translate-y-[-8px] transition-all border border-white group">
-                      <div className="flex justify-between items-start mb-8">
-                        <div className="space-y-2">
-                          <h4 className="text-2xl font-black uppercase tracking-tight text-[#3e2723]">{s.name}</h4>
+                    <div key={s.id} className="bg-white p-6 md:p-10 rounded-2xl md:rounded-[3rem] shadow-2xl hover:translate-y-[-8px] transition-all border border-white group">
+                      <div className="flex justify-between items-start mb-4 md:mb-8">
+                        <div className="space-y-1 md:space-y-2">
+                          <h4 className="text-lg md:text-2xl font-black uppercase tracking-tight text-[#3e2723]">{s.name}</h4>
                           <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">{s.duration} MIN • {s.description}</p>
                         </div>
-                        <span className="text-3xl font-brand text-[#b32b2b] italic">R{s.price}</span>
+                        <span className="text-2xl md:text-3xl font-brand text-[#b32b2b] italic ml-2">R{s.price}</span>
                       </div>
                       <button
                         onClick={() => { setSelectedService(s); setStep(2); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                        className="w-full bg-[#b32b2b] text-white py-5 rounded-3xl font-black uppercase text-xs tracking-widest hover:bg-black transition-all shadow-xl active:scale-95"
+                        className="w-full bg-[#b32b2b] text-white py-4 md:py-5 rounded-2xl md:rounded-3xl font-black uppercase text-xs tracking-widest hover:bg-black transition-all shadow-xl active:scale-95"
                       >
                         Book This Session
                       </button>
@@ -285,14 +278,26 @@ const App: React.FC = () => {
             {step === 0 && renderLanding()}
             {step === 1 && renderServiceMenu()}
             {step === 2 && (
-              <div className="min-h-screen bg-[#fbd600] py-24 px-6">
-                <div className="max-w-4xl mx-auto space-y-12">
+              <div className="min-h-screen bg-[#fbd600] py-6 md:py-24 px-4 md:px-6">
+                <div className="max-w-4xl mx-auto space-y-8 md:space-y-12">
                   <button onClick={() => setStep(1)} className="flex items-center gap-3 text-[#3e2723] font-black uppercase text-xs tracking-[0.3em]"><ChevronLeft size={20} /> Back to Menu</button>
-                  <div className="text-center space-y-4">
-                    <h2 className="text-7xl md:text-8xl font-brand italic uppercase text-[#b32b2b] leading-none">SELECT TIME</h2>
-                    <p className="text-xs font-black uppercase tracking-[0.5em] text-[#3e2723]/60">Available slots for {selectedDate.toDateString()}</p>
+                  <div className="text-center space-y-2 md:space-y-4">
+                    <h2 className="text-4xl md:text-8xl font-brand italic uppercase text-[#b32b2b] leading-none">SELECT TIME</h2>
+                    <p className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] md:tracking-[0.5em] text-[#3e2723]/60">Available slots for {selectedDate.toDateString()}</p>
+
+                    {/* Date Picker */}
+                    <div className="flex justify-center mt-4">
+                      <input
+                        type="date"
+                        value={selectedDate.toISOString().split('T')[0]}
+                        min={new Date().toISOString().split('T')[0]}
+                        onChange={(e) => setSelectedDate(new Date(e.target.value))}
+                        className="bg-white text-[#3e2723] font-black uppercase tracking-widest p-4 rounded-xl border-2 border-[#3e2723]/10 focus:border-[#b32b2b] outline-none shadow-xl"
+                      />
+                    </div>
                   </div>
-                  <div className="bg-white p-12 md:p-16 rounded-[4rem] shadow-2xl border border-white">
+
+                  <div className="bg-white p-6 md:p-16 rounded-[2rem] md:rounded-[4rem] shadow-2xl border border-white">
                     <TimeGrid
                       selectedDate={selectedDate}
                       selectedTime={selectedTime}
