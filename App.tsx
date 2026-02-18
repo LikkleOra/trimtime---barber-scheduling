@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Layout from './components/Layout';
 import TimeGrid from './components/TimeGrid';
 import BookingSummary from './components/BookingSummary';
+import ReviewPage from './components/ReviewPage';
 import { SERVICES, BARBER_CONFIG } from './constants';
 import { Service, Booking, ViewType } from './types';
 import { bookingService } from './services/bookingService';
@@ -18,7 +19,7 @@ const App: React.FC = () => {
   const [customerPhone, setCustomerPhone] = useState('');
   const [notes, setNotes] = useState('');
   const [bookings, setBookings] = useState<Booking[]>([]);
-  const [step, setStep] = useState<0 | 1 | 2 | 3>(0);
+  const [step, setStep] = useState<0 | 1 | 2 | 3 | 4>(0);
   const [staffPassword, setStaffPassword] = useState('');
   const [authError, setAuthError] = useState('');
   const [isStaffAuthenticated, setIsStaffAuthenticated] = useState(false);
@@ -148,6 +149,11 @@ https://fadezone-grooming.netlify.app/
     setSelectedService(null);
   };
 
+  const handleLogout = () => {
+    setIsStaffAuthenticated(false);
+    setStaffPassword('');
+  };
+
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
       const { scrollLeft, clientWidth } = scrollRef.current;
@@ -174,7 +180,7 @@ https://fadezone-grooming.netlify.app/
       {/* Hero Section Redesign */}
       <section id="hero-section" className="relative min-h-screen lg:h-[85vh] bg-[#fbd600] diagonal-stripes flex items-center overflow-hidden pt-20">
         <div className="hidden lg:block absolute left-8 top-1/2 -translate-y-1/2 -rotate-90 origin-left">
-          <p className="font-black uppercase tracking-[0.4em] text-[10px] md:text-xs">EST 2024 • DURBAN</p>
+          <p className="font-black uppercase tracking-[0.4em] text-[10px] md:text-xs">EST 2020 • JOHANNESBURG</p>
         </div>
 
         <div className="grid lg:grid-cols-2 w-full h-full max-w-7xl mx-auto px-6 gap-8 md:gap-0">
@@ -213,7 +219,7 @@ https://fadezone-grooming.netlify.app/
       {/* About Section Redesign */}
       <section id="about-section" className="bg-[#e0f2f1] py-20 md:py-32 px-6 md:px-20 relative overflow-hidden">
         <div className="absolute top-0 left-10 bg-[#fbd600] px-4 py-2">
-          <span className="font-black uppercase tracking-widest text-xs">Since 2024</span>
+          <span className="font-black uppercase tracking-widest text-xs">Since 2020</span>
         </div>
         <div className="max-w-4xl mx-auto space-y-8">
           <h2 className="text-4xl md:text-6xl lg:text-7xl font-brand italic uppercase text-black leading-[0.9] tracking-tighter">
@@ -222,7 +228,7 @@ https://fadezone-grooming.netlify.app/
           <div className="flex items-center gap-4">
             <div className="w-1 h-12 bg-[#b32b2b]"></div>
             <h3 className="text-xl md:text-2xl font-black italic uppercase text-[#b32b2b] tracking-wider">
-              DURBAN’S FINEST GROOMING HUB
+              JOHANNESBURG’S FINEST GROOMING HUB
             </h3>
           </div>
           <p className="text-lg md:text-xl font-serif italic text-zinc-600 leading-relaxed max-w-2xl border-l border-zinc-300 pl-6 py-2">
@@ -270,6 +276,16 @@ https://fadezone-grooming.netlify.app/
               </button>
             ))}
           </div>
+
+          {/* Review CTA */}
+          <div className="pt-12 text-center border-t border-zinc-900">
+            <button
+              onClick={() => { setStep(4); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+              className="px-10 py-5 bg-white text-black font-black uppercase italic tracking-tighter shadow-[8px_8px_0px_0px_rgba(251,214,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all flex items-center gap-3 mx-auto text-lg"
+            >
+              <Star className="text-[#b32b2b]" size={24} fill="#b32b2b" /> Review Your Experience
+            </button>
+          </div>
         </div>
       </section>
 
@@ -285,7 +301,7 @@ https://fadezone-grooming.netlify.app/
                 </div>
                 <div>
                   <p className="text-2xl md:text-3xl font-black text-[#3e2723] leading-tight">{selectedLocation.address}</p>
-                  <button className="mt-4 text-[11px] font-black uppercase tracking-widest text-[#b32b2b] hover:text-black border-b border-[#b32b2b]">Get Directions</button>
+                  <p className="mt-2 text-xl font-black text-[#b32b2b]">081 268 7806</p>
                 </div>
               </div>
               <div className="flex flex-wrap gap-4">
@@ -369,7 +385,14 @@ https://fadezone-grooming.netlify.app/
   };
 
   return (
-    <Layout activeView={activeView} onViewChange={setActiveView} currentStep={step} onGoToSection={handleGoToSection}>
+    <Layout
+      activeView={activeView}
+      onViewChange={setActiveView}
+      currentStep={step}
+      onGoToSection={handleGoToSection}
+      isStaffAuthenticated={isStaffAuthenticated}
+      onLogout={handleLogout}
+    >
       <div className="w-full">
         {activeView === 'customer' ? (
           <>
@@ -468,6 +491,17 @@ https://fadezone-grooming.netlify.app/
                   </div>
                 )}
               </div>
+            )}
+            {step === 4 && (
+              <ReviewPage
+                onBack={() => setStep(0)}
+                onSubmitReview={async (review) => {
+                  console.log('Review submitted:', review);
+                  // In a real app, you'd upload the image to a storage bucket
+                  // and save the review to a database.
+                  await new Promise(resolve => setTimeout(resolve, 1500));
+                }}
+              />
             )}
           </>
         ) : !isStaffAuthenticated ? (

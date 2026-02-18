@@ -68,8 +68,8 @@ export const SERVICES: Service[] = [
 ];
 
 export const WORKING_HOURS = {
-  start: 7,
-  end: 17,
+  start: 8,
+  end: 19,
   interval: 30
 };
 
@@ -83,20 +83,20 @@ export const BARBER_CONFIG = {
       name: 'Kensington',
       address: '424 Commissioner Street, Kensington, Johannesburg',
       hours: [
-        { day: 'Monday', time: '07:00 - 12:00', status: 'active' },
-        { day: 'Tuesday', time: '07:00 - 17:00', status: 'active' },
-        { day: 'Wednesday', time: '07:00 - 17:00', status: 'active' },
-        { day: 'Thursday', time: '07:00 - 17:00', status: 'active' },
-        { day: 'Friday', time: '07:00 - 15:30', status: 'current' },
-        { day: 'Saturday', time: '07:30 - 13:00', status: 'active' },
-        { day: 'Sunday', time: 'CLOSED', status: 'closed' }
+        { day: 'Monday', time: '08:00 - 17:00', status: 'active' },
+        { day: 'Tuesday', time: '08:00 - 18:00', status: 'active' },
+        { day: 'Wednesday', time: '08:00 - 18:00', status: 'active' },
+        { day: 'Thursday', time: '08:00 - 18:00', status: 'active' },
+        { day: 'Friday', time: '08:00 - 18:00', status: 'current' },
+        { day: 'Saturday', time: '08:00 - 19:00', status: 'active' },
+        { day: 'Sunday', time: '08:00 - 18:00', status: 'active' }
       ]
     },
     {
       id: 'gw',
-      name: 'Glenwood',
-      address: '123 Helen Joseph Rd, Glenwood',
-      hours: [] // Assume similar
+      name: 'Sandton',
+      address: 'Sandton City, Johannesburg',
+      hours: []
     }
   ]
 };

@@ -9,12 +9,18 @@ interface LayoutProps {
   onViewChange: (view: ViewType) => void;
   currentStep: number;
   onGoToSection: (sectionId: string) => void;
+  isStaffAuthenticated?: boolean;
+  onLogout?: () => void;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children, activeView, onViewChange, currentStep, onGoToSection }) => {
+const Layout: React.FC<LayoutProps> = ({ children, activeView, onViewChange, currentStep, onGoToSection, isStaffAuthenticated, onLogout }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleNavClick = (sectionId: string) => {
+    if (activeView === 'barber' && onLogout) {
+      onLogout();
+    }
+    onViewChange('customer');
     onGoToSection(sectionId);
     setMobileMenuOpen(false);
   };
@@ -61,10 +67,23 @@ const Layout: React.FC<LayoutProps> = ({ children, activeView, onViewChange, cur
 
       {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 top-[80px] bg-[#fbd600] z-40 flex flex-col items-center justify-start pt-12 gap-10 md:hidden">
-          <button onClick={() => handleNavClick('about-section')} className="text-2xl font-black uppercase tracking-tighter italic text-black">About</button>
-          <button onClick={() => handleNavClick('prices-section')} className="text-2xl font-black uppercase tracking-tighter italic text-black">Pricing</button>
-          <button onClick={() => handleNavClick('contact-section')} className="text-2xl font-black uppercase tracking-tighter italic text-black">Contact</button>
+        <div className="fixed inset-0 bg-[#fbd600] z-[60] flex flex-col items-center justify-center gap-12 md:hidden">
+          <button
+            onClick={() => setMobileMenuOpen(false)}
+            className="absolute top-6 right-6 w-10 h-10 flex items-center justify-center border-2 border-black rounded-lg"
+          >
+            <X size={24} />
+          </button>
+          <button onClick={() => handleNavClick('about-section')} className="text-4xl font-brand italic uppercase tracking-tighter text-black">About</button>
+          <button onClick={() => handleNavClick('prices-section')} className="text-4xl font-brand italic uppercase tracking-tighter text-black">Pricing</button>
+          <button onClick={() => handleNavClick('contact-section')} className="text-4xl font-brand italic uppercase tracking-tighter text-black">Contact</button>
+
+          <button
+            onClick={() => { onViewChange('barber'); setMobileMenuOpen(false); }}
+            className="mt-8 px-8 py-4 bg-black text-[#fbd600] font-black uppercase tracking-widest rounded-xl text-sm"
+          >
+            Staff Portal
+          </button>
         </div>
       )}
 
@@ -81,7 +100,7 @@ const Layout: React.FC<LayoutProps> = ({ children, activeView, onViewChange, cur
             <Instagram size={20} className="hover:text-white transition-colors cursor-pointer" />
             <MessageSquare size={20} className="hover:text-white transition-colors cursor-pointer" />
           </div>
-          <p className="text-[9px] font-bold uppercase tracking-[0.3em] opacity-50">© 2024 Fadezone Grooming. All Rights Reserved.</p>
+          <p className="text-[9px] font-bold uppercase tracking-[0.3em] opacity-50">© 2020 Fadezone Grooming. All Rights Reserved.</p>
         </div>
       </footer>
     </div>
