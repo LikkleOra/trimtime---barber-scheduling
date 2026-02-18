@@ -34,7 +34,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
             <p className="text-[10px] font-black text-zinc-500 uppercase mt-1 tracking-widest">Ref: #FZ-{Math.floor(Math.random() * 9000) + 1000}</p>
           </div>
           <div className="bg-zinc-900 border border-zinc-800 px-4 py-2 rotate-1">
-            <span className="text-[10px] font-black uppercase text-[#FFC107] tracking-widest">Durban North</span>
+            <span className="text-[10px] font-black uppercase text-[#FFC107] tracking-widest">Johannesburg</span>
           </div>
         </div>
 
