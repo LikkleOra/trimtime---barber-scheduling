@@ -100,11 +100,10 @@ const App: React.FC = () => {
     return () => window.removeEventListener('storage', refreshBookings);
   }, [refreshBookings]);
 
-  const [showConsultantModal, setShowConsultantModal] = useState(false);
 
   const handleConfirm = () => {
     if (!selectedService || !selectedTime) return;
-    setShowConsultantModal(true);
+    processBooking('27812687806');
   };
 
   const processBooking = (consultantNumber: string) => {
@@ -144,7 +143,6 @@ https://fadezone-grooming.netlify.app/
     window.open(whatsappUrl, '_blank');
 
     // Reset UI
-    setShowConsultantModal(false);
     setStep(0);
     setSelectedService(null);
   };
@@ -457,39 +455,6 @@ https://fadezone-grooming.netlify.app/
                   </div>
                 </div>
 
-                {/* Consultant Selection Modal */}
-                {showConsultantModal && (
-                  <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/90 backdrop-blur-sm animate-in fade-in duration-200">
-                    <div className="bg-white rounded-[2rem] p-8 max-w-sm w-full space-y-6 text-center border-4 border-[#FFC107]">
-                      <div className="space-y-2">
-                        <h3 className="text-2xl font-brand italic uppercase text-[#b32b2b]">Select Consultant</h3>
-                        <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Choose your preferred barber</p>
-                      </div>
-
-                      <div className="space-y-3">
-                        <button
-                          onClick={() => processBooking('27785962689')}
-                          className="w-full bg-zinc-900 text-white py-4 rounded-xl font-black uppercase text-xs tracking-widest hover:bg-[#FFC107] hover:text-black transition-all flex items-center justify-center gap-2"
-                        >
-                          <Smartphone size={16} /> WA: 078 596 2689
-                        </button>
-                        <button
-                          onClick={() => processBooking('27812687806')}
-                          className="w-full bg-zinc-900 text-white py-4 rounded-xl font-black uppercase text-xs tracking-widest hover:bg-[#FFC107] hover:text-black transition-all flex items-center justify-center gap-2"
-                        >
-                          <Smartphone size={16} /> WA: 081 268 7806
-                        </button>
-                      </div>
-
-                      <button
-                        onClick={() => setShowConsultantModal(false)}
-                        className="text-[10px] font-black uppercase tracking-widest text-zinc-400 hover:text-black border-b border-zinc-200"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                )}
               </div>
             )}
             {step === 4 && (
