@@ -259,6 +259,13 @@ https://fadezone-grooming.netlify.app/
                 }}
                 className="min-w-[90vw] md:min-w-[45vw] lg:min-w-[30%] h-[300px] md:h-[380px] lg:h-[450px] relative overflow-hidden rounded-2xl md:rounded-[3rem] snap-center md:snap-start group bg-zinc-900 border-2 border-white/5 shadow-2xl text-left flex-shrink-0"
               >
+                {service.image && (
+                  <img
+                    src={service.image}
+                    alt={service.name}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 grayscale group-hover:grayscale-0"
+                  />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/30"></div>
                 <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8 lg:p-12">
                   <p className="text-[10px] md:text-sm font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-zinc-400 mb-1 md:mb-2 group-hover:text-white transition-colors">{service.name}</p>
@@ -355,6 +362,11 @@ https://fadezone-grooming.netlify.app/
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
                   {cat.services.map(s => (
                     <div key={s.id} className="bg-white p-6 md:p-10 rounded-2xl md:rounded-[3rem] shadow-2xl hover:translate-y-[-8px] transition-all border border-white group">
+                      {s.image && (
+                        <div className="w-full h-48 mb-6 overflow-hidden rounded-2xl md:rounded-[2rem]">
+                          <img src={s.image} alt={s.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                        </div>
+                      )}
                       <div className="flex justify-between items-start mb-4 md:mb-8">
                         <div className="space-y-1 md:space-y-2">
                           <h4 className="text-lg md:text-2xl font-black uppercase tracking-tight text-[#3e2723]">{s.name}</h4>

@@ -7,14 +7,16 @@ export const SERVICES: Service[] = [
     name: 'HAIR CUT',
     price: 70,
     duration: 30,
-    description: 'Classic haircut'
+    description: 'Classic haircut',
+    image: '/services/Haircut.jpg'
   },
   {
     id: 'chiskop',
     name: 'CHISKOP',
     price: 30,
     duration: 20,
-    description: 'Short buzz cut'
+    description: 'Short buzz cut',
+    image: '/services/Chiskop.jpg'
   },
   {
     id: 'brush-cut',
@@ -28,28 +30,32 @@ export const SERVICES: Service[] = [
     name: 'KIDS CUT',
     price: 50,
     duration: 30,
-    description: 'Children haircut'
+    description: 'Children haircut',
+    image: '/services/Kids Haircut.jpg'
   },
   {
     id: 'ladies-haircut',
     name: 'LADIES CUT',
     price: 80,
     duration: 45,
-    description: 'Ladies haircut'
+    description: 'Ladies haircut',
+    image: '/services/Ladies Cut.jpg'
   },
   {
     id: 'haircut-dye',
     name: 'HAIRCUT + BLACK DYE',
     price: 120,
     duration: 60,
-    description: 'Haircut + black dye'
+    description: 'Haircut + black dye',
+    image: '/services/Haircut + Black Dye.jpg'
   },
   {
     id: 'unique-haircut',
     name: 'HAIRCUT + CUSTOM DYE',
     price: 250,
     duration: 90,
-    description: 'Custom haircut with coloured dye'
+    description: 'Custom haircut with coloured dye',
+    image: '/services/Haircut + Custom Dye.jpg'
   },
   {
     id: 'shave-beard',
@@ -63,14 +69,16 @@ export const SERVICES: Service[] = [
     name: 'TRIMMING',
     price: 20,
     duration: 20,
-    description: 'Trimming service'
+    description: 'Trimming service',
+    image: '/services/Trimming.jpg'
   },
   {
     id: 'versatile-fade',
     name: 'VERSATILE FADE',
     price: 100,
     duration: 45,
-    description: 'Versatile fade haircut'
+    description: 'Versatile fade haircut',
+    image: '/services/Versatile Fade.jpg'
   }
 ];
 

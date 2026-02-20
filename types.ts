@@ -5,6 +5,7 @@ export interface Service {
   price: number;
   duration: number; // in minutes
   description: string;
+  image?: string;
 }
 
 export interface Booking {
