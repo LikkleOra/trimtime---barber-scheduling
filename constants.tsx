@@ -23,7 +23,8 @@ export const SERVICES: Service[] = [
     name: 'BRUSH CUT',
     price: 50,
     duration: 25,
-    description: 'Brush cut style'
+    description: 'Brush cut style',
+    image: '/services/Brush cut.jpg'
   },
   {
     id: 'kids-haircut',
@@ -62,7 +63,8 @@ export const SERVICES: Service[] = [
     name: 'BEARD SHAVE',
     price: 20,
     duration: 15,
-    description: 'Beard shave'
+    description: 'Beard shave',
+    image: '/services/Beard shave.jpg'
   },
   {
     id: 'shave-trim',
