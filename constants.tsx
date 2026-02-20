@@ -39,14 +39,14 @@ export const SERVICES: Service[] = [
   },
   {
     id: 'haircut-dye',
-    name: 'BLACK DYE',
+    name: 'HAIRCUT + BLACK DYE',
     price: 120,
     duration: 60,
     description: 'Haircut + black dye'
   },
   {
     id: 'unique-haircut',
-    name: 'UNIQUE COLOURED DYE',
+    name: 'HAIRCUT + CUSTOM DYE',
     price: 250,
     duration: 90,
     description: 'Custom haircut with coloured dye'
