@@ -8,7 +8,7 @@ export const SERVICES: Service[] = [
     price: 70,
     duration: 30,
     description: 'Classic haircut',
-    image: '/services/Haircut.jpg'
+    image: '/services/haircut.jpg'
   },
   {
     id: 'chiskop',
@@ -16,7 +16,7 @@ export const SERVICES: Service[] = [
     price: 30,
     duration: 20,
     description: 'Short buzz cut',
-    image: '/services/Chiskop.jpg'
+    image: '/services/chiskop.jpg'
   },
   {
     id: 'brush-cut',
@@ -24,7 +24,7 @@ export const SERVICES: Service[] = [
     price: 50,
     duration: 25,
     description: 'Brush cut style',
-    image: '/services/Brush cut.jpg'
+    image: '/services/brush-cut.jpg'
   },
   {
     id: 'kids-haircut',
@@ -32,7 +32,7 @@ export const SERVICES: Service[] = [
     price: 50,
     duration: 30,
     description: 'Children haircut',
-    image: '/services/Kids Haircut.jpg'
+    image: '/services/kids-haircut.jpg'
   },
   {
     id: 'ladies-haircut',
@@ -40,7 +40,7 @@ export const SERVICES: Service[] = [
     price: 80,
     duration: 45,
     description: 'Ladies haircut',
-    image: '/services/Ladies Cut.jpg'
+    image: '/services/ladies-cut.jpg'
   },
   {
     id: 'haircut-dye',
@@ -48,7 +48,7 @@ export const SERVICES: Service[] = [
     price: 120,
     duration: 60,
     description: 'Haircut + black dye',
-    image: '/services/Haircut + Black Dye.jpg'
+    image: '/services/haircut-black-dye.jpg'
   },
   {
     id: 'unique-haircut',
@@ -56,7 +56,7 @@ export const SERVICES: Service[] = [
     price: 250,
     duration: 90,
     description: 'Custom haircut with coloured dye',
-    image: '/services/Haircut + Custom Dye.jpg'
+    image: '/services/haircut-custom-dye.jpg'
   },
   {
     id: 'shave-beard',
@@ -64,7 +64,7 @@ export const SERVICES: Service[] = [
     price: 20,
     duration: 15,
     description: 'Beard shave',
-    image: '/services/Beard shave.jpg'
+    image: '/services/beard-shave.jpg'
   },
   {
     id: 'shave-trim',
@@ -72,7 +72,7 @@ export const SERVICES: Service[] = [
     price: 20,
     duration: 20,
     description: 'Trimming service',
-    image: '/services/Trimming.jpg'
+    image: '/services/trimming.jpg'
   },
   {
     id: 'versatile-fade',
@@ -80,7 +80,7 @@ export const SERVICES: Service[] = [
     price: 100,
     duration: 45,
     description: 'Versatile fade haircut',
-    image: '/services/Versatile Fade.jpg'
+    image: '/services/versatile-fade.jpg'
   }
 ];
 
