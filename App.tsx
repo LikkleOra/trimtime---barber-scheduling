@@ -1,13 +1,13 @@
-
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import Layout from './components/Layout';
 import TimeGrid from './components/TimeGrid';
 import BookingSummary from './components/BookingSummary';
 import ReviewPage from './components/ReviewPage';
 import { SERVICES, BARBER_CONFIG } from './constants';
 import { Service, Booking, ViewType } from './types';
-import { bookingService } from './services/bookingService';
 import { ChevronRight, MapPin, CheckCircle, Smartphone, ChevronLeft, ArrowRight, Star } from 'lucide-react';
+import { useQuery, useMutation } from "convex/react";
+import { api } from "./convex/_generated/api";
 
 const App: React.FC = () => {
   const [activeView, setActiveView] = useState<ViewType>('customer');
@@ -18,11 +18,14 @@ const App: React.FC = () => {
   const [customerName, setCustomerName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
   const [notes, setNotes] = useState('');
-  const [bookings, setBookings] = useState<Booking[]>([]);
   const [step, setStep] = useState<0 | 1 | 2 | 3 | 4>(0);
   const [staffPassword, setStaffPassword] = useState('');
   const [authError, setAuthError] = useState('');
   const [isStaffAuthenticated, setIsStaffAuthenticated] = useState(false);
+
+  // Convex Data
+  const bookings = useQuery(api.bookings.getBookings) || [];
+  const addBookingMutation = useMutation(api.bookings.addBooking);
 
   // Calendar State
   const [viewDate, setViewDate] = useState(new Date());
@@ -90,23 +93,12 @@ const App: React.FC = () => {
     );
   };
 
-  const refreshBookings = useCallback(() => {
-    setBookings(bookingService.getBookings());
-  }, []);
-
-  useEffect(() => {
-    refreshBookings();
-    window.addEventListener('storage', refreshBookings);
-    return () => window.removeEventListener('storage', refreshBookings);
-  }, [refreshBookings]);
-
-
   const handleConfirm = () => {
     if (!selectedService || !selectedTime) return;
     processBooking('27812687806');
   };
 
-  const processBooking = (consultantNumber: string) => {
+  const processBooking = async (consultantNumber: string) => {
     if (!selectedService || !selectedTime) return;
     const dateStr = selectedDate.toISOString().split('T')[0];
 
@@ -127,24 +119,29 @@ _Need to book again?_
 https://fadezone-grooming.netlify.app/
     `.trim();
 
-    // Store in DB (or mock DB)
-    bookingService.addBooking({
-      id: Math.random().toString(36).substr(2, 9),
-      serviceId: selectedService.id,
-      date: dateStr,
-      time: selectedTime,
-      customerName,
-      customerPhone,
-      status: 'confirmed'
-    });
+    try {
+      // Store in Convex
+      await addBookingMutation({
+        serviceId: selectedService.id,
+        date: dateStr,
+        time: selectedTime,
+        customerName,
+        customerPhone,
+        notes,
+        status: 'confirmed'
+      });
 
-    // Open WhatsApp
-    const whatsappUrl = `https://wa.me/${consultantNumber}?text=${encodeURIComponent(msg)}`;
-    window.open(whatsappUrl, '_blank');
+      // Open WhatsApp
+      const whatsappUrl = `https://wa.me/${consultantNumber}?text=${encodeURIComponent(msg)}`;
+      window.open(whatsappUrl, '_blank');
 
-    // Reset UI
-    setStep(0);
-    setSelectedService(null);
+      // Reset UI
+      setStep(0);
+      setSelectedService(null);
+    } catch (error) {
+      console.error("Booking failed:", error);
+      alert("Something went wrong with the booking. Please try again.");
+    }
   };
 
   const handleLogout = () => {

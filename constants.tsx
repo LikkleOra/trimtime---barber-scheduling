@@ -64,6 +64,13 @@ export const SERVICES: Service[] = [
     price: 20,
     duration: 20,
     description: 'Trimming service'
+  },
+  {
+    id: 'versatile-fade',
+    name: 'VERSATILE FADE',
+    price: 100,
+    duration: 45,
+    description: 'Versatile fade haircut'
   }
 ];
 
