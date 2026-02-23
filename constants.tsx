@@ -13,7 +13,7 @@ export const SERVICES: Service[] = [
   {
     id: 'chiskop',
     name: 'CHISKOP',
-    price: 30,
+    price: 40,
     duration: 20,
     description: 'Short buzz cut',
     image: '/services/chiskop.jpg'
@@ -45,7 +45,7 @@ export const SERVICES: Service[] = [
   {
     id: 'haircut-dye',
     name: 'HAIRCUT + BLACK DYE',
-    price: 120,
+    price: 80,
     duration: 60,
     description: 'Haircut + black dye',
     image: '/services/haircut-black-dye.jpg'
@@ -61,7 +61,7 @@ export const SERVICES: Service[] = [
   {
     id: 'shave-beard',
     name: 'BEARD SHAVE',
-    price: 20,
+    price: 30,
     duration: 15,
     description: 'Beard shave',
     image: '/services/beard-shave.jpg'

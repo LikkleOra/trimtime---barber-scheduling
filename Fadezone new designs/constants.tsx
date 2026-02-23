@@ -12,14 +12,14 @@ export const SERVICES: Service[] = [
   {
     id: 'haircut-dye',
     name: 'HAIRCUT WITH BLACK DYE',
-    price: 120,
+    price: 80,
     duration: 40,
     description: 'Haircut + black dye'
   },
   {
     id: 'chiskop',
     name: 'CHISKOP',
-    price: 30,
+    price: 40,
     duration: 15,
     description: 'Short buzz cut'
   },
@@ -47,7 +47,7 @@ export const SERVICES: Service[] = [
   {
     id: 'shave-beard',
     name: 'SHAVING BEARD',
-    price: 20,
+    price: 30,
     duration: 15,
     description: 'Beard shave'
   },
@@ -68,9 +68,9 @@ export const SERVICES: Service[] = [
 ];
 
 export const WORKING_HOURS = {
-  start: 7, 
-  end: 17,  
-  interval: 30 
+  start: 7,
+  end: 17,
+  interval: 30
 };
 
 export const BARBER_CONFIG = {
@@ -78,9 +78,9 @@ export const BARBER_CONFIG = {
   phone: '27721234567',
   shopName: 'FADEZONE Grooming',
   locations: [
-    { 
+    {
       id: 'kensington',
-      name: 'Kensington', 
+      name: 'Kensington',
       address: '424 Commissioner Street, Kensington, Johannesburg',
       hours: [
         { day: 'Monday', time: '07:00 - 12:00', status: 'active' },
@@ -92,9 +92,9 @@ export const BARBER_CONFIG = {
         { day: 'Sunday', time: 'CLOSED', status: 'closed' }
       ]
     },
-    { 
+    {
       id: 'gw',
-      name: 'Glenwood', 
+      name: 'Glenwood',
       address: '123 Helen Joseph Rd, Glenwood',
       hours: [] // Assume similar
     }
