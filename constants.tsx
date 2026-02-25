@@ -92,7 +92,7 @@ export const WORKING_HOURS = {
 
 export const BARBER_CONFIG = {
   name: 'Alex',
-  phone: '27721234567',
+  phone: '27812687806',
   shopName: 'FADEZONE Grooming',
   locations: [
     {
@@ -106,14 +106,7 @@ export const BARBER_CONFIG = {
         { day: 'Thursday', time: '08:00 - 18:00', status: 'active' },
         { day: 'Friday', time: '08:00 - 18:00', status: 'current' },
         { day: 'Saturday', time: '08:00 - 19:00', status: 'active' },
-        { day: 'Sunday', time: '08:00 - 18:00', status: 'active' }
       ]
-    },
-    {
-      id: 'gw',
-      name: 'Sandton',
-      address: 'Sandton City, Johannesburg',
-      hours: []
     }
   ]
 };

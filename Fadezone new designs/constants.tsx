@@ -75,7 +75,7 @@ export const WORKING_HOURS = {
 
 export const BARBER_CONFIG = {
   name: 'Alex',
-  phone: '27721234567',
+  phone: '27812687806',
   shopName: 'FADEZONE Grooming',
   locations: [
     {
@@ -91,12 +91,5 @@ export const BARBER_CONFIG = {
         { day: 'Saturday', time: '07:30 - 13:00', status: 'active' },
         { day: 'Sunday', time: 'CLOSED', status: 'closed' }
       ]
-    },
-    {
-      id: 'gw',
-      name: 'Glenwood',
-      address: '123 Helen Joseph Rd, Glenwood',
-      hours: [] // Assume similar
-    }
   ]
 };

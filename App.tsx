@@ -3,6 +3,7 @@ import Layout from './components/Layout';
 import TimeGrid from './components/TimeGrid';
 import BookingSummary from './components/BookingSummary';
 import ReviewPage from './components/ReviewPage';
+import Gallery from './components/Gallery';
 import { SERVICES, BARBER_CONFIG } from './constants';
 import { Service, Booking, ViewType } from './types';
 import { ChevronRight, MapPin, CheckCircle, Smartphone, ChevronLeft, ArrowRight, Star } from 'lucide-react';
@@ -18,14 +19,19 @@ const App: React.FC = () => {
   const [customerName, setCustomerName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
   const [notes, setNotes] = useState('');
-  const [step, setStep] = useState<0 | 1 | 2 | 3 | 4>(0);
+  const [step, setStep] = useState<0 | 1 | 2 | 3 | 4 | 5>(0);
   const [staffPassword, setStaffPassword] = useState('');
   const [authError, setAuthError] = useState('');
   const [isStaffAuthenticated, setIsStaffAuthenticated] = useState(false);
+  const [lastBookingId, setLastBookingId] = useState<any>(null);
 
   // Convex Data
   const bookings = useQuery(api.bookings.getBookings) || [];
   const addBookingMutation = useMutation(api.bookings.addBooking);
+  const reviews = useQuery(api.reviews.getReviews) || [];
+  const addReviewMutation = useMutation(api.reviews.addReview);
+  const generateUploadUrl = useMutation(api.reviews.generateUploadUrl);
+  const deleteBookingMutation = useMutation(api.bookings.deleteBooking);
 
   // Calendar State
   const [viewDate, setViewDate] = useState(new Date());
@@ -95,7 +101,7 @@ const App: React.FC = () => {
 
   const handleConfirm = () => {
     if (!selectedService || !selectedTime) return;
-    processBooking('27812687806');
+    processBooking(BARBER_CONFIG.phone);
   };
 
   const processBooking = async (consultantNumber: string) => {
@@ -121,7 +127,7 @@ https://fadezone-grooming.netlify.app/
 
     try {
       // Store in Convex
-      await addBookingMutation({
+      const bookingId = await addBookingMutation({
         serviceId: selectedService.id,
         date: dateStr,
         time: selectedTime,
@@ -130,6 +136,8 @@ https://fadezone-grooming.netlify.app/
         notes,
         status: 'confirmed'
       });
+
+      setLastBookingId(bookingId);
 
       // Open WhatsApp
       const whatsappUrl = `https://wa.me/${consultantNumber}?text=${encodeURIComponent(msg)}`;
@@ -280,10 +288,16 @@ https://fadezone-grooming.netlify.app/
           </div>
 
           {/* Review CTA */}
-          <div className="pt-12 text-center border-t border-zinc-900">
+          <div className="pt-12 text-center border-t border-zinc-900 space-y-4">
+            <button
+              onClick={() => { setStep(5); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+              className="px-10 py-5 bg-black border-2 border-[#fbd600] text-[#fbd600] font-black uppercase italic tracking-tighter shadow-[8px_8px_0px_0px_rgba(251,214,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all flex items-center justify-center w-full md:w-auto gap-3 mx-auto text-lg mb-4"
+            >
+              See the Legend's Gallery
+            </button>
             <button
               onClick={() => { setStep(4); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-              className="px-10 py-5 bg-white text-black font-black uppercase italic tracking-tighter shadow-[8px_8px_0px_0px_rgba(251,214,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all flex items-center gap-3 mx-auto text-lg"
+              className="px-10 py-5 bg-white text-black font-black uppercase italic tracking-tighter shadow-[8px_8px_0px_0px_rgba(251,214,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all flex items-center justify-center w-full md:w-auto gap-3 mx-auto text-lg"
             >
               <Star className="text-[#b32b2b]" size={24} fill="#b32b2b" /> Review Your Experience
             </button>
@@ -461,6 +475,23 @@ https://fadezone-grooming.netlify.app/
                       onNotesChange={setNotes}
                       onConfirm={handleConfirm}
                     />
+                    {lastBookingId && (
+                      <div className="mt-8 pt-8 border-t-2 border-zinc-100 text-center">
+                        <button
+                          onClick={async () => {
+                            if (confirm('Are you sure you want to cancel your booking?')) {
+                              await deleteBookingMutation({ id: lastBookingId });
+                              setLastBookingId(null);
+                              setStep(0);
+                              alert('Booking cancelled successfully.');
+                            }
+                          }}
+                          className="text-red-600 font-black uppercase text-xs tracking-widest hover:underline"
+                        >
+                          Cancel My Booking
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -470,11 +501,30 @@ https://fadezone-grooming.netlify.app/
               <ReviewPage
                 onBack={() => setStep(0)}
                 onSubmitReview={async (review) => {
-                  console.log('Review submitted:', review);
-                  // In a real app, you'd upload the image to a storage bucket
-                  // and save the review to a database.
-                  await new Promise(resolve => setTimeout(resolve, 1500));
+                  let imageId = undefined;
+                  if (review.image) {
+                    const postUrl = await generateUploadUrl();
+                    const result = await fetch(postUrl, {
+                      method: "POST",
+                      headers: { "Content-Type": review.image.type },
+                      body: review.image,
+                    });
+                    const { storageId } = await result.json();
+                    imageId = storageId;
+                  }
+
+                  await addReviewMutation({
+                    rating: review.rating,
+                    comment: review.comment,
+                    imageId,
+                  });
                 }}
+              />
+            )}
+            {step === 5 && (
+              <Gallery
+                reviews={reviews as any}
+                onBack={() => setStep(0)}
               />
             )}
           </>
@@ -496,7 +546,7 @@ https://fadezone-grooming.netlify.app/
                   }}
                   onKeyPress={(e) => {
                     if (e.key === 'Enter') {
-                      if (staffPassword === 'Alex') {
+                      if (staffPassword === import.meta.env.VITE_STAFF_PASSWORD) {
                         setIsStaffAuthenticated(true);
                         setAuthError('');
                       } else {
@@ -510,7 +560,7 @@ https://fadezone-grooming.netlify.app/
                 {authError && <p className="text-red-500 text-xs font-bold text-center">{authError}</p>}
                 <button
                   onClick={() => {
-                    if (staffPassword === 'Alex') {
+                    if (staffPassword === import.meta.env.VITE_STAFF_PASSWORD) {
                       setIsStaffAuthenticated(true);
                       setAuthError('');
                     } else {
@@ -563,6 +613,26 @@ https://fadezone-grooming.netlify.app/
                             <span className={`px-4 py-2 rounded-lg text-xs font-bold uppercase ${booking.status === 'confirmed' ? 'bg-green-900 text-green-200' : 'bg-yellow-900 text-yellow-200'}`}>
                               {booking.status}
                             </span>
+                            <button
+                              onClick={async () => {
+                                if (confirm('Cancel this booking?')) {
+                                  await deleteBookingMutation({ id: booking._id as any });
+                                }
+                              }}
+                              className="px-4 py-2 bg-red-900 text-red-200 rounded-lg text-xs font-bold uppercase hover:bg-red-800"
+                            >
+                              Cancel Booking
+                            </button>
+                            <button
+                              onClick={() => {
+                                const msg = `Yo ${booking.customerName}! Just a reminder of your legendary fade tomorrow at ${booking.time} at Fadezone. See you then! 🔥`;
+                                const whatsappUrl = `https://wa.me/${booking.customerPhone}?text=${encodeURIComponent(msg)}`;
+                                window.open(whatsappUrl, '_blank');
+                              }}
+                              className="px-4 py-2 bg-[#fbd600] text-black rounded-lg text-xs font-bold uppercase hover:bg-white transition-colors"
+                            >
+                              Send Reminder
+                            </button>
                           </div>
                         </div>
                       );
