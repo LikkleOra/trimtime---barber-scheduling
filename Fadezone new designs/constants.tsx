@@ -12,7 +12,7 @@ export const SERVICES: Service[] = [
   {
     id: 'haircut-dye',
     name: 'HAIRCUT WITH BLACK DYE',
-    price: 80,
+    price: 120,
     duration: 40,
     description: 'Haircut + black dye'
   },

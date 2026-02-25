@@ -45,7 +45,7 @@ export const SERVICES: Service[] = [
   {
     id: 'haircut-dye',
     name: 'HAIRCUT + BLACK DYE',
-    price: 80,
+    price: 120,
     duration: 60,
     description: 'Haircut + black dye',
     image: '/services/haircut-black-dye.jpg'
