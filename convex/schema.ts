@@ -11,10 +11,4 @@ export default defineSchema({
         notes: v.optional(v.string()),
         status: v.union(v.literal("confirmed"), v.literal("pending")),
     }),
-    reviews: defineTable({
-        rating: v.number(),
-        comment: v.string(),
-        imageId: v.optional(v.id("_storage")),
-        createdAt: v.number(),
-    }),
 });
