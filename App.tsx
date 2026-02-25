@@ -3,6 +3,7 @@ import Layout from './components/Layout';
 import TimeGrid from './components/TimeGrid';
 import BookingSummary from './components/BookingSummary';
 import ReviewPage from './components/ReviewPage';
+import Gallery from './components/Gallery';
 import { SERVICES, BARBER_CONFIG } from './constants';
 import { Service, Booking, ViewType } from './types';
 import { ChevronRight, MapPin, CheckCircle, Smartphone, ChevronLeft, ArrowRight, Star } from 'lucide-react';
@@ -18,7 +19,7 @@ const App: React.FC = () => {
   const [customerName, setCustomerName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
   const [notes, setNotes] = useState('');
-  const [step, setStep] = useState<0 | 1 | 2 | 3 | 4>(0);
+  const [step, setStep] = useState<0 | 1 | 2 | 3 | 4 | 5>(0);
   const [staffPassword, setStaffPassword] = useState('');
   const [authError, setAuthError] = useState('');
   const [isStaffAuthenticated, setIsStaffAuthenticated] = useState(false);
@@ -26,6 +27,9 @@ const App: React.FC = () => {
   // Convex Data
   const bookings = useQuery(api.bookings.getBookings) || [];
   const addBookingMutation = useMutation(api.bookings.addBooking);
+  const reviews = useQuery(api.reviews.getReviews) || [];
+  const addReviewMutation = useMutation(api.reviews.addReview);
+  const generateUploadUrl = useMutation(api.reviews.generateUploadUrl);
 
   // Calendar State
   const [viewDate, setViewDate] = useState(new Date());
@@ -280,10 +284,16 @@ https://fadezone-grooming.netlify.app/
           </div>
 
           {/* Review CTA */}
-          <div className="pt-12 text-center border-t border-zinc-900">
+          <div className="pt-12 text-center border-t border-zinc-900 space-y-4">
+            <button
+              onClick={() => { setStep(5); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+              className="px-10 py-5 bg-black border-2 border-[#fbd600] text-[#fbd600] font-black uppercase italic tracking-tighter shadow-[8px_8px_0px_0px_rgba(251,214,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all flex items-center justify-center w-full md:w-auto gap-3 mx-auto text-lg mb-4"
+            >
+              See the Legend's Gallery
+            </button>
             <button
               onClick={() => { setStep(4); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-              className="px-10 py-5 bg-white text-black font-black uppercase italic tracking-tighter shadow-[8px_8px_0px_0px_rgba(251,214,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all flex items-center gap-3 mx-auto text-lg"
+              className="px-10 py-5 bg-white text-black font-black uppercase italic tracking-tighter shadow-[8px_8px_0px_0px_rgba(251,214,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all flex items-center justify-center w-full md:w-auto gap-3 mx-auto text-lg"
             >
               <Star className="text-[#b32b2b]" size={24} fill="#b32b2b" /> Review Your Experience
             </button>
@@ -470,11 +480,30 @@ https://fadezone-grooming.netlify.app/
               <ReviewPage
                 onBack={() => setStep(0)}
                 onSubmitReview={async (review) => {
-                  console.log('Review submitted:', review);
-                  // In a real app, you'd upload the image to a storage bucket
-                  // and save the review to a database.
-                  await new Promise(resolve => setTimeout(resolve, 1500));
+                  let imageId = undefined;
+                  if (review.image) {
+                    const postUrl = await generateUploadUrl();
+                    const result = await fetch(postUrl, {
+                      method: "POST",
+                      headers: { "Content-Type": review.image.type },
+                      body: review.image,
+                    });
+                    const { storageId } = await result.json();
+                    imageId = storageId;
+                  }
+
+                  await addReviewMutation({
+                    rating: review.rating,
+                    comment: review.comment,
+                    imageId,
+                  });
                 }}
+              />
+            )}
+            {step === 5 && (
+              <Gallery
+                reviews={reviews as any}
+                onBack={() => setStep(0)}
               />
             )}
           </>
