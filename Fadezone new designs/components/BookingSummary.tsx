@@ -14,11 +14,12 @@ interface BookingSummaryProps {
   onPhoneChange: (val: string) => void;
   onNotesChange: (val: string) => void;
   onConfirm: () => void;
+  address: string;
 }
 
 const BookingSummary: React.FC<BookingSummaryProps> = ({
   service, time, date, customerName, customerPhone, notes,
-  onNameChange, onPhoneChange, onNotesChange, onConfirm
+  onNameChange, onPhoneChange, onNotesChange, onConfirm, address
 }) => {
   const isFormValid = customerName.trim() && customerPhone.trim();
 
@@ -42,7 +43,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
           </div>
           <div>
             <p className="text-[10px] font-mono-brand text-zinc-500 uppercase">Location</p>
-            <p className="text-sm font-bold leading-snug">28 Mackeurtan Avenue, Durban North</p>
+            <p className="text-sm font-bold leading-snug">{address}</p>
           </div>
         </div>
 

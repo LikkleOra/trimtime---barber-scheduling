@@ -91,5 +91,6 @@ export const BARBER_CONFIG = {
         { day: 'Saturday', time: '07:30 - 13:00', status: 'active' },
         { day: 'Sunday', time: 'CLOSED', status: 'closed' }
       ]
+    }
   ]
 };

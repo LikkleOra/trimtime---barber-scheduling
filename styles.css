@@ -217,6 +217,8 @@ main {
 .info-section h4 {
   font-size: 1.125rem;
   font-weight: 700;
+}
+
 /* Old unused styles removed - Fadezone design uses Tailwind */
 
 .input-field-new {

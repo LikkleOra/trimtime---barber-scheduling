@@ -237,9 +237,9 @@ const App: React.FC = () => {
 
   const renderServiceMenu = () => {
     const categories = [
-      { name: 'Hair', services: SERVICES.filter(s => ['scholar', 'fade', 'buzz'].includes(s.id)) },
-      { name: 'Beard', services: SERVICES.filter(s => s.id === 'beard') },
-      { name: 'Combo', services: SERVICES.filter(s => s.id === 'full') }
+      { name: 'Hair', services: SERVICES.filter(s => ['haircut', 'chiskop', 'brush-cut', 'kids-haircut', 'ladies-haircut'].includes(s.id)) },
+      { name: 'Beard', services: SERVICES.filter(s => ['shave-beard', 'shave-trim'].includes(s.id)) },
+      { name: 'Combo', services: SERVICES.filter(s => ['haircut-dye', 'unique-haircut'].includes(s.id)) }
     ];
 
     return (
@@ -332,6 +332,7 @@ const App: React.FC = () => {
                       onPhoneChange={setCustomerPhone}
                       onNotesChange={setNotes}
                       onConfirm={handleConfirm}
+                      address={selectedLocation.address}
                     />
                   </div>
                 </div>
