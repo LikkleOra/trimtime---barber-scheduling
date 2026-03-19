@@ -222,12 +222,16 @@ const App: React.FC = () => {
           <div className="bg-zinc-50 p-12 rounded-[4rem] border border-zinc-100 shadow-inner">
             <h4 className="text-4xl font-brand italic uppercase text-[#b32b2b] mb-10">Opening Times</h4>
             <div className="space-y-4">
-              {selectedLocation.hours.map(h => (
-                <div key={h.day} className={`flex justify-between border-b border-zinc-200 pb-4 ${h.status === 'current' ? 'text-zinc-900 font-black' : 'text-zinc-400 font-bold'}`}>
+              {selectedLocation.hours.map((h, idx) => {
+                const currentDay = new Date().getDay();
+                const isCurrent = currentDay === idx;
+                return (
+                <div key={h.day} className={`flex justify-between border-b border-zinc-200 pb-4 ${isCurrent ? 'text-zinc-900 font-black' : 'text-zinc-400 font-bold'}`}>
                   <span className="uppercase tracking-[0.2em] text-xs">{h.day}</span>
                   <span className="text-xs font-mono">{h.time}</span>
                 </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
@@ -261,7 +265,12 @@ const App: React.FC = () => {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {cat.services.map(s => (
-                    <div key={s.id} className="bg-white p-10 rounded-[3rem] shadow-2xl hover:translate-y-[-8px] transition-all border border-white group">
+                    <div key={s.id} className="bg-white p-8 rounded-[3rem] shadow-2xl hover:translate-y-[-8px] transition-all border border-white group overflow-hidden flex flex-col">
+                      {s.image && (
+                        <div className="-mx-8 -mt-8 mb-8 overflow-hidden">
+                          <img src={s.image} alt={s.name} className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-700" />
+                        </div>
+                      )}
                       <div className="flex justify-between items-start mb-8">
                         <div className="space-y-2">
                           <h4 className="text-2xl font-black uppercase tracking-tight text-[#3e2723]">{s.name}</h4>
@@ -271,7 +280,7 @@ const App: React.FC = () => {
                       </div>
                       <button
                         onClick={() => { setSelectedService(s); setStep(2); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                        className="w-full bg-[#b32b2b] text-white py-5 rounded-3xl font-black uppercase text-xs tracking-widest hover:bg-black transition-all shadow-xl active:scale-95"
+                        className="w-full mt-auto bg-[#b32b2b] text-white py-5 rounded-3xl font-black uppercase text-xs tracking-widest hover:bg-black transition-all shadow-xl active:scale-95"
                       >
                         Book This Session
                       </button>

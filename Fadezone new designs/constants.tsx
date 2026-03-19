@@ -1,5 +1,8 @@
 
 import { Service } from './types';
+import TrimmingImg from './Trimming.jpg';
+import ChiskopImg from './Chiskop.jpg';
+import HaircutImg from './Haircut.jpg';
 
 export const SERVICES: Service[] = [
   {
@@ -7,7 +10,8 @@ export const SERVICES: Service[] = [
     name: 'HAIR CUT',
     price: 70,
     duration: 25,
-    description: 'Classic haircut'
+    description: 'Classic haircut',
+    image: HaircutImg
   },
   {
     id: 'haircut-dye',
@@ -21,7 +25,8 @@ export const SERVICES: Service[] = [
     name: 'CHISKOP',
     price: 40,
     duration: 15,
-    description: 'Short buzz cut'
+    description: 'Short buzz cut',
+    image: ChiskopImg
   },
   {
     id: 'brush-cut',
@@ -56,7 +61,8 @@ export const SERVICES: Service[] = [
     name: 'SHAVING AND TRIMMING',
     price: 20,
     duration: 20,
-    description: 'Shave and trim service'
+    description: 'Shave and trim service',
+    image: TrimmingImg
   },
   {
     id: 'unique-haircut',
@@ -83,13 +89,13 @@ export const BARBER_CONFIG = {
       name: 'Kensington',
       address: '424 Commissioner Street, Kensington, Johannesburg',
       hours: [
+        { day: 'Sunday', time: 'CLOSED', status: 'closed' },
         { day: 'Monday', time: '07:00 - 12:00', status: 'active' },
         { day: 'Tuesday', time: '07:00 - 17:00', status: 'active' },
         { day: 'Wednesday', time: '07:00 - 17:00', status: 'active' },
         { day: 'Thursday', time: '07:00 - 17:00', status: 'active' },
-        { day: 'Friday', time: '07:00 - 15:30', status: 'current' },
-        { day: 'Saturday', time: '07:30 - 13:00', status: 'active' },
-        { day: 'Sunday', time: 'CLOSED', status: 'closed' }
+        { day: 'Friday', time: '07:00 - 15:30', status: 'active' },
+        { day: 'Saturday', time: '07:30 - 13:00', status: 'active' }
       ]
     }
   ]
