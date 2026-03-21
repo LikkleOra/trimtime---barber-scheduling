@@ -1,29 +1,28 @@
 /* =====================================
-   Fadezone Barber Booking App - Neo-Brutalist Styles
+   Fadezone Barber Booking App - HIGH-CHROMA Neo-Brutalist Styles
    ===================================== */
 
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;700;900&family=Big+Shoulders+Display:wght@700;900&family=JetBrains+Mono:wght@500;700&display=swap');
 
 :root {
-  /* Neo-Brutalist Color Palette */
-  --color-yellow: #fbd600;
+  /* Official Fadezone Palette */
+  --color-yellow: #FFD700; /* Safety/Electric Yellow */
+  --color-red: #8B0000;    /* Primary Red (Darker base) */
+  --color-red-action: #FF0000; /* Action Red (CTA) */
   --color-black: #000000;
-  --color-white: #ffffff;
-  --color-red-bright: #b32b2b;
-  --color-red-dark: #3e2723;
-  --color-green-success: #22c55e;
+  --color-white: #FFFFFF;
+  --color-off-white: #F2F2F2;
+  --color-green-acid: #00FF00;
   
   /* Borders & Shadows */
-  --neob-border-width: 4px;
-  --neob-shadow-offset: 6px;
-  --neob-shadow: var(--neob-shadow-offset) var(--neob-shadow-offset) 0px 0px var(--color-black);
+  --neob-border: 4px solid #000000;
+  --neob-shadow-offset: 8px;
+  --neob-shadow: var(--neob-shadow-offset) var(--neob-shadow-offset) 0px 0px #000000;
   
   /* Fonts */
-  --font-display: 'Anton', sans-serif;
-  --font-condensed: 'Big Shoulders Display', sans-serif;
-  --font-body: 'Inter', sans-serif;
-  --font-mono: 'JetBrains+Mono', monospace;
+  --font-display: 'Archivo Black', 'Impact', sans-serif;
+  --font-body: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
 }
 
 /* Base Styles */
@@ -35,6 +34,7 @@
 
 body {
   font-family: var(--font-body);
+  font-weight: 700;
   background-color: var(--color-yellow);
   color: var(--color-black);
   line-height: 1.2;
@@ -43,113 +43,114 @@ body {
 }
 
 /* Typography Utilities */
-.font-brand {
+.text-aggressive {
   font-family: var(--font-display);
-  text-transform: uppercase;
   font-style: italic;
-  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  letter-spacing: -0.05em;
+  line-height: 0.9;
+  transform: skewX(-5deg); /* Manual extra slant */
 }
 
 .font-label {
   font-family: var(--font-body);
   font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 2px;
 }
 
-.font-condensed {
-  font-family: var(--font-condensed);
-  text-transform: uppercase;
+.label-badge {
+  background: var(--color-black);
+  color: var(--color-yellow);
+  padding: 4px 10px;
+  font-size: 14px;
   font-weight: 900;
+  letter-spacing: 2px;
+  display: inline-block;
+  font-style: italic;
 }
 
-/* Neo-Brutalist Components */
-.neob-card {
-  background-color: var(--color-white);
-  border: var(--neob-border-width) solid var(--color-black);
+/* Custom Components */
+.btn-brutalist {
+  background-color: var(--color-red-action);
+  border: var(--neob-border);
   box-shadow: var(--neob-shadow);
-  transition: transform 0.1s;
+  color: var(--color-white);
+  font-family: var(--font-display);
+  font-style: italic;
+  text-transform: uppercase;
+  padding: 16px 32px;
+  transition: all 0.1s cubic-bezier(0.23, 1, 0.32, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: pointer;
 }
 
-.neob-card:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 8px 8px 0px 0px var(--color-black);
+.btn-brutalist:active {
+  transform: translate(4px, 4px);
+  box-shadow: 4px 4px 0px 0px #000000;
 }
 
-.neob-card:active {
-  transform: translate(2px, 2px);
-  box-shadow: 4px 4px 0px 0px var(--color-black);
-}
-
-.neob-button-black:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 8px 8px 0px 0px var(--color-black);
-}
-
-.neob-button-black:active {
-  transform: translate(2px, 2px);
-  box-shadow: 4px 4px 0px 0px var(--color-black);
-}
-
-.neob-button-red:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 8px 8px 0px 0px var(--color-black);
-}
-
-.neob-button-red:active {
-  transform: translate(2px, 2px);
-  box-shadow: 4px 4px 0px 0px var(--color-black);
-}
-
-
-/* Layout Utilities */
-.diagonal-stripes {
+.hero-diagonal-texture {
   background-color: var(--color-yellow);
   background-image: repeating-linear-gradient(
     45deg,
     rgba(0, 0, 0, 0.1),
-    rgba(0, 0, 0, 0.1) 20px,
-    transparent 20px,
-    transparent 40px
+    rgba(0, 0, 0, 0.1) 10px,
+    transparent 10px,
+    transparent 20px
   );
 }
 
-.neob-button-slanted {
-  background-color: var(--color-red-bright);
-  color: var(--color-white);
-  border: var(--neob-border-width) solid var(--color-black);
-  font-family: var(--font-display);
-  font-style: italic;
-  text-transform: uppercase;
-  padding: 1.5rem 3rem;
-  transform: skewX(-10deg);
-  box-shadow: 10px 10px 0px 0px var(--color-black);
-  cursor: pointer;
-  transition: all 0.1s;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+.brutalist-card {
+  background: var(--color-white);
+  border: var(--neob-border);
+  box-shadow: 10px 10px 0px 0px #000000;
+  transition: all 0.1s ease;
 }
 
-.neob-button-slanted span {
-    transform: skewX(10deg);
+.brutalist-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 12px 12px 0px 0px #000000;
 }
 
-.neob-button-slanted:hover {
-  transform: skewX(-10deg) translate(-2px, -2px);
-  box-shadow: 14px 14px 0px 0px var(--color-black);
+/* Specific Screen Elements */
+.receipt-container {
+  background: var(--color-white);
+  border-left: var(--neob-border);
+  border-right: var(--neob-border);
+  position: relative;
+  padding: 40px 24px;
+  box-shadow: 12px 12px 0px 0px rgba(0,0,0,0.15);
 }
 
-.neob-button-slanted:active {
-  transform: skewX(-10deg) translate(2px, 2px);
-  box-shadow: 6px 6px 0px 0px var(--color-black);
+.time-slot-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    width: 100%;
 }
 
-.neob-shadow-thick {
-    box-shadow: 8px 8px 0px 0px var(--color-black);
+.time-btn {
+    height: 60px;
+    font-family: var(--font-display);
+    font-style: italic;
+    background: var(--color-black);
+    color: var(--color-white);
+    border: var(--neob-border);
+    font-size: 24px;
+    transition: all 0.1s ease;
 }
 
+.time-btn.selected {
+    background: var(--color-yellow);
+    color: var(--color-black);
+    transform: scale(1.05);
+}
 
+/* Scroll Smoothing */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
@@ -158,56 +159,11 @@ body {
   scrollbar-width: none;
 }
 
-/* Animations */
-@keyframes slideInLeft {
-  from { transform: translateX(-150%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
-}
-@keyframes slideInRight {
-  from { transform: translateX(150%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
-}
-
-.animate-slide-left {
-  animation: slideInLeft 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
-}
-
-.animate-slide-right {
-  animation: slideInRight 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
-}
-
-/* Specific UI Elements from Screenshots */
-.calendar-card {
-  background: white;
-  border: 4px solid black;
-  box-shadow: 8px 8px 0px 0px black;
-  padding: 1rem;
-}
-
-.time-slot {
-  background: black;
-  color: white;
-  border: 4px solid black;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  padding: 1rem;
-  cursor: pointer;
-}
-
-.time-slot.selected {
-  background: var(--color-yellow);
-  color: black;
-}
-
-.ticket-card {
-  background: #111;
-  color: white;
-  border-radius: 1.5rem;
-  border: 2px solid rgba(255,255,255,0.1);
-  padding: 2rem;
-  position: relative;
-  box-shadow: 8px 8px 0px 0px #000;
+/* Responsive Desktop Wrapper */
+.desktop-center {
+    max-width: 480px;
+    margin: 0 auto;
+    background-color: var(--color-yellow);
+    min-height: 100vh;
+    box-shadow: 0 0 100px rgba(0,0,0,0.2);
 }
