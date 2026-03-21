@@ -2,6 +2,7 @@
    Fadezone Barber Booking App - Neo-Brutalist Styles
    ===================================== */
 
+@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;700;900&family=Big+Shoulders+Display:wght@700;900&family=JetBrains+Mono:wght@500;700&display=swap');
 
 :root {
