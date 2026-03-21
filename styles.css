@@ -114,12 +114,41 @@ body {
   );
 }
 
-.jagged-edge {
-  clip-path: polygon(
-    0% 0%, 5% 5%, 10% 0%, 15% 5%, 20% 0%, 25% 5%, 30% 0%, 35% 5%, 40% 0%, 45% 5%, 50% 0%, 55% 5%, 60% 0%, 65% 5%, 70% 0%, 75% 5%, 80% 0%, 85% 5%, 90% 0%, 95% 5%, 100% 0%,
-    100% 100%, 95% 95%, 90% 100%, 85% 95%, 80% 100%, 75% 95%, 70% 100%, 65% 95%, 60% 100%, 55% 95%, 50% 100%, 45% 95%, 40% 100%, 35% 95%, 30% 100%, 25% 95%, 20% 100%, 15% 95%, 10% 100%, 5% 95%, 0% 100%
-  );
+.neob-button-slanted {
+  background-color: var(--color-red-bright);
+  color: var(--color-white);
+  border: var(--neob-border-width) solid var(--color-black);
+  font-family: var(--font-display);
+  font-style: italic;
+  text-transform: uppercase;
+  padding: 1.5rem 3rem;
+  transform: skewX(-10deg);
+  box-shadow: 10px 10px 0px 0px var(--color-black);
+  cursor: pointer;
+  transition: all 0.1s;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
+
+.neob-button-slanted span {
+    transform: skewX(10deg);
+}
+
+.neob-button-slanted:hover {
+  transform: skewX(-10deg) translate(-2px, -2px);
+  box-shadow: 14px 14px 0px 0px var(--color-black);
+}
+
+.neob-button-slanted:active {
+  transform: skewX(-10deg) translate(2px, 2px);
+  box-shadow: 6px 6px 0px 0px var(--color-black);
+}
+
+.neob-shadow-thick {
+    box-shadow: 8px 8px 0px 0px var(--color-black);
+}
+
 
 .no-scrollbar::-webkit-scrollbar {
   display: none;

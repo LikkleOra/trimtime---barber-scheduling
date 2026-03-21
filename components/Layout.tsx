@@ -33,47 +33,48 @@ const Layout: React.FC<LayoutProps> = ({ children, activeView, onViewChange }) =
       </main>
 
       {/* Chunky Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-[#fbd600] border-t-4 border-black px-6 py-4 flex justify-between items-center z-50">
+      <nav className="fixed bottom-0 left-0 right-0 bg-[#fbd600] border-t-[6px] border-black px-8 py-6 flex justify-between items-center z-50">
         <button 
             onClick={() => onViewChange('home')}
-            className={`flex flex-col items-center gap-1 transition-transform active:scale-90 ${activeView === 'home' ? 'text-black' : 'text-black/40'}`}
+            className={`flex flex-col items-center gap-2 transition-all ${activeView === 'home' ? 'scale-110' : 'opacity-40'}`}
         >
-            <div className={`p-1 ${activeView === 'home' ? 'bg-black text-white rounded-lg' : ''}`}>
-                <Landmark size={28} strokeWidth={3} />
+            <div className={`p-2 ${activeView === 'home' ? 'bg-black text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' : 'bg-transparent text-black'}`}>
+                <Landmark size={32} strokeWidth={3} />
             </div>
-            <span className="text-[10px] font-black uppercase tracking-widest">Home</span>
+            <span className="text-[10px] font-brand italic uppercase tracking-widest leading-none">Home</span>
         </button>
 
         <button 
             onClick={() => onViewChange('bookings')}
-            className={`flex flex-col items-center gap-1 transition-transform active:scale-90 ${activeView === 'bookings' ? 'text-black' : 'text-black/40'}`}
+            className={`flex flex-col items-center gap-2 transition-all ${activeView === 'bookings' ? 'scale-110' : 'opacity-40'}`}
         >
-            <div className={`p-1 ${activeView === 'bookings' ? 'bg-black text-white rounded-lg' : ''}`}>
-                <Calendar size={28} strokeWidth={3} />
+            <div className={`p-2 ${activeView === 'bookings' ? 'bg-black text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' : 'bg-transparent text-black'}`}>
+                <Calendar size={32} strokeWidth={3} />
             </div>
-            <span className="text-[10px] font-black uppercase tracking-widest">Bookings</span>
+            <span className="text-[10px] font-brand italic uppercase tracking-widest leading-none">Bookings</span>
         </button>
 
         <button 
             onClick={() => onViewChange('store')}
-            className={`flex flex-col items-center gap-1 transition-transform active:scale-90 ${activeView === 'store' ? 'text-black' : 'text-black/40'}`}
+            className={`flex flex-col items-center gap-2 transition-all ${activeView === 'store' ? 'scale-110' : 'opacity-40'}`}
         >
-            <div className={`p-1 ${activeView === 'store' ? 'bg-black text-white rounded-lg' : ''}`}>
-                <ShoppingBag size={28} strokeWidth={3} />
+            <div className={`p-2 ${activeView === 'store' ? 'bg-black text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' : 'bg-transparent text-black'}`}>
+                <ShoppingBag size={32} strokeWidth={3} />
             </div>
-            <span className="text-[10px] font-black uppercase tracking-widest">Store</span>
+            <span className="text-[10px] font-brand italic uppercase tracking-widest leading-none">Store</span>
         </button>
 
         <button 
             onClick={() => onViewChange('profile')}
-            className={`flex flex-col items-center gap-1 transition-transform active:scale-90 ${activeView === 'profile' ? 'text-black' : 'text-black/40'}`}
+            className={`flex flex-col items-center gap-2 transition-all ${activeView === 'profile' ? 'scale-110' : 'opacity-40'}`}
         >
-            <div className={`p-1 ${activeView === 'profile' ? 'bg-black text-white rounded-lg' : ''}`}>
-                <Zap size={28} strokeWidth={3} />
+            <div className={`p-2 ${activeView === 'profile' ? 'bg-black text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' : 'bg-transparent text-black'}`}>
+                <Zap size={32} strokeWidth={3} />
             </div>
-            <span className="text-[10px] font-black uppercase tracking-widest">Profile</span>
+            <span className="text-[10px] font-brand italic uppercase tracking-widest leading-none">Profile</span>
         </button>
       </nav>
+
     </div>
   );
 };
