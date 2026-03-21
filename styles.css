@@ -1,65 +1,31 @@
 /* =====================================
-   TrimTime Barber Scheduling - Styles
+   Fadezone Barber Booking App - Neo-Brutalist Styles
    ===================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;700;900&family=Big+Shoulders+Display:wght@700;900&family=JetBrains+Mono:wght@500;700&display=swap');
 
-/* CSS Variables for Design System */
 :root {
-  /* Colors */
-  --color-brand-yellow: #fbd600;
-  /* Construction Yellow */
-  --color-brand-amber: #FFC107;
-  /* Amber - New Selection Color */
-  --color-brand-red: #b32b2b;
-  /* Oxblood Red */
-  --color-brand-brown: #3e2723;
-  /* Chocolate Brown */
-  --color-brand-teal: #e0f2f1;
-  /* Durban Teal */
-  --color-brand-green: #25D366;
-  /* WhatsApp Green */
-
-  --color-bg-primary: var(--color-brand-yellow);
-  --color-bg-secondary: #ffffff;
-  --color-bg-tertiary: var(--color-brand-teal);
-  --color-bg-card: #ffffff;
-  --color-bg-dark: var(--color-brand-brown);
-  --color-bg-input: rgba(255, 255, 255, 0.9);
-
-  --color-accent-primary: var(--color-brand-red);
-  --color-accent-secondary: var(--color-brand-amber);
-
-  --color-border: rgba(0, 0, 0, 0.1);
-  --color-border-dark: rgba(255, 255, 255, 0.1);
-
-  --color-text-primary: #000000;
-  --color-text-secondary: #333333;
-  --color-text-muted: #666666;
-  --color-text-light: #ffffff;
-
+  /* Neo-Brutalist Color Palette */
+  --color-yellow: #fbd600;
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-red-bright: #b32b2b;
+  --color-red-dark: #3e2723;
+  --color-green-success: #22c55e;
+  
+  /* Borders & Shadows */
+  --neob-border-width: 4px;
+  --neob-shadow-offset: 6px;
+  --neob-shadow: var(--neob-shadow-offset) var(--neob-shadow-offset) 0px 0px var(--color-black);
+  
   /* Fonts */
-  --font-heading: 'Anton', sans-serif;
+  --font-display: 'Anton', sans-serif;
+  --font-condensed: 'Big Shoulders Display', sans-serif;
   --font-body: 'Inter', sans-serif;
-
-  /* Spacing */
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
-  --spacing-2xl: 3rem;
-
-  /* Border Radius */
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 1rem;
-  --radius-xl: 2.5rem;
-  /* Updated as per spec */
-  --radius-full: 9999px;
+  --font-mono: 'JetBrains+Mono', monospace;
 }
 
-/* Reset & Base Styles */
+/* Base Styles */
 * {
   margin: 0;
   padding: 0;
@@ -67,236 +33,151 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: var(--font-body);
+  background-color: var(--color-yellow);
+  color: var(--color-black);
+  line-height: 1.2;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: var(--color-bg-primary);
-  color: var(--color-text-primary);
-  line-height: 1.5;
+  overflow-x: hidden;
 }
 
-/* Hide scrollbar */
+/* Typography Utilities */
+.font-brand {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-style: italic;
+  letter-spacing: -0.02em;
+}
+
+.font-label {
+  font-family: var(--font-body);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.font-condensed {
+  font-family: var(--font-condensed);
+  text-transform: uppercase;
+  font-weight: 900;
+}
+
+/* Neo-Brutalist Components */
+.neob-card {
+  background-color: var(--color-white);
+  border: var(--neob-border-width) solid var(--color-black);
+  box-shadow: var(--neob-shadow);
+  transition: transform 0.1s;
+}
+
+.neob-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0px 0px var(--color-black);
+}
+
+.neob-card:active {
+  transform: translate(2px, 2px);
+  box-shadow: 4px 4px 0px 0px var(--color-black);
+}
+
+.neob-button-black:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0px 0px var(--color-black);
+}
+
+.neob-button-black:active {
+  transform: translate(2px, 2px);
+  box-shadow: 4px 4px 0px 0px var(--color-black);
+}
+
+.neob-button-red:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0px 0px var(--color-black);
+}
+
+.neob-button-red:active {
+  transform: translate(2px, 2px);
+  box-shadow: 4px 4px 0px 0px var(--color-black);
+}
+
+
+/* Layout Utilities */
+.diagonal-stripes {
+  background-color: var(--color-yellow);
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0.1),
+    rgba(0, 0, 0, 0.1) 20px,
+    transparent 20px,
+    transparent 40px
+  );
+}
+
+.jagged-edge {
+  clip-path: polygon(
+    0% 0%, 5% 5%, 10% 0%, 15% 5%, 20% 0%, 25% 5%, 30% 0%, 35% 5%, 40% 0%, 45% 5%, 50% 0%, 55% 5%, 60% 0%, 65% 5%, 70% 0%, 75% 5%, 80% 0%, 85% 5%, 90% 0%, 95% 5%, 100% 0%,
+    100% 100%, 95% 95%, 90% 100%, 85% 95%, 80% 100%, 75% 95%, 70% 100%, 65% 95%, 60% 100%, 55% 95%, 50% 100%, 45% 95%, 40% 100%, 35% 95%, 30% 100%, 25% 95%, 20% 100%, 15% 95%, 10% 100%, 5% 95%, 0% 100%
+  );
+}
+
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
-
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
 
-/* Utility Classes */
-.hidden {
-  display: none !important;
+/* Animations */
+@keyframes slideInLeft {
+  from { transform: translateX(-150%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+@keyframes slideInRight {
+  from { transform: translateX(150%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
 }
 
-.diagonal-stripes {
-  background-image: linear-gradient(45deg,
-      var(--color-brand-yellow) 25%,
-      rgba(0, 0, 0, 0.05) 25%,
-      rgba(0, 0, 0, 0.05) 50%,
-      var(--color-brand-yellow) 50%,
-      var(--color-brand-yellow) 75%,
-      rgba(0, 0, 0, 0.05) 75%,
-      rgba(0, 0, 0, 0.05) 100%);
-  background-size: 40px 40px;
+.animate-slide-left {
+  animation: slideInLeft 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
 }
 
-.jagged-edge {
-  clip-path: polygon(0% 0%, 5% 2%, 10% 0%, 15% 2%, 20% 0%, 25% 2%, 30% 0%, 35% 2%, 40% 0%, 45% 2%, 50% 0%, 55% 2%, 60% 0%, 65% 2%, 70% 0%, 75% 2%, 80% 0%, 85% 2%, 90% 0%, 95% 2%, 100% 0%,
-      100% 100%, 95% 98%, 90% 100%, 85% 98%, 80% 100%, 75% 98%, 70% 100%, 65% 98%, 60% 100%, 55% 98%, 50% 100%, 45% 98%, 40% 100%, 35% 98%, 30% 100%, 25% 98%, 20% 100%, 15% 98%, 10% 100%, 5% 98%, 0% 100%);
+.animate-slide-right {
+  animation: slideInRight 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
 }
 
-.sunburst-gradient {
-  background: radial-gradient(circle, rgba(251, 214, 0, 0.3) 0%, transparent 70%);
-}
-
-.font-heading {
-  font-family: var(--font-heading);
-  text-transform: uppercase;
-}
-
-.btn-bubble {
-  position: fixed;
-  top: var(--spacing-lg);
-  right: var(--spacing-lg);
-  background-color: var(--color-brand-red);
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--radius-full);
-  font-weight: 900;
-  text-transform: uppercase;
-  font-size: 0.7rem;
-  z-index: 1000;
-  box-shadow: 0 4px 15px rgba(179, 43, 43, 0.4);
-}
-
-/* App Container */
-#app {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  position: relative;
-  overflow-x: hidden;
-}
-
-/* =====================================
-   HEADER
-   ===================================== */
-
-/* Header styles handled by Tailwind */
-
-/* =====================================
-   MAIN CONTENT
-   ===================================== */
-
-main {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-.view {
-  display: none;
-}
-
-.view.active {
-  display: block;
-}
-
-.style-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: grayscale(100%);
-  transition: transform 0.7s;
-}
-
-.style-card:hover img {
-  transform: scale(1.1);
-}
-
-.style-card-content {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent, transparent);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: var(--spacing-xl);
-}
-
-.style-card-label {
-  font-size: 0.75rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: var(--color-text-primary);
-  margin-bottom: 0.25rem;
-}
-
-.style-card-price {
-  font-size: 2.25rem;
-  font-weight: 900;
-  color: var(--color-text-primary);
-  font-style: italic;
-}
-
-/* Info Grid */
-.info-grid {
-  padding: var(--spacing-lg);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-xl);
-  margin: var(--spacing-md) 0;
-}
-
-.info-section h4 {
-  font-size: 1.125rem;
-  font-weight: 700;
-}
-
-/* Old unused styles removed - Fadezone design uses Tailwind */
-
-.input-field-new {
-  width: 100%;
+/* Specific UI Elements from Screenshots */
+.calendar-card {
   background: white;
-  border: 2px solid #f4f4f5;
-  padding: 1.25rem;
-  font-size: 0.75rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  border-radius: 1rem;
-  outline: none;
-  transition: border-color 0.3s;
+  border: 4px solid black;
+  box-shadow: 8px 8px 0px 0px black;
+  padding: 1rem;
 }
 
-.input-field-new:focus {
-  border-color: var(--color-brand-yellow);
-}
-
-/* Admin Dashboard Consistency */
-.admin-dashboard {
-  background-color: #000;
-  color: #fff;
-  padding: 2rem;
-  min-height: 100vh;
-}
-
-.admin-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 3rem;
-}
-
-/* Footer (Added to bottom of app container) */
-footer {
-  background-color: var(--color-brand-brown);
+.time-slot {
+  background: black;
   color: white;
-  padding: 4rem 2rem;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
-}
-
-.footer-logo {
-  font-family: 'Anton', sans-serif;
-  font-size: 2rem;
-  color: var(--color-brand-yellow);
-  line-height: 0.9;
-}
-
-.footer-vibe {
-  font-family: 'Anton', sans-serif;
-  font-size: 3rem;
-  color: var(--color-brand-yellow);
-}
-
-.footer-socials {
-  display: flex;
-  gap: 1rem;
-}
-
-.social-circle {
-  width: 2.5rem;
-  height: 2.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: var(--radius-full);
+  border: 4px solid black;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  padding: 1rem;
+  cursor: pointer;
 }
 
-.social-circle:hover {
-  border-color: var(--color-brand-yellow);
-  color: var(--color-brand-yellow);
+.time-slot.selected {
+  background: var(--color-yellow);
+  color: black;
 }
-/* All old CSS removed - using Tailwind CSS for styling */
+
+.ticket-card {
+  background: #111;
+  color: white;
+  border-radius: 1.5rem;
+  border: 2px solid rgba(255,255,255,0.1);
+  padding: 2rem;
+  position: relative;
+  box-shadow: 8px 8px 0px 0px #000;
+}
