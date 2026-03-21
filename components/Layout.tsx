@@ -7,100 +7,76 @@ interface LayoutProps {
   children: React.ReactNode;
   activeView: ViewType;
   onViewChange: (view: ViewType) => void;
-  currentStep: number;
-  onGoToSection: (sectionId: string) => void;
-  isStaffAuthenticated?: boolean;
-  onLogout?: () => void;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children, activeView, onViewChange, currentStep, onGoToSection, isStaffAuthenticated, onLogout }) => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const handleNavClick = (sectionId: string) => {
-    if (activeView === 'barber' && onLogout) {
-      onLogout();
-    }
-    onViewChange('customer');
-    onGoToSection(sectionId);
-    setMobileMenuOpen(false);
-  };
+const Layout: React.FC<LayoutProps> = ({ children, activeView, onViewChange }) => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#fbd600] text-black relative overflow-x-hidden selection:bg-black selection:text-[#fbd600]">
-      {/* Redesigned Navbar */}
-      <header className="px-6 md:px-12 py-5 flex justify-between items-center sticky top-0 z-50 transition-all duration-300 backdrop-blur-md bg-[#fbd600]/90 border-b border-black/5">
-
-        {/* Logo Section */}
-        <div className="flex items-center gap-3 cursor-pointer group" onClick={() => { onViewChange('customer'); onGoToSection('hero-section'); }}>
-          <div className="w-10 h-10 bg-black flex items-center justify-center -skew-x-12 shadow-lg group-hover:scale-105 transition-transform">
-            <span className="text-[#fbd600] font-black italic text-sm skew-x-12">FZ</span>
+    <div className="min-h-screen flex flex-col bg-[#fbd600] text-black relative overflow-x-hidden">
+      {/* Dynamic Responsive Navigation Bar */}
+      <header className="px-6 md:px-20 py-8 flex justify-between items-center sticky top-0 bg-[#fbd600]/90 backdrop-blur-xl z-50">
+        <div className="flex items-center gap-4 group cursor-pointer" onClick={() => window.location.reload()}>
+          <div className="w-12 h-12 bg-[#3e2723] rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+             <span className="text-white font-brand text-2xl italic">N</span>
           </div>
-          <div className="hidden md:flex flex-col">
-            <h1 className="text-xl font-black italic tracking-tighter uppercase leading-none skew-x-[-10deg]">FADEZONE-Grooming</h1>
+          <div className="hidden md:block">
+            <h1 className="text-xl font-brand italic tracking-tight uppercase leading-none">NEV THE BARBER</h1>
+            <p className="text-[8px] text-zinc-600 font-black tracking-[0.4em] uppercase">Legendary Grooming</p>
           </div>
         </div>
 
-        {/* Desktop Navigation - Centered */}
-        <nav className="hidden md:flex items-center gap-12 absolute left-1/2 transform -translate-x-1/2">
-          <button onClick={() => handleNavClick('about-section')} className="text-xs font-black uppercase tracking-[0.2em] text-black hover:text-[#b32b2b] transition-colors">About</button>
-          <button onClick={() => handleNavClick('prices-section')} className="text-xs font-black uppercase tracking-[0.2em] text-black hover:text-[#b32b2b] transition-colors">Pricing</button>
-          <button onClick={() => handleNavClick('contact-section')} className="text-xs font-black uppercase tracking-[0.2em] text-black hover:text-[#b32b2b] transition-colors">Contact</button>
+        <nav className="hidden md:flex items-center gap-10">
+          <button onClick={() => onViewChange('customer')} className="text-[10px] font-black uppercase tracking-widest text-[#b32b2b] hover:text-black">Home</button>
+          <button className="text-[10px] font-black uppercase tracking-widest text-[#3e2723] hover:text-black">About</button>
+          <button className="text-[10px] font-black uppercase tracking-widest text-[#3e2723] hover:text-black">Pricing</button>
+          <button className="text-[10px] font-black uppercase tracking-widest text-[#3e2723] hover:text-black">Contact</button>
         </nav>
 
-        {/* User Icon & Mobile Toggle */}
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => onViewChange('barber')}
-            className="w-10 h-10 border-2 border-black rounded-lg flex items-center justify-center hover:bg-black hover:text-[#fbd600] transition-all"
-          >
-            <User size={20} />
-          </button>
-
-          <button
-            className="md:hidden w-10 h-10 flex items-center justify-center"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        <div className="hidden md:flex items-center gap-4">
+          <button onClick={() => onViewChange('barber')} className="px-6 py-2 bg-[#3e2723] text-white rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-black transition-all flex items-center gap-2">
+            <User size={14} /> Staff Login
           </button>
         </div>
+
+        <div className="md:hidden flex items-center gap-4">
+          <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="w-10 h-10 flex items-center justify-center z-50 relative">
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+
+        {/* Mobile Menu Dropdown */}
+        {isMobileMenuOpen && (
+          <div className="absolute top-full left-0 right-0 bg-[#fbd600] border-t border-black/10 shadow-2xl p-6 flex flex-col gap-6 md:hidden z-40">
+            <button onClick={() => { onViewChange('customer'); setIsMobileMenuOpen(false); }} className="text-left text-sm font-black uppercase tracking-widest text-[#b32b2b]">Home</button>
+            <button onClick={() => setIsMobileMenuOpen(false)} className="text-left text-sm font-black uppercase tracking-widest text-[#3e2723]">About</button>
+            <button onClick={() => setIsMobileMenuOpen(false)} className="text-left text-sm font-black uppercase tracking-widest text-[#3e2723]">Pricing</button>
+            <button onClick={() => setIsMobileMenuOpen(false)} className="text-left text-sm font-black uppercase tracking-widest text-[#3e2723]">Contact</button>
+            <hr className="border-black/10" />
+            <button onClick={() => { onViewChange('barber'); setIsMobileMenuOpen(false); }} className="px-6 py-3 bg-[#3e2723] text-white rounded-xl text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2">
+              <User size={16} /> Staff Login
+            </button>
+          </div>
+        )}
       </header>
-
-      {/* Mobile Menu Overlay */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 bg-[#fbd600] z-[60] flex flex-col items-center justify-center gap-12 md:hidden">
-          <button
-            onClick={() => setMobileMenuOpen(false)}
-            className="absolute top-6 right-6 w-10 h-10 flex items-center justify-center border-2 border-black rounded-lg"
-          >
-            <X size={24} />
-          </button>
-          <button onClick={() => handleNavClick('about-section')} className="text-4xl font-brand italic uppercase tracking-tighter text-black">About</button>
-          <button onClick={() => handleNavClick('prices-section')} className="text-4xl font-brand italic uppercase tracking-tighter text-black">Pricing</button>
-          <button onClick={() => handleNavClick('contact-section')} className="text-4xl font-brand italic uppercase tracking-tighter text-black">Contact</button>
-
-          <button
-            onClick={() => { onViewChange('barber'); setMobileMenuOpen(false); }}
-            className="mt-8 px-8 py-4 bg-black text-[#fbd600] font-black uppercase tracking-widest rounded-xl text-sm"
-          >
-            Staff Portal
-          </button>
-        </div>
-      )}
 
       {/* Main Container */}
       <main className="flex-1 overflow-x-hidden">
         {children}
       </main>
 
-      {/* Footer */}
-      <footer className="bg-black text-[#fbd600] py-12 px-6 text-center border-t border-zinc-900">
-        <div className="max-w-6xl mx-auto flex flex-col items-center gap-6">
-          <h2 className="text-4xl font-brand italic uppercase tracking-tighter">FADEZONE</h2>
-          <div className="flex gap-8">
-            <Instagram size={20} className="hover:text-white transition-colors cursor-pointer" />
-            <MessageSquare size={20} className="hover:text-white transition-colors cursor-pointer" />
+      {/* Footer / Mobile Nav */}
+      <footer className="bg-[#3e2723] text-[#fbd600] py-12 px-6 md:px-20">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+          <div className="text-center md:text-left">
+            <h2 className="text-4xl font-brand italic uppercase">Vibe The Vibe</h2>
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] opacity-60 mt-2">Durban's Finest Grooming Establishment</p>
           </div>
-          <p className="text-[9px] font-bold uppercase tracking-[0.3em] opacity-50">© 2020 Fadezone Grooming. All Rights Reserved.</p>
+          <div className="flex gap-6">
+            <Instagram size={20} className="hover:scale-125 transition-transform cursor-pointer" />
+            <MessageSquare size={20} className="hover:scale-125 transition-transform cursor-pointer" />
+          </div>
+          <p className="text-[9px] font-bold opacity-40 uppercase tracking-widest">© 2024 Nev the Barber. All Rights Reserved.</p>
         </div>
       </footer>
     </div>

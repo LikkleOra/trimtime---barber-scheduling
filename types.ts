@@ -9,8 +9,7 @@ export interface Service {
 }
 
 export interface Booking {
-  id?: string;
-  _id?: string;
+  id: string;
   serviceId: string;
   date: string; // YYYY-MM-DD
   time: string; // HH:mm
