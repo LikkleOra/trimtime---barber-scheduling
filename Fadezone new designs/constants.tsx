@@ -1,14 +1,11 @@
 
 import { Service } from './types';
-import TrimmingImg from './Trimming.jpg';
-import ChiskopImg from './Chiskop.jpg';
-import HaircutImg from './Haircut.jpg';
-import BeardShaveImg from './Beard shave.jpg';
-import BrushCutImg from './Brush cut.jpg';
-import KidsHaircutImg from './Kids Haircut.jpg';
-import LadiesCutImg from './Ladies Cut.jpg';
-import HaircutBlackDyeImg from './Haircut + Black Dye.jpg';
-import HaircutCustomDyeImg from './Haircut + Custom Dye.jpg';
+/* 
+ * NUGGETS OF WISDOM:
+ * 1. Assets in /public are served at the root path (e.g., /services/haircut.jpg).
+ * 2. Use kebab-case for filenames to avoid URL encoding issues (%20).
+ * 3. Don't import local images as modules when using ESM/CDN builds.
+ */
 
 export const SERVICES: Service[] = [
   {
@@ -17,7 +14,7 @@ export const SERVICES: Service[] = [
     price: 70,
     duration: 25,
     description: 'Classic haircut',
-    image: HaircutImg
+    image: '/services/haircut.jpg'
   },
   {
     id: 'haircut-dye',
@@ -25,7 +22,7 @@ export const SERVICES: Service[] = [
     price: 120,
     duration: 40,
     description: 'Haircut + black dye',
-    image: HaircutBlackDyeImg
+    image: '/services/haircut-black-dye.jpg'
   },
   {
     id: 'chiskop',
@@ -33,7 +30,7 @@ export const SERVICES: Service[] = [
     price: 40,
     duration: 15,
     description: 'Short buzz cut',
-    image: ChiskopImg
+    image: '/services/chiskop.jpg'
   },
   {
     id: 'brush-cut',
@@ -41,7 +38,7 @@ export const SERVICES: Service[] = [
     price: 50,
     duration: 20,
     description: 'Brush cut style',
-    image: BrushCutImg
+    image: '/services/brush-cut.jpg'
   },
   {
     id: 'kids-haircut',
@@ -49,7 +46,7 @@ export const SERVICES: Service[] = [
     price: 50,
     duration: 20,
     description: 'Children haircut',
-    image: KidsHaircutImg
+    image: '/services/kids-haircut.jpg'
   },
   {
     id: 'ladies-haircut',
@@ -57,7 +54,7 @@ export const SERVICES: Service[] = [
     price: 80,
     duration: 30,
     description: 'Ladies haircut',
-    image: LadiesCutImg
+    image: '/services/ladies-cut.jpg'
   },
   {
     id: 'shave-beard',
@@ -65,7 +62,7 @@ export const SERVICES: Service[] = [
     price: 30,
     duration: 15,
     description: 'Beard shave',
-    image: BeardShaveImg
+    image: '/services/beard-shave.jpg'
   },
   {
     id: 'shave-trim',
@@ -73,7 +70,7 @@ export const SERVICES: Service[] = [
     price: 20,
     duration: 20,
     description: 'Shave and trim service',
-    image: TrimmingImg
+    image: '/services/trimming.jpg'
   },
   {
     id: 'unique-haircut',
@@ -81,7 +78,7 @@ export const SERVICES: Service[] = [
     price: 250,
     duration: 60,
     description: 'Custom haircut with coloured dye',
-    image: HaircutCustomDyeImg
+    image: '/services/haircut-custom-dye.jpg'
   }
 ];
 
