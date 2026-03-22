@@ -1,28 +1,35 @@
 /* =====================================
-   Fadezone Barber Booking App - HIGH-CHROMA Neo-Brutalist Styles
+   Fadezone Barber Booking App - PREMIUM URBAN SYSTEM
    ===================================== */
 
 @import "tailwindcss";
 
 :root {
-  /* Official Fadezone Palette */
-  --color-yellow: #FFD700; /* Safety/Electric Yellow */
-  --color-red: #8B0000;    /* Primary Red (Darker base) */
-  --color-red-action: #FF0000; /* Action Red (CTA) */
-  --color-black: #000000;
+  /* Premium Barbershop Palette */
+  --color-bg-warm: #F5F0EB;    /* Warm Cream/Beige */
+  --color-bg-page: #F5F5F5;    /* Soft Light Gray */
+  --color-burgundy: #8B1E3F;   /* Primary Brand Color */
+  --color-gold: #D4A84B;       /* Secondary Accent / Gold */
+  --color-charcoal: #1C1C1C;   /* Dark Mode Background */
+  --color-dark-surface: #2C2C2C; /* Appointment Card Surface */
+  
+  --color-black: #1A1A1A;
   --color-white: #FFFFFF;
-  --color-off-white: #F2F2F2;
-  --color-green-acid: #00FF00;
+  --color-gray-dark: #666666;
+  --color-gray-light: #EEEEEE;
   
-  /* Borders & Shadows */
-  --neob-border: 4px solid #000000;
-  --neob-shadow-offset: 8px;
-  --neob-shadow: var(--neob-shadow-offset) var(--neob-shadow-offset) 0px 0px #000000;
+  --color-success: #00C853;
+  --color-pending: #FFC107;
   
-  /* Fonts */
-  --font-display: 'Archivo Black', 'Impact', sans-serif;
-  --font-body: 'Inter', 'Helvetica Neue', Arial, sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  /* Borders & Shadows - Premium Soft */
+  --premium-shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+  --premium-shadow-md: 0 4px 12px rgba(0,0,0,0.12);
+  --premium-radius-lg: 16px;
+  --premium-radius-sm: 8px;
+  
+  /* Fonts - Clean & Balanced */
+  --font-display: 'Archivo Black', sans-serif;
+  --font-body: 'Inter', sans-serif;
 }
 
 /* Base Styles */
@@ -34,136 +41,105 @@
 
 body {
   font-family: var(--font-body);
-  font-weight: 700;
-  background-color: var(--color-yellow);
+  background-color: var(--color-bg-warm);
   color: var(--color-black);
-  line-height: 1.2;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
 }
 
 /* Typography Utilities */
-.text-aggressive {
+.text-premium-heading {
   font-family: var(--font-display);
-  font-style: italic;
   text-transform: uppercase;
-  letter-spacing: -0.05em;
-  line-height: 0.9;
-  transform: skewX(-5deg); /* Manual extra slant */
+  letter-spacing: 0.05em;
+  line-height: 1.1;
 }
 
-.font-label {
-  font-family: var(--font-body);
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-}
+.text-gold { color: var(--color-gold); }
+.text-burgundy { color: var(--color-burgundy); }
 
-.label-badge {
-  background: var(--color-black);
-  color: var(--color-yellow);
-  padding: 4px 10px;
-  font-size: 14px;
-  font-weight: 900;
-  letter-spacing: 2px;
-  display: inline-block;
-  font-style: italic;
-}
-
-/* Custom Components */
-.btn-brutalist {
-  background-color: var(--color-red-action);
-  border: var(--neob-border);
-  box-shadow: var(--neob-shadow);
+/* Premium Components */
+.btn-premium {
+  background-color: var(--color-burgundy);
   color: var(--color-white);
-  font-family: var(--font-display);
-  font-style: italic;
+  font-family: var(--font-body);
+  font-weight: 700;
   text-transform: uppercase;
-  padding: 16px 32px;
-  transition: all 0.1s cubic-bezier(0.23, 1, 0.32, 1);
+  padding: 12px 24px;
+  border-radius: var(--premium-radius-sm);
+  box-shadow: var(--premium-shadow-md);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  cursor: pointer;
+  gap: 8px;
 }
 
-.btn-brutalist:active {
-  transform: translate(4px, 4px);
-  box-shadow: 4px 4px 0px 0px #000000;
+.btn-premium:hover {
+  transform: translateY(-2px);
+  filter: brightness(110%);
 }
 
-.hero-diagonal-texture {
-  background-color: var(--color-yellow);
-  background-image: repeating-linear-gradient(
-    45deg,
-    rgba(0, 0, 0, 0.1),
-    rgba(0, 0, 0, 0.1) 10px,
-    transparent 10px,
-    transparent 20px
-  );
+.premium-card {
+  background: var(--color-white);
+  border-radius: var(--premium-radius-lg);
+  box-shadow: var(--premium-shadow-sm);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Screen Specifics */
+.receipt-container {
+  background: var(--color-white);
+  border-radius: var(--premium-radius-lg);
+  position: relative;
+  padding: 40px 24px;
+  box-shadow: var(--premium-shadow-md);
+}
+
+.time-btn {
+    height: 48px;
+    background: var(--color-gray-light);
+    color: var(--color-gray-dark);
+    border-radius: var(--premium-radius-sm);
+    font-weight: 600;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.time-btn.selected {
+    background: var(--color-burgundy);
+    color: var(--color-white);
+}
+
+.desktop-center {
+    max-width: 480px;
+    margin: 0 auto;
+    background-color: var(--color-bg-page);
+    min-height: 100vh;
+    box-shadow: 0 0 40px rgba(0,0,0,0.1);
+}
+
+/* Legacy Compat Mapping */
+.btn-brutalist {
+  background-color: var(--color-burgundy);
+  color: var(--color-white);
+  padding: 12px 24px;
+  border-radius: var(--premium-radius-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  border: none;
 }
 
 .brutalist-card {
   background: var(--color-white);
-  border: var(--neob-border);
-  box-shadow: 10px 10px 0px 0px #000000;
-  transition: all 0.1s ease;
+  border-radius: var(--premium-radius-lg);
+  box-shadow: var(--premium-shadow-sm);
 }
 
-.brutalist-card:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 12px 12px 0px 0px #000000;
-}
-
-/* Specific Screen Elements */
-.receipt-container {
-  background: var(--color-white);
-  border-left: var(--neob-border);
-  border-right: var(--neob-border);
-  position: relative;
-  padding: 40px 24px;
-  box-shadow: 12px 12px 0px 0px rgba(0,0,0,0.15);
-}
-
-.time-slot-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    width: 100%;
-}
-
-.time-btn {
-    height: 60px;
-    font-family: var(--font-display);
-    font-style: italic;
-    background: var(--color-black);
-    color: var(--color-white);
-    border: var(--neob-border);
-    font-size: 24px;
-    transition: all 0.1s ease;
-}
-
-.time-btn.selected {
-    background: var(--color-yellow);
-    color: var(--color-black);
-    transform: scale(1.05);
-}
-
-/* Scroll Smoothing */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-/* Responsive Desktop Wrapper */
-.desktop-center {
-    max-width: 480px;
-    margin: 0 auto;
-    background-color: var(--color-yellow);
-    min-height: 100vh;
-    box-shadow: 0 0 100px rgba(0,0,0,0.2);
+.text-aggressive {
+  font-family: var(--font-display);
+  text-transform: uppercase;
 }
