@@ -24,5 +24,5 @@ export interface TimeSlot {
   isBooked: boolean;
 }
 
-export type ViewType = 'home' | 'bookings' | 'store' | 'profile' | 'staff';
+export type ViewType = 'home' | 'bookings' | 'store' | 'profile' | 'staff' | 'about' | 'contacts';
 

@@ -71,37 +71,50 @@ const App: React.FC = () => {
         </div>
       </section>
 
-      {/* Latest Styles Section - SCALED DOWN */}
-      <section className="py-10 px-6 bg-[#F2F2F2]">
-        <div className="mb-8">
+      {/* Latest Styles Section - CAROUSEL */}
+      <section className="py-10 bg-[#F2F2F2]">
+        <div className="mb-6">
             <h2 className="section-title-underlined text-4xl font-black italic uppercase tracking-tighter">
                 LATEST STYLES
             </h2>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 pb-8">
+        <div className="flex overflow-x-auto gap-4 pb-4 no-scrollbar -mx-4 px-4 snap-x snap-mandatory">
             {[
-                { name: 'SKIN FADE', text: 'NEO-URBAN', img: '/services/haircut-black-dye.jpg' },
-                { name: 'BUZZ CUT', text: 'MINIMALIST', img: '/services/chiskop.jpg' },
-                { name: 'BRUSH CUT', text: 'SHARP', img: '/services/brush-cut.jpg' },
-                { name: 'FADE', text: 'CLASSIC', img: '/services/haircut.jpg' }
+                { id: 'ladies-haircut', name: 'LADIES CUT', text: 'URBAN FEMME', img: '/services/ladies-cut.jpg' },
+                { id: 'shave-trim', name: 'TRIM & EDGE', text: 'SHARP FINISH', img: '/services/trimming.jpg' },
+                { id: 'haircut', name: 'THE CLASSIC', text: 'TIMELESS LOOK', img: '/services/haircut.jpg' },
+                { id: 'unique-haircut', name: 'CUSTOM DYE', text: 'LOUD COLORS', img: '/services/haircut-custom-dye.jpg' }
             ].map((style, idx) => (
-                <div key={idx} className="flex flex-col gap-2">
-                    <div className="relative brutalist-card-thick aspect-square bg-white shadow-solid-4px">
+                <div 
+                    key={idx} 
+                    className="min-w-[200px] flex flex-col gap-2 snap-start cursor-pointer group"
+                    onClick={() => {
+                        const service = SERVICES.find(s => s.id === style.id);
+                        if (service) {
+                            setSelectedService(service);
+                            setActiveView('bookings');
+                            setStep(1);
+                            window.scrollTo(0,0);
+                        }
+                    }}
+                >
+                    <div className="relative brutalist-card-thick aspect-[4/5] bg-white shadow-solid-4px transition-transform group-active:translate-x-1 group-active:translate-y-1 group-active:shadow-none">
                         <img src={style.img} className="w-full h-full object-cover grayscale contrast-125 brightness-110" alt={style.name} />
-                        <div className="absolute bottom-2 left-0">
-                            <div className="tilted-label text-sm font-black italic uppercase tracking-tighter border-2 border-black">
+                        <div className="absolute bottom-3 left-0">
+                            <div className="tilted-label text-lg font-black italic uppercase tracking-tighter border-2 border-black">
                                 {style.name}
                             </div>
                         </div>
                     </div>
-                    <div className="text-sm font-black italic uppercase tracking-tighter text-black/60 mt-1">
+                    <div className="text-xs font-black italic uppercase tracking-tighter text-black/60 mt-1">
                         {style.text}
                     </div>
                 </div>
             ))}
         </div>
       </section>
+
 
       {/* Stats Section - COMPACT */}
       <section className="py-10 px-8 bg-black text-[#FFD700] border-t-4 border-black">
@@ -284,9 +297,19 @@ const App: React.FC = () => {
                     </div>
 
                     <div className="mt-8 pt-6 border-t-4 border-black text-center">
-                        <p className="text-[9px] font-black uppercase tracking-widest opacity-30">SCREENSHOT FOR ENTRY</p>
+                        <p className="text-[9px] font-black uppercase tracking-widest opacity-30 mb-4">SCREENSHOT FOR ENTRY</p>
+                        <button 
+                            onClick={() => {
+                                const msg = `Hey Alex, I've booked a ${selectedService?.name} at ${selectedTime}. Ref: ${lastBookingId}`;
+                                window.open(`https://wa.me/27812687806?text=${encodeURIComponent(msg)}`, '_blank');
+                            }}
+                            className="w-full bg-[#25D366] text-black font-black italic uppercase text-xs py-2 border-2 border-black shadow-solid-4px active:translate-y-1 active:shadow-none"
+                        >
+                            CONFIRM VIA WHATSAPP
+                        </button>
                     </div>
                 </main>
+
                 
                 <button 
                     onClick={() => { setActiveView('profile'); setStep(0); }}
@@ -433,14 +456,94 @@ const App: React.FC = () => {
     </div>
   );
 
+  const renderAbout = () => (
+    <div className="flex flex-col bg-[#F2F2F2] min-h-screen">
+        <header className="py-12 border-b-6 border-black mb-10 text-center">
+            <h1 className="text-6xl font-black italic uppercase tracking-tighter">STORY</h1>
+        </header>
+        
+        <div className="space-y-12">
+            <div className="brutalist-card-thick bg-white p-6 shadow-solid-6px -rotate-1">
+                <h2 className="text-3xl font-black italic uppercase tracking-tighter text-red-600 mb-4">THE VIBE</h2>
+                <p className="text-lg font-bold leading-tight uppercase tracking-tight">
+                    FADEZONE ISN'T JUST A BARBERSHOP. IT'S THE URBAN BEAT OF KENSINGTON. WE BLEND STREET CULTURE WITH PRECISION GROOMING TO ENSURE YOU LEAVE SCREAMING STYLE.
+                </p>
+            </div>
+
+            <div className="relative aspect-video brutalist-card-thick">
+                <img src="/services/haircut.jpg" className="w-full h-full object-cover grayscale contrast-150" alt="Vibe" />
+                <div className="absolute top-4 left-4">
+                    <div className="tilted-label text-xl">#BORNINKENSINGTON</div>
+                </div>
+            </div>
+
+            <div className="p-6 bg-black text-[#FFD700] border-4 border-black shadow-solid-6px">
+                <h2 className="text-3xl font-black italic uppercase tracking-tighter mb-4">OUR CODE</h2>
+                <ul className="space-y-4 text-xl font-black italic uppercase tracking-tighter">
+                    <li>• NO APPOINTMENT? NO FLEX.</li>
+                    <li>• PRECISION OVER EVERYTHING.</li>
+                    <li>• URBAN ATTITUDE.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+  );
+
+  const renderContacts = () => (
+    <div className="flex flex-col bg-[#FFD700] min-h-screen">
+        <header className="py-12 border-b-6 border-black mb-10 text-center">
+            <h1 className="text-6xl font-black italic uppercase tracking-tighter">REACH</h1>
+        </header>
+
+        <div className="space-y-10">
+            <div className="brutalist-card-thick bg-white p-6 shadow-solid-6px rotate-1">
+                <h2 className="text-3xl font-black italic uppercase tracking-tighter mb-4">LOCATION</h2>
+                <p className="text-2xl font-black uppercase tracking-tighter leading-none mb-2">424 COMMISSIONER ST</p>
+                <p className="text-lg font-black uppercase tracking-tighter opacity-40 italic">KENSINGTON, JOHANNESBURG</p>
+                <button className="mt-4 w-full bg-black text-white py-4 font-black italic uppercase text-xl shadow-solid-4px active:translate-y-1">
+                    GET DIRECTIONS
+                </button>
+            </div>
+
+            <div className="brutalist-card-thick bg-black text-[#FFD700] p-6 shadow-solid-6px -rotate-1">
+                <h2 className="text-3xl font-black italic uppercase tracking-tighter mb-6 border-b-2 border-[#FFD700]/20 pb-2">HOURS</h2>
+                <div className="space-y-3">
+                    {[
+                        { day: 'MON-FRI', time: '08:00 - 18:00' },
+                        { day: 'SATURDAY', time: '08:00 - 19:00' },
+                        { day: 'SUNDAY', time: 'CLOSED', red: true }
+                    ].map(h => (
+                        <div key={h.day} className="flex justify-between items-center text-xl font-black italic tracking-tighter">
+                            <span className="opacity-50">{h.day}</span>
+                            <span className={h.red ? 'text-red-500' : ''}>{h.time}</span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div className="brutalist-card-thick bg-white p-6 shadow-solid-6px">
+                <h2 className="text-3xl font-black italic uppercase tracking-tighter mb-4">DIRECT LINE</h2>
+                <p className="text-3xl font-black tracking-widest text-center py-4 bg-gray-100 border-2 border-black border-dashed">
+                    081 268 7806
+                </p>
+                <button className="mt-6 w-full btn-brutalist-red py-4 text-2xl flex items-center justify-center gap-4">
+                    CALL NOW <Zap size={24} />
+                </button>
+            </div>
+        </div>
+    </div>
+  );
+
   return (
     <Layout activeView={activeView} onViewChange={(v) => { setActiveView(v); setStep(0); }}>
         {activeView === 'home' && renderHome()}
         {activeView === 'bookings' && renderBookings()}
+        {activeView === 'about' && renderAbout()}
+        {activeView === 'contacts' && renderContacts()}
         {activeView === 'store' && (
             <div className="p-12 text-center bg-[#FFD700] min-h-screen flex items-center justify-center">
                 <div className="brutalist-card-thick bg-white p-12 max-w-sm shadow-solid-8px -rotate-2">
-                    <h2 className="text-7xl font-black italic uppercase tracking-tighter leading-none mb-6">STORE<br/>SOON</h2>
+                    <h2 className="text-6xl font-black italic uppercase tracking-tighter leading-none mb-6">STORE<br/>SOON</h2>
                     <div className="h-4 w-full bg-red-600 mb-8" />
                     <p className="text-[12px] font-black uppercase tracking-[0.2em] opacity-30 italic">Apparel & Gear Coming Winter 2026</p>
                 </div>
@@ -451,5 +554,6 @@ const App: React.FC = () => {
     </Layout>
   );
 };
+
 
 export default App;

@@ -129,13 +129,15 @@ body {
 
 /* Layout Utilities */
 .desktop-center {
-    max-width: 450px; /* Marginally tighter */
+    max-width: 450px;
     margin: 0 auto;
     background-color: #F9F9F9;
     min-height: 100vh;
     box-shadow: 0 0 30px rgba(0,0,0,0.15);
     position: relative;
+    padding: 18px; /* Global 18px Safe-Zone */
 }
+
 
 
 /* Responsive Overrides */
