@@ -131,12 +131,18 @@ body {
 .desktop-center {
     max-width: 450px;
     margin: 0 auto;
-    background-color: #F9F9F9;
+    background-color: var(--color-yellow); /* Border color */
     min-height: 100vh;
     box-shadow: 0 0 30px rgba(0,0,0,0.15);
     position: relative;
     padding: 18px; /* Global 18px Safe-Zone */
 }
+
+/* Ensure body is also yellow to avoid gap during scroll/overscroll */
+body {
+    background-color: var(--color-yellow) !important;
+}
+
 
 
 

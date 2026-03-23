@@ -10,58 +10,79 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children, activeView, onViewChange }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const navItems = [
+    { id: 'home', icon: Landmark, label: 'HOME' },
+    { id: 'bookings', icon: Calendar, label: 'BOOK A FADE' },
+    { id: 'about', icon: Info, label: 'OUR STORY' },
+    { id: 'contacts', icon: MapPin, label: 'REACH US' },
+    { id: 'profile', icon: Zap, label: 'MY ACCOUNT' }
+  ];
+
+  const handleNav = (id: ViewType) => {
+    onViewChange(id);
+    setIsMenuOpen(false);
+  };
+
   return (
-    <div className="min-h-screen bg-black text-black selection:bg-black selection:text-[#FFD700]">
-      <div className="desktop-center flex flex-col relative pb-[70px]">
+    <div className="min-h-screen bg-[#FFD700] text-black selection:bg-black selection:text-[#FFD700]">
+      <div className="desktop-center flex flex-col relative">
         {/* Compressed Header */}
-        <header className="px-6 h-[64px] flex justify-between items-center sticky top-0 bg-[#FFD700] z-50 border-b-4 border-black">
-          <div className="flex items-center gap-3">
-             <div className="w-8 h-8 bg-black rounded-sm flex items-center justify-center transform rotate-3 shadow-solid-4px">
-                <Zap size={20} className="text-[#FFD700]" strokeWidth={3} />
-             </div>
-             <h1 className="text-2xl font-black italic uppercase tracking-tighter leading-none text-black">
+        <header className="px-5 h-[62px] flex justify-between items-center sticky top-0 bg-[#FFD700] z-[101] border-b-4 border-black">
+          <div className="flex items-center gap-2">
+             <button 
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="p-1 hover:scale-110 active:scale-95 transition-all text-black"
+             >
+                {isMenuOpen ? <X size={28} strokeWidth={4} /> : <Menu size={28} strokeWidth={4} />}
+             </button>
+             <h1 className="text-xl font-black italic uppercase tracking-tighter leading-none text-black ml-1">
                 FADEZONE
              </h1>
           </div>
 
-          <button onClick={() => onViewChange('staff')} className="p-2 active:scale-95 transition-transform">
-              <User size={28} strokeWidth={3} className="text-black" />
+          <button onClick={() => handleNav('staff')} className="p-1 active:scale-95 transition-transform">
+              <User size={26} strokeWidth={3} className="text-black" />
           </button>
         </header>
 
+        {/* NEO-BRUTALIST MENU OVERLAY */}
+        {isMenuOpen && (
+            <div className="fixed inset-0 z-[100] bg-[#FFD700] flex flex-col p-10 pt-24 animate-in fade-in slide-in-from-top duration-200 h-full max-w-[450px] left-1/2 -translate-x-1/2">
+                <div className="space-y-6">
+                    {navItems.map((item) => (
+                        <button
+                            key={item.id}
+                            onClick={() => handleNav(item.id as ViewType)}
+                            className={`flex items-center gap-6 w-full text-left transition-all ${activeView === item.id ? 'translate-x-4' : ''}`}
+                        >
+                            <div className={`p-3 border-2 border-black shadow-solid-4px ${activeView === item.id ? 'bg-black text-[#FFD700]' : 'bg-white text-black'}`}>
+                                <item.icon size={24} strokeWidth={4} />
+                            </div>
+                            <span className={`text-4xl font-black italic uppercase tracking-tighter hover:text-red-600 ${activeView === item.id ? 'text-red-600' : 'text-black'}`}>
+                                {item.label}
+                            </span>
+                        </button>
+                    ))}
+                </div>
+                
+                <div className="mt-auto border-t-4 border-black pt-8">
+                    <p className="text-sm font-black italic uppercase mb-2">MASTER BARBER ON CALL</p>
+                    <p className="text-3xl font-black tracking-widest text-black/40">081 268 7806</p>
+                </div>
+            </div>
+        )}
+
         {/* Main Content Area */}
-        <main className="flex-1 relative overflow-x-hidden bg-[#F2F2F2]">
+        <main className="flex-1 relative overflow-x-hidden bg-[#F2F2F2] border-x-4 border-b-4 border-black shadow-solid-6px">
           {children}
         </main>
-
-        {/* Compact Bottom Navigation */}
-        <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[450px] h-[72px] bg-[#FFD700] border-t-4 border-black px-2 flex justify-between items-center z-[100]">
-          {[
-            { id: 'home', icon: Landmark, label: 'Home' },
-            { id: 'bookings', icon: Calendar, label: 'Book' },
-            { id: 'about', icon: Info, label: 'About' },
-            { id: 'contacts', icon: MapPin, label: 'Reach' },
-            { id: 'profile', icon: Zap, label: 'Me' }
-          ].map((item) => (
-            <button 
-              key={item.id}
-              onClick={() => onViewChange(item.id as ViewType)}
-              className={`flex flex-col items-center gap-0.5 transition-all ${activeView === item.id ? 'opacity-100 scale-105' : 'opacity-60'}`}
-            >
-              <div className="p-1 flex items-center justify-center">
-                <item.icon size={24} strokeWidth={3} className="text-black" />
-              </div>
-              <span className="text-[9px] font-black italic uppercase tracking-tighter text-black">
-                {item.label}
-              </span>
-            </button>
-          ))}
-        </nav>
-
       </div>
     </div>
   );
 };
+
 
 export default Layout;
 
