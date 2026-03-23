@@ -50,118 +50,105 @@ const App: React.FC = () => {
   };
 
   const renderHome = () => (
-    <div className="flex flex-col bg-[#F5F5F5] min-h-screen">
-      {/* Hero Section */}
-      <section className="relative h-[500px] flex items-end overflow-hidden">
-        <img 
-            src="/services/haircut.jpg" 
-            className="absolute inset-0 w-full h-full object-cover"
-            alt="Hero Background"
-        />
-        <div className="absolute inset-0 hero-overlay" />
-        
-        <div className="relative z-10 p-8 pb-12 w-full text-white">
-            <div className="flex items-center gap-2 mb-4">
-                <div className="h-[2px] w-12 bg-[#D4A84B]" />
-                <span className="text-xs font-bold uppercase tracking-[0.3em] text-[#D4A84B]">Premium Cutz</span>
-            </div>
-            <h1 className="text-5xl font-display leading-[1] mb-6 tracking-tighter shadow-black/20 text-shadow-sm">
-                ELEVATE<br/>YOUR VIBE
-            </h1>
+    <div className="flex flex-col bg-[#F2F2F2]">
+      {/* Hero Section - COMPRESSED */}
+      <section className="relative h-[320px] flex items-center justify-center hero-diagonal-pattern border-b-6 border-black">
+        <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+             <img 
+                src="/services/haircut.jpg" 
+                className="w-full h-full object-cover grayscale contrast-150 brightness-110"
+                alt="Hero Haircut"
+             />
+        </div>
+
+        <div className="relative z-10 flex flex-col items-center mt-12 transform-tilted">
             <button
                 onClick={() => { setActiveView('bookings'); setStep(0); }}
-                className="btn-premium px-10 py-5 text-lg rounded-full"
+                className="btn-brutalist-red flex items-center gap-3 text-3xl italic font-black uppercase tracking-tighter shadow-solid-6px"
             >
-                BOOK A FADE <ArrowRight size={20} />
+                BOOK A FADE <ArrowRight size={32} strokeWidth={4} className="rotate-[-45deg]" />
             </button>
         </div>
       </section>
 
-      {/* Latest Styles Section */}
-      <section className="py-12 px-6 bg-[#F5F0EB]">
-        <div className="flex justify-between items-end mb-8">
-            <div>
-                <h2 className="text-2xl font-display text-black">LATEST STYLES</h2>
-                <div className="h-1 w-16 bg-[#8B1E3F] mt-1" />
-            </div>
-            <button className="text-xs font-bold text-[#8B1E3F] border-b border-[#8B1E3F] pb-0.5">VIEW ALL</button>
+      {/* Latest Styles Section - SCALED DOWN */}
+      <section className="py-10 px-6 bg-[#F2F2F2]">
+        <div className="mb-8">
+            <h2 className="section-title-underlined text-4xl font-black italic uppercase tracking-tighter">
+                LATEST STYLES
+            </h2>
         </div>
 
-        <div className="flex overflow-x-auto gap-6 pb-6 no-scrollbar snap-x snap-mandatory">
+        <div className="grid grid-cols-2 gap-4 pb-8">
             {[
-                { name: 'SKIN FADE', price: 'R60', tag: 'FEATURED', img: '/services/haircut-black-dye.jpg' },
-                { name: 'BUZZ CUT', price: 'R40', tag: 'NEW', img: '/services/chiskop.jpg' },
-                { name: 'BRUSH CUT', price: 'R50', tag: 'SALE', img: '/services/brush-cut.jpg' }
+                { name: 'SKIN FADE', text: 'NEO-URBAN', img: '/services/haircut-black-dye.jpg' },
+                { name: 'BUZZ CUT', text: 'MINIMALIST', img: '/services/chiskop.jpg' },
+                { name: 'BRUSH CUT', text: 'SHARP', img: '/services/brush-cut.jpg' },
+                { name: 'FADE', text: 'CLASSIC', img: '/services/haircut.jpg' }
             ].map((style, idx) => (
-                <div key={idx} className="min-w-[160px] flex flex-col snap-center">
-                    <div className="premium-card h-[220px] relative mb-3">
-                        <img src={style.img} className="w-full h-[140px] object-cover" alt={style.name} />
-                        <div className="absolute top-3 left-3">
-                            <span className={`px-2 py-0.5 rounded text-[9px] font-black text-white ${style.tag === 'NEW' ? 'bg-[#10B981]' : style.tag === 'SALE' ? 'bg-[#EF4444]' : 'bg-[#F59E0B]'}`}>
-                                {style.tag}
-                            </span>
+                <div key={idx} className="flex flex-col gap-2">
+                    <div className="relative brutalist-card-thick aspect-square bg-white shadow-solid-4px">
+                        <img src={style.img} className="w-full h-full object-cover grayscale contrast-125 brightness-110" alt={style.name} />
+                        <div className="absolute bottom-2 left-0">
+                            <div className="tilted-label text-sm font-black italic uppercase tracking-tighter border-2 border-black">
+                                {style.name}
+                            </div>
                         </div>
-                        <div className="p-3">
-                            <h3 className="text-[13px] font-bold text-black uppercase leading-tight mb-1">{style.name}</h3>
-                            <span className="text-[14px] font-bold text-[#D4A84B]">{style.price}</span>
-                        </div>
+                    </div>
+                    <div className="text-sm font-black italic uppercase tracking-tighter text-black/60 mt-1">
+                        {style.text}
                     </div>
                 </div>
             ))}
         </div>
       </section>
 
-      {/* Why Fadezone Section */}
-      <section className="py-16 px-8 bg-black text-white">
+      {/* Stats Section - COMPACT */}
+      <section className="py-10 px-8 bg-black text-[#FFD700] border-t-4 border-black">
           <div className="grid grid-cols-2 gap-8">
-              <div className="space-y-2">
-                  <span className="text-4xl font-display text-[#D4A84B]">10+</span>
-                  <p className="text-[10px] uppercase font-bold tracking-widest text-white/50">Master Barbers</p>
+              <div className="flex flex-col items-center">
+                  <span className="text-5xl font-black italic tracking-tighter">10+</span>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-[#FFD700]/60">MASTER BARBERS</p>
               </div>
-              <div className="space-y-2">
-                  <span className="text-4xl font-display text-[#D4A84B]">99%</span>
-                  <p className="text-[10px] uppercase font-bold tracking-widest text-white/50">Vibe Rating</p>
+              <div className="flex flex-col items-center">
+                  <span className="text-5xl font-black italic tracking-tighter">99%</span>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-[#FFD700]/60">VIBE RATING</p>
               </div>
           </div>
       </section>
     </div>
   );
 
+
   const renderBookings = () => {
+    // Note: Re-applying Brutalist styling to Booking flow too for consistency
     if (step === 0) {
         return (
-            <div className="p-6 bg-[#F5F5F5] min-h-screen">
-                <header className="py-8 space-y-2">
-                    <div className="flex items-center gap-2">
-                         <div className="h-[2px] w-6 bg-black" />
-                         <span className="text-[10px] font-bold uppercase tracking-widest">Step 1 of 3</span>
-                    </div>
-                    <h1 className="text-3xl font-display uppercase tracking-tight">
+            <div className="p-4 bg-[#FFD700] min-h-screen">
+                <header className="py-8 border-b-2 border-black mb-6">
+                    <h1 className="text-4xl font-black italic uppercase tracking-tighter leading-none">
                         SELECT SERVICE
                     </h1>
                 </header>
                 
-                <div className="grid grid-cols-2 gap-4 pb-32">
+                <div className="grid grid-cols-1 gap-4 pb-32">
                     {SERVICES.map(s => (
-                        <div key={s.id} className="premium-card flex flex-col h-full group">
-                            <div className="relative aspect-square overflow-hidden">
-                                <img src={s.image} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt={s.name} />
-                                <div className="absolute top-2 right-2 flex flex-col items-end gap-1">
-                                    <span className="bg-white/90 backdrop-blur rounded px-2 py-1 text-xs font-bold text-[#8B1E3F] shadow-sm italic">
+                        <div key={s.id} className="brutalist-card-thick flex flex-col h-full bg-white shadow-solid-4px">
+                            <div className="relative aspect-video overflow-hidden border-b-2 border-black">
+                                <img src={s.image} className="w-full h-full object-cover grayscale contrast-125 transition-transform hover:scale-110" alt={s.name} />
+                                <div className="absolute top-2 right-2">
+                                    <div className="tilted-label text-lg px-2 py-1 border-2 border-black shadow-solid-4px mb-1">
                                         R{s.price}
-                                    </span>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="p-3 flex flex-col justify-between flex-1">
-                                <div>
-                                    <h2 className="text-[14px] font-bold text-black leading-tight uppercase mb-1">{s.name}</h2>
-                                    <p className="text-[10px] text-gray-500 line-clamp-1 mb-2">30 mins session</p>
-                                </div>
+                            <div className="p-4 flex flex-col gap-2">
+                                <h2 className="text-2xl font-black italic uppercase tracking-tighter leading-none">{s.name}</h2>
                                 <button 
                                     onClick={() => { setSelectedService(s); setStep(1); window.scrollTo(0,0); }}
-                                    className="w-full bg-[#1A1A1A] text-white text-[11px] font-bold py-2.5 rounded-lg active:scale-95 transition-all uppercase tracking-wider"
+                                    className="btn-brutalist-red w-full text-lg py-2 rounded-none shadow-solid-4px"
                                 >
-                                    Select
+                                    BOOK SESSION
                                 </button>
                             </div>
                         </div>
@@ -173,45 +160,39 @@ const App: React.FC = () => {
 
     if (step === 1) {
         return (
-            <div className="p-6 bg-[#F5F0EB] min-h-screen">
-                <button onClick={() => setStep(0)} className="flex items-center gap-2 mb-8 text-black/60 hover:text-black transition-colors">
-                    <ArrowLeft size={18} />
-                    <span className="text-xs font-bold uppercase tracking-widest">Back to services</span>
+            <div className="p-4 bg-[#FFD700] min-h-screen">
+                <button onClick={() => setStep(0)} className="mb-6 font-black italic uppercase tracking-tighter text-lg bg-black text-white px-3 py-1 flex items-center gap-2 shadow-solid-4px">
+                    <ArrowLeft size={18} /> BACK
                 </button>
 
-                <div className="premium-card p-6 mb-10 bg-white">
-                    <div className="flex justify-between items-center mb-8 border-b border-gray-100 pb-4">
-                        <h2 className="text-lg font-bold text-black uppercase tracking-tight">March 2026</h2>
-                        <div className="flex gap-4">
-                            <button className="p-1 border border-gray-200 rounded-full opacity-30"><ArrowLeft size={14} /></button>
-                            <button className="p-1 border border-gray-100 rounded-full"><ChevronRight size={14} /></button>
-                        </div>
-                    </div>
+                <div className="brutalist-card-thick p-4 mb-8 bg-white shadow-solid-4px">
+                    <header className="mb-4 border-b-2 border-black pb-2 text-center">
+                         <h2 className="text-2xl font-black italic uppercase tracking-tighter">MARCH 2026</h2>
+                    </header>
                     
-                    {/* Calendar Grid */}
-                    <div className="grid grid-cols-7 gap-y-2 mb-2">
+                    <div className="grid grid-cols-7 gap-1 mb-2">
                         {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(d => (
-                            <div key={d} className="p-2 text-[10px] font-bold text-center text-gray-400 uppercase tracking-widest">{d}</div>
+                            <div key={d} className="p-1 text-[10px] font-black text-center border border-black bg-black text-white">{d}</div>
                         ))}
                         {Array.from({ length: 31 }).map((_, i) => (
-                            <div key={i} className="flex flex-col items-center justify-center">
-                                <div className={`w-9 h-9 flex items-center justify-center text-sm font-medium rounded-full cursor-pointer transition-all ${i+1 === 5 ? 'bg-[#8B1E3F] text-white' : 'hover:bg-gray-100'}`}>
-                                    {i + 1}
-                                </div>
-                                {i + 1 === 23 && <div className="w-1 h-1 bg-[#D4A84B] rounded-full mt-0.5" />}
+                            <div 
+                                key={i} 
+                                className={`h-10 flex items-center justify-center text-sm font-black border border-black cursor-pointer transition-all ${i+1 === 5 ? 'bg-black text-white' : 'bg-white text-black hover:bg-black/5'}`}
+                            >
+                                {i + 1}
                             </div>
                         ))}
                     </div>
                 </div>
 
                 <div className="mb-8">
-                    <h3 className="text-xs font-bold uppercase tracking-[0.2em] mb-4 text-gray-500">Available Times</h3>
-                    <div className="grid grid-cols-4 gap-3 mb-20">
-                        {['08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00'].map(t => (
+                    <h3 className="text-center text-3xl font-black italic uppercase tracking-tighter text-red-600 mb-4">SELECT TIME</h3>
+                    <div className="grid grid-cols-3 gap-3 mb-20">
+                        {['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'].map(t => (
                             <button 
                                 key={t}
                                 onClick={() => { setSelectedTime(t); setStep(2); window.scrollTo(0,0); }}
-                                className={`h-11 flex items-center justify-center text-[13px] font-semibold rounded-lg transition-all ${selectedTime === t ? 'bg-[#1A1A1A] text-white' : 'bg-gray-200/50 text-gray-600 hover:bg-gray-200'}`}
+                                className={`h-12 flex items-center justify-center text-lg font-black border-2 border-black transition-all ${selectedTime === t ? 'bg-[#FFD700] text-black shadow-none' : 'bg-black text-white shadow-solid-4px'}`}
                             >
                                 {t}
                             </button>
@@ -222,101 +203,96 @@ const App: React.FC = () => {
         );
     }
 
+    // Confirmation Step
     if (step === 2) {
         return (
-            <div className="p-6 bg-[#F5F5F5] min-h-screen">
-                <header className="py-8">
-                    <h1 className="text-3xl font-display uppercase tracking-tight text-center">CONFIRMATION</h1>
+            <div className="p-4 bg-[#FFD700] min-h-screen">
+                <header className="py-8 border-b-4 border-black mb-8">
+                    <h1 className="text-5xl font-black italic uppercase tracking-tighter text-center">CHECKOUT</h1>
                 </header>
 
-                <div className="premium-card bg-white p-8 max-w-sm mx-auto space-y-8">
+                <div className="brutalist-card-thick bg-white p-6 max-w-[340px] mx-auto space-y-6 shadow-solid-6px">
                     <div className="space-y-1">
-                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Full Name</label>
+                        <label className="text-lg font-black italic uppercase tracking-tighter">Your Name</label>
                         <input 
                             value={customerName}
                             onChange={(e) => setCustomerName(e.target.value)}
-                            className="w-full border-b border-gray-200 py-3 text-lg font-bold text-black focus:border-[#8B1E3F] transition-colors outline-none bg-transparent"
-                            placeholder="Alex Doe"
+                            className="w-full border-2 border-black p-3 text-xl font-black focus:bg-yellow-50 outline-none"
+                            placeholder="NAME"
                         />
                     </div>
                     <div className="space-y-1">
-                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">WhatsApp Contact</label>
+                        <label className="text-lg font-black italic uppercase tracking-tighter">Contact #</label>
                         <input 
                             value={customerPhone}
                             onChange={(e) => setCustomerPhone(e.target.value)}
-                            className="w-full border-b border-gray-200 py-3 text-lg font-bold text-black focus:border-[#8B1E3F] transition-colors outline-none bg-transparent"
-                            placeholder="+27 00 000 0000"
+                            className="w-full border-2 border-black p-3 text-xl font-black focus:bg-yellow-50 outline-none"
+                            placeholder="+27 000"
                         />
                     </div>
                     
-                    <div className="pt-8 space-y-4 border-t border-gray-50">
-                        <div className="flex justify-between items-center text-sm font-medium">
-                            <span className="text-gray-500 uppercase tracking-widest text-[10px] font-bold">Service</span>
-                            <span className="text-black">{selectedService?.name}</span>
+                    <div className="pt-4 space-y-2 border-t-2 border-black">
+                        <div className="flex justify-between items-center">
+                            <span className="text-sm font-black uppercase tracking-tighter opacity-50">Service</span>
+                            <span className="text-md font-black uppercase text-right leading-none">{selectedService?.name}</span>
                         </div>
-                        <div className="flex justify-between items-center text-sm font-medium">
-                            <span className="text-gray-500 uppercase tracking-widest text-[10px] font-bold">Time</span>
-                            <span className="text-black">{selectedTime}</span>
-                        </div>
-                        <div className="flex justify-between items-center pt-2">
-                             <span className="text-gray-500 uppercase tracking-widest text-[10px] font-bold">Price</span>
-                             <span className="text-2xl font-display text-[#D4A84B]">R{selectedService?.price}</span>
+                        <div className="flex justify-between items-center">
+                            <span className="text-sm font-black uppercase tracking-tighter opacity-50">Time Slot</span>
+                            <span className="text-md font-black uppercase">{selectedTime}</span>
                         </div>
                     </div>
 
                     <button 
                         onClick={handleConfirm}
-                        className="btn-premium w-full py-5 text-lg rounded-xl shadow-lg mt-4"
+                        className="btn-brutalist-red w-full py-4 text-2xl shadow-solid-6px active:translate-y-1 active:shadow-none"
                     >
-                        Confirm Booking
-                    </button>
-                    <button onClick={() => setStep(1)} className="w-full text-center text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-black transition-colors pt-2">
-                        Change Time
+                        CONFIRM
                     </button>
                 </div>
             </div>
         );
     }
 
+    // Receipt View
     if (step === 3) {
         return (
-            <div className="p-6 bg-[#F5F0EB] min-h-screen flex flex-col items-center">
-                <main className="receipt-container w-full max-w-[340px] mx-auto mt-16 scale-105">
+            <div className="p-4 bg-[#F2F2F2] min-h-screen flex flex-col items-center relative overflow-hidden">
+                <div className="absolute top-0 rotate-6 bg-[#FFD700] w-[150%] h-[100px] -translate-y-12 border-b-6 border-black z-0"></div>
+                
+                <main className="relative z-10 w-full max-w-[320px] mt-16 bg-white border-4 border-black p-6 shadow-solid-6px">
                     <TornEdge position="top" />
                     <TornEdge position="bottom" />
 
-                    <div className="text-center py-6 mb-8 border-b border-gray-100">
-                        <div className="inline-block bg-[#1A1A1A] text-white px-3 py-1 text-[10px] font-bold tracking-[0.3em] mb-4">CONFIRMED</div>
-                        <h1 className="text-xl font-bold tracking-widest leading-none">
-                            ORDER #{lastBookingId}
+                    <div className="text-center py-4 mb-4 border-b-4 border-black border-dashed">
+                        <div className="tilted-label text-md mb-4">#READY</div>
+                        <h1 className="text-2xl font-black italic tracking-tighter leading-tight">
+                            REF: {lastBookingId}
                         </h1>
                     </div>
                     
-                    <div className="space-y-6">
+                    <div className="space-y-4">
                         {[
                             { label: 'Service', val: selectedService?.name },
-                            { label: 'Barber', val: 'Anuel' },
-                            { label: 'Date', val: '23 Mar 2026' },
-                            { label: 'Time', val: selectedTime }
+                            { label: 'Time', val: selectedTime },
+                            { label: 'Total', val: 'R'+selectedService?.price }
                         ].map(item => (
-                            <div key={item.label} className="flex justify-between items-center bg-[#F9F9F9] p-3 rounded-lg">
-                                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{item.label}</span>
-                                <span className="text-[14px] font-bold text-black uppercase">{item.val}</span>
+                            <div key={item.label} className="flex justify-between items-center">
+                                <span className="text-[10px] font-black text-black/40 uppercase tracking-tighter">{item.label}</span>
+                                <span className="text-sm font-black uppercase">{item.val}</span>
                             </div>
                         ))}
-                        
-                        <div className="flex justify-between items-center pt-8 px-2">
-                             <span className="text-lg font-display text-gray-800">TOTAL:</span>
-                             <span className="text-3xl font-display text-[#D4A84B]">R{selectedService?.price}.00</span>
-                        </div>
+                    </div>
+
+                    <div className="mt-8 pt-6 border-t-4 border-black text-center">
+                        <p className="text-[9px] font-black uppercase tracking-widest opacity-30">SCREENSHOT FOR ENTRY</p>
                     </div>
                 </main>
                 
                 <button 
                     onClick={() => { setActiveView('profile'); setStep(0); }}
-                    className="mt-20 w-full max-w-[340px] btn-premium py-6 text-xl rounded-full"
+                    className="relative z-10 mt-12 btn-brutalist-red px-12 py-4 text-2xl transform-tilted shadow-solid-6px"
                 >
-                    DONE
+                    GOT IT
                 </button>
             </div>
         );
@@ -326,51 +302,38 @@ const App: React.FC = () => {
   };
 
   const renderProfile = () => (
-    <div className="p-6 bg-[#1C1C1C] min-h-screen text-white pb-32">
-        <header className="py-12 space-y-2">
-            <h1 className="text-4xl font-display text-center uppercase tracking-tight">
+    <div className="p-4 bg-black min-h-screen text-[#FFD700] pb-32">
+        <header className="py-8 border-b-2 border-[#FFD700] mb-6 text-center">
+            <h1 className="text-4xl font-black italic uppercase tracking-tighter">
                 YOUR FADES
             </h1>
-            <p className="text-[10px] text-center font-bold uppercase tracking-[0.4em] text-white/40">Appointment History</p>
         </header>
 
-        <main className="max-w-lg mx-auto w-full space-y-6">
+        <main className="max-w-md mx-auto w-full space-y-6">
             {bookings.length === 0 ? (
-                <div className="p-20 text-center border-2 border-white/5 rounded-3xl bg-white/5">
-                    <Plus size={40} className="mx-auto mb-4 text-white/20" />
-                    <p className="text-white/40 font-bold uppercase text-xs tracking-widest">No Fades Booked Yet</p>
+                <div className="p-12 text-center border-2 border-dashed border-[#FFD700]/30">
+                    <p className="text-[#FFD700]/30 font-black italic uppercase text-lg tracking-tighter">No Active Bookings</p>
                 </div>
             ) : (
                 bookings.map(b => (
-                    <div key={b.id} className="relative bg-[#2C2C2C] p-6 rounded-[20px] flex flex-col gap-6 shadow-xl border border-white/5">
-                        <div className="flex justify-between items-start">
-                            <div className="space-y-1">
-                                <h2 className="text-[#D4AF37] text-2xl font-bold leading-none uppercase">
-                                    {SERVICES.find(s => s.id === b.serviceId)?.name || 'HAIRCUT'}
-                                </h2>
-                                <p className="text-white/60 text-xs font-bold uppercase">
-                                    Barber: Alex
-                                </p>
-                            </div>
-                            <div className="bg-[#1B5E20] px-3 py-1 rounded-full border border-[#00C853]/50">
-                                <span className="text-[#00C853] text-[9px] font-bold tracking-widest uppercase">Confirmed</span>
-                            </div>
+                    <div key={b.id} className="relative group brutalist-card-thick bg-black border-2 border-[#FFD700] p-4 shadow-none">
+                        <div className="absolute inset-0 bg-[#FFD700] translate-x-1.5 translate-y-1.5 -z-10" />
+                        
+                        <div className="flex justify-between items-start mb-4">
+                            <h2 className="text-[#FFD700] text-xl font-black italic uppercase tracking-tighter leading-tight">
+                                {SERVICES.find(s => s.id === b.serviceId)?.name}
+                            </h2>
+                            <div className="bg-[#00FF00] text-black px-2 py-0.5 text-[10px] font-black uppercase italic -skew-x-12">OK</div>
                         </div>
 
-                        <div className="flex items-center gap-6 py-4 border-y border-white/5">
-                            <div className="flex items-center gap-2">
-                                <CalendarIcon size={14} className="text-[#D4AF37]" />
-                                <span className="text-xs font-bold">{b.date}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <Clock size={14} className="text-[#D4AF37]" />
-                                <span className="text-xs font-bold">{b.time}</span>
-                            </div>
+                        <div className="flex justify-between items-center py-2 border-y border-[#FFD700]/20 mb-4 font-black uppercase text-lg italic tracking-tighter">
+                            <span>{b.date}</span>
+                            <span>{b.time}</span>
                         </div>
                         
-                        <div className="flex gap-4">
-                            <button className="flex-1 bg-[#D4AF37] text-black text-[11px] font-black py-4 rounded-xl uppercase tracking-widest active:scale-95 transition-all">
-                                View Details
+                        <div className="flex gap-2">
+                            <button className="flex-1 bg-[#00FF00] text-black text-lg font-black italic py-2 border border-black active:translate-y-0.5 shadow-solid-4px">
+                                DETAILS
                             </button>
                             <button 
                                 onClick={() => {
@@ -379,7 +342,7 @@ const App: React.FC = () => {
                                         refreshBookings();
                                     }
                                 }}
-                                className="bg-[#EF4444]/20 p-4 rounded-xl text-[#EF4444] border border-[#EF4444]/30 active:scale-95 transition-all"
+                                className="bg-[#FF0000] p-2 text-white border border-black shadow-solid-4px"
                             >
                                 <Trash2 size={20} />
                             </button>
@@ -389,76 +352,76 @@ const App: React.FC = () => {
             )}
         </main>
         
-        <div className="mt-16">
+        <div className="mt-12">
             <button 
                 onClick={() => { setActiveView('bookings'); setStep(0); }}
-                className="btn-premium w-full rounded-full py-6 text-lg"
+                className="w-full bg-[#FFD700] text-black font-black italic uppercase tracking-tighter py-4 text-2xl border-4 border-black shadow-solid-6px active:shadow-none active:translate-y-1"
             >
-               BOOK NEW FADE <Plus size={24} />
+               BOOK NEW SESSION <Plus size={24} />
             </button>
         </div>
     </div>
   );
 
+
   const renderStaff = () => (
-    <div className="min-h-screen bg-[#1C1C1C] flex items-center justify-center p-6">
-      <div className="max-w-xl w-full bg-[#2C2C2C] p-12 rounded-[32px] space-y-10 shadow-2xl border border-white/10">
+    <div className="min-h-screen bg-black flex items-center justify-center p-6">
+      <div className="max-w-xl w-full bg-[#FFD700] p-12 border-8 border-black space-y-10 shadow-solid-8px">
         {!isStaffAuthenticated ? (
             <>
-                <div className="text-center space-y-3">
-                    <h2 className="text-4xl font-display text-[#D4A84B]">STAFF LOGIN</h2>
-                    <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/40">Authorized Access Only</p>
+                <div className="text-center space-y-2">
+                    <h2 className="text-5xl font-black italic uppercase tracking-tighter">ADMIN LOGIN</h2>
+                    <p className="text-xs font-black uppercase tracking-widest opacity-40">Staff Personnel Only</p>
                 </div>
                 <div className="space-y-6">
-                    <div className="space-y-1">
-                        <label className="text-[10px] uppercase font-bold text-white/30 tracking-widest pl-2">Access Key</label>
-                        <input
-                            type="password"
-                            placeholder="••••••••"
-                            value={staffPassword}
-                            onChange={(e) => setStaffPassword(e.target.value)}
-                            className="w-full bg-black/40 border-2 border-white/5 p-5 font-mono text-xl tracking-[0.5em] text-white text-center rounded-2xl outline-none focus:border-[#D4A84B]/50 transition-colors"
-                        />
-                    </div>
+                    <input
+                        type="password"
+                        placeholder="ACCESS KEY"
+                        value={staffPassword}
+                        onChange={(e) => setStaffPassword(e.target.value)}
+                        className="w-full border-4 border-black p-5 text-3xl font-black tracking-[0.3em] text-center outline-none focus:bg-white transition-colors"
+                    />
                     <button
                         onClick={() => {
                             if (staffPassword === 'Alex') {
                                 setIsStaffAuthenticated(true);
                             } else {
-                                alert('Invalid Key');
+                                alert('Wrong Code');
                             }
                         }}
-                        className="btn-premium w-full py-6 rounded-2xl text-lg mt-4"
+                        className="btn-brutalist-red w-full py-6 text-3xl"
                     >
-                        Authenticate
+                        UNLOCKED
                     </button>
                 </div>
             </>
         ) : (
             <div className="space-y-10">
-                <div className="flex justify-between items-center border-b border-white/10 pb-6">
-                    <h2 className="text-2xl font-display text-[#D4A84B]">DASHBOARD</h2>
-                    <button onClick={() => setIsStaffAuthenticated(false)} className="px-5 py-2 rounded-full bg-white/5 text-white/60 text-xs font-bold uppercase tracking-widest hover:bg-white/10 transition-colors">Logout</button>
+                <div className="flex justify-between items-center border-b-4 border-black pb-6 font-black italic uppercase tracking-tighter">
+                    <h2 className="text-4xl text-black">CONTROL PANEL</h2>
+                    <button onClick={() => setIsStaffAuthenticated(false)} className="px-4 py-2 bg-black text-white text-sm">LOGOUT</button>
                 </div>
                 <div className="space-y-6 overflow-y-auto max-h-[50vh] pr-2 no-scrollbar">
                     {bookings.length === 0 ? (
-                        <p className="text-center py-20 text-white/20 font-bold uppercase text-[10px] tracking-widest">No Bookings Yet</p>
+                        <p className="text-center py-20 font-black italic uppercase text-2xl opacity-20">System Idle</p>
                     ) : (
                         bookings.map(b => (
-                            <div key={b.id} className="bg-black/30 p-6 rounded-2xl border border-white/5 space-y-4">
+                            <div key={b.id} className="bg-white border-4 border-black p-6 space-y-4 shadow-solid-4px">
                                 <div className="flex justify-between items-start">
-                                    <div>
-                                        <p className="text-[#D4A84B] font-bold text-lg leading-tight">{b.customerName}</p>
-                                        <p className="text-white/40 text-[10px] font-bold mt-1">{b.customerPhone}</p>
+                                    <div className="font-black italic uppercase tracking-tighter">
+                                        <p className="text-[#FF0000] text-2xl">{b.customerName}</p>
+                                        <p className="text-black/40 text-sm mt-1">{b.customerPhone}</p>
                                     </div>
-                                    <div className="text-right">
-                                        <div className="bg-[#8B1E3F]/20 text-[#8B1E3F] text-[10px] font-black px-2 py-1 rounded inline-block px-3">{b.time}</div>
-                                        <p className="text-white/30 text-[9px] font-bold mt-2">{b.date}</p>
+                                    <div className="text-right font-black italic uppercase tracking-tighter">
+                                        <div className="bg-black text-white px-3 py-1 flex items-center gap-2">
+                                            <Clock size={16} /> {b.time}
+                                        </div>
+                                        <p className="text-black/30 text-xs mt-2">{b.date}</p>
                                     </div>
                                 </div>
-                                <div className="pt-3 border-t border-white/5 flex justify-between items-center">
-                                    <span className="text-[10px] font-bold text-white/40">SERVICE:</span>
-                                    <span className="text-[11px] font-bold text-white/80 uppercase">{SERVICES.find(s => s.id === b.serviceId)?.name}</span>
+                                <div className="pt-4 border-t-2 border-black/10 flex justify-between items-center font-black italic uppercase tracking-tighter">
+                                    <span className="text-black/40 text-[10px]">Session:</span>
+                                    <span className="text-black text-lg">{SERVICES.find(s => s.id === b.serviceId)?.name}</span>
                                 </div>
                             </div>
                         ))
@@ -475,11 +438,11 @@ const App: React.FC = () => {
         {activeView === 'home' && renderHome()}
         {activeView === 'bookings' && renderBookings()}
         {activeView === 'store' && (
-            <div className="p-12 text-center bg-[#F5F0EB] min-h-screen flex items-center justify-center">
-                <div className="premium-card bg-white p-16 max-w-sm">
-                    <div className="h-1 w-24 bg-[#D4A84B] mx-auto mb-10" />
-                    <h2 className="text-6xl font-display mb-6 leading-none tracking-tighter">STORE<br/>SOON</h2>
-                    <p className="text-[10px] font-bold uppercase tracking-[0.3em] opacity-30">Premium Apparel & Gear 2026</p>
+            <div className="p-12 text-center bg-[#FFD700] min-h-screen flex items-center justify-center">
+                <div className="brutalist-card-thick bg-white p-12 max-w-sm shadow-solid-8px -rotate-2">
+                    <h2 className="text-7xl font-black italic uppercase tracking-tighter leading-none mb-6">STORE<br/>SOON</h2>
+                    <div className="h-4 w-full bg-red-600 mb-8" />
+                    <p className="text-[12px] font-black uppercase tracking-[0.2em] opacity-30 italic">Apparel & Gear Coming Winter 2026</p>
                 </div>
             </div>
         )}

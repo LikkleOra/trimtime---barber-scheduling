@@ -11,45 +11,46 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children, activeView, onViewChange }) => {
   return (
-    <div className="min-h-screen bg-[#F5F5F5] text-[#1A1A1A] selection:bg-[#8B1E3F] selection:text-white">
-      <div className="desktop-center flex flex-col relative pb-[90px]">
-        {/* Top Branding Bar */}
-        <header className="px-6 h-[80px] flex justify-between items-center sticky top-0 bg-[#F5F5F5] z-50 border-b border-black/5">
-          <button className="p-2 active:scale-95 transition-transform">
-              <Menu size={28} strokeWidth={2} className="text-black" />
-          </button>
-          
-          <h1 className="text-2xl font-display uppercase tracking-[0.2em] leading-none text-black">
-              FADEZONE
-          </h1>
+    <div className="min-h-screen bg-black text-black selection:bg-black selection:text-[#FFD700]">
+      <div className="desktop-center flex flex-col relative pb-[70px]">
+        {/* Compressed Header */}
+        <header className="px-6 h-[64px] flex justify-between items-center sticky top-0 bg-[#FFD700] z-50 border-b-4 border-black">
+          <div className="flex items-center gap-3">
+             <div className="w-8 h-8 bg-black rounded-sm flex items-center justify-center transform rotate-3 shadow-solid-4px">
+                <Zap size={20} className="text-[#FFD700]" strokeWidth={3} />
+             </div>
+             <h1 className="text-2xl font-black italic uppercase tracking-tighter leading-none text-black">
+                FADEZONE
+             </h1>
+          </div>
 
           <button onClick={() => onViewChange('staff')} className="p-2 active:scale-95 transition-transform">
-              <User size={28} strokeWidth={2} className="text-black" />
+              <User size={28} strokeWidth={3} className="text-black" />
           </button>
         </header>
 
         {/* Main Content Area */}
-        <main className="flex-1 relative overflow-x-hidden">
+        <main className="flex-1 relative overflow-x-hidden bg-[#F2F2F2]">
           {children}
         </main>
 
-        {/* Premium Bottom Navigation */}
-        <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] h-[75px] bg-[#1A1A1A] border-t border-[#2D2D2D] px-8 flex justify-between items-center z-[100]">
+        {/* Compact Bottom Navigation */}
+        <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[450px] h-[72px] bg-[#FFD700] border-t-4 border-black px-4 flex justify-between items-center z-[100]">
           {[
             { id: 'home', icon: Landmark, label: 'Home' },
             { id: 'bookings', icon: Calendar, label: 'Book' },
             { id: 'store', icon: ShoppingBag, label: 'Store' },
-            { id: 'profile', icon: Zap, label: 'Fades' }
+            { id: 'profile', icon: Zap, label: 'Me' }
           ].map((item) => (
             <button 
               key={item.id}
               onClick={() => onViewChange(item.id as ViewType)}
-              className={`flex flex-col items-center gap-1 transition-all ${activeView === item.id ? 'opacity-100' : 'opacity-40'}`}
+              className={`flex flex-col items-center gap-0.5 transition-all ${activeView === item.id ? 'opacity-100 scale-105' : 'opacity-60'}`}
             >
-              <div className={`p-2 transition-all duration-200 flex items-center justify-center ${activeView === item.id ? 'text-[#D4A84B]' : 'text-[#6B7280]'}`}>
-                <item.icon size={26} strokeWidth={2.5} />
+              <div className="p-1.5 flex items-center justify-center">
+                <item.icon size={26} strokeWidth={3} className="text-black" />
               </div>
-              <span className={`text-[10px] font-bold uppercase tracking-widest ${activeView === item.id ? 'text-[#D4A84B]' : 'text-[#6B7280]'}`}>
+              <span className="text-[10px] font-black italic uppercase tracking-tighter text-black">
                 {item.label}
               </span>
             </button>
@@ -57,12 +58,8 @@ const Layout: React.FC<LayoutProps> = ({ children, activeView, onViewChange }) =
         </nav>
       </div>
     </div>
-
-
-      </div>
-    </div>
   );
 };
 
-
 export default Layout;
+

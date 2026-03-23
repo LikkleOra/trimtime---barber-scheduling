@@ -1,38 +1,24 @@
 /* =====================================
-   Fadezone Barber Booking App - PREMIUM URBAN SYSTEM
+   Fadezone Barber Booking App - HIGH-FIDELITY NEO-BRUTALIST
    ===================================== */
 
 @import "tailwindcss";
 
 :root {
-  /* Premium Barbershop Palette */
-  --color-bg-warm: #F5F0EB;    /* Warm Cream/Beige */
-  --color-bg-page: #F5F5F5;    /* Soft Light Gray */
-  --color-burgundy: #8B1E3F;   /* Primary Brand Color */
-  --color-gold: #D4A84B;       /* Secondary Accent / Gold */
-  --color-charcoal: #1C1C1C;   /* Dark Mode Background */
-  --color-dark-surface: #2C2C2C; /* Appointment Card Surface */
-  
-  --color-black: #1A1A1A;
+  /* High-Chroma Brand Palette */
+  --color-yellow: #FFD700;    /* Electric Yellow */
+  --color-red: #FF0000;       /* Action Red */
+  --color-black: #000000;     /* Absolute Black */
   --color-white: #FFFFFF;
-  --color-gray-dark: #666666;
-  --color-gray-light: #EEEEEE;
+  --color-gray: #F2F2F2;
   
-  --color-success: #00C853;
-  --color-pending: #FFC107;
-  
-  /* Borders & Shadows - Premium Soft */
-  --premium-shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
-  --premium-shadow-md: 0 4px 12px rgba(0,0,0,0.12);
-  --premium-radius-lg: 16px;
-  --premium-radius-sm: 8px;
-  
-  /* Fonts - Clean & Balanced */
-  --font-display: 'Archivo Black', sans-serif;
-  --font-body: 'Inter', sans-serif;
+  /* Hard UI Tokens */
+  --border-thick: 4px solid var(--color-black);
+  --shadow-solid: 6px 6px 0px 0px var(--color-black);
+  --shadow-solid-4px: 4px 4px 0px 0px var(--color-black);
 }
 
-/* Base Styles */
+/* Base Override */
 * {
   margin: 0;
   padding: 0;
@@ -40,106 +26,121 @@
 }
 
 body {
-  font-family: var(--font-body);
-  background-color: var(--color-bg-warm);
+  font-family: 'Archivo Black', 'Impact', sans-serif;
+  background-color: var(--color-yellow);
   color: var(--color-black);
-  line-height: 1.5;
+  text-transform: uppercase;
+  font-style: italic;
+  letter-spacing: -0.05em;
+  line-height: 1.1; /* Slightly more relaxed for smaller text */
   -webkit-font-smoothing: antialiased;
 }
 
-/* Typography Utilities */
-.text-premium-heading {
-  font-family: var(--font-display);
+/* Aggressive Typography Utility - SCALED DOWN */
+.font-impact-style {
+  font-family: 'Archivo Black', 'Impact', sans-serif;
+  font-style: italic;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  line-height: 1.1;
+  letter-spacing: -0.05em;
 }
 
-.text-gold { color: var(--color-gold); }
-.text-burgundy { color: var(--color-burgundy); }
-
-/* Premium Components */
-.btn-premium {
-  background-color: var(--color-burgundy);
-  color: var(--color-white);
-  font-family: var(--font-body);
-  font-weight: 700;
-  text-transform: uppercase;
-  padding: 12px 24px;
-  border-radius: var(--premium-radius-sm);
-  box-shadow: var(--premium-shadow-md);
-  transition: all 0.2s ease;
-  cursor: pointer;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+/* Texture & Pattern Utilities - SCALED DOWN */
+.diagonal-stripes-45 {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--color-yellow),
+    var(--color-yellow) 10px,
+    #E6B800 10px,
+    #E6B800 20px
+  );
 }
 
-.btn-premium:hover {
-  transform: translateY(-2px);
-  filter: brightness(110%);
+.hero-diagonal-pattern {
+    background-color: var(--color-yellow);
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(0,0,0,0.05) 20px, rgba(0,0,0,0.05) 40px);
 }
 
-.premium-card {
-  background: var(--color-white);
-  border-radius: var(--premium-radius-lg);
-  box-shadow: var(--premium-shadow-sm);
-  overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+/* Hard Shadows */
+
+.shadow-solid-4px {
+    box-shadow: 4px 4px 0px 0px #000000;
 }
 
-/* Screen Specifics */
-.receipt-container {
-  background: var(--color-white);
-  border-radius: var(--premium-radius-lg);
-  position: relative;
-  padding: 40px 24px;
-  box-shadow: var(--premium-shadow-md);
+.shadow-solid-6px {
+    box-shadow: 6px 6px 0px 0px #000000;
 }
 
-.time-btn {
-    height: 48px;
-    background: var(--color-gray-light);
-    color: var(--color-gray-dark);
-    border-radius: var(--premium-radius-sm);
-    font-weight: 600;
-    transition: all 0.2s ease;
-    border: none;
+/* Tilted Components */
+.transform-tilted {
+    transform: rotate(-1.5deg); /* Subtle tilt */
 }
 
-.time-btn.selected {
-    background: var(--color-burgundy);
+.tilted-label {
+    background-color: var(--color-red);
     color: var(--color-white);
+    padding: 6px 12px;
+    transform: rotate(-1deg) skewX(-8deg);
+    display: inline-block;
 }
 
+/* Buttons - COMPACT */
+.btn-brutalist-red {
+    background-color: var(--color-red);
+    color: var(--color-white);
+    border: 3px solid var(--color-black);
+    padding: 12px 24px;
+    font-size: 1.5rem;
+    font-weight: 900;
+    box-shadow: 4px 4px 0px 0px #000000;
+    transition: all 0.1s ease;
+    cursor: pointer;
+}
+
+.btn-brutalist-red:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0px 0px #000000;
+}
+
+/* Cards */
+.brutalist-card-thick {
+    background-color: var(--color-white);
+    border: 4px solid var(--color-black);
+    overflow: hidden;
+    position: relative;
+    box-shadow: 5px 5px 0px 0px #000000;
+}
+
+/* Section Title with Red Bar */
+.section-title-underlined {
+    display: inline-block;
+    position: relative;
+    padding-bottom: 2px;
+}
+
+.section-title-underlined::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background-color: var(--color-red);
+}
+
+/* Layout Utilities */
 .desktop-center {
-    max-width: 480px;
+    max-width: 450px; /* Marginally tighter */
     margin: 0 auto;
-    background-color: var(--color-bg-page);
+    background-color: #F9F9F9;
     min-height: 100vh;
-    box-shadow: 0 0 40px rgba(0,0,0,0.1);
+    box-shadow: 0 0 30px rgba(0,0,0,0.15);
+    position: relative;
 }
 
-/* Legacy Compat Mapping */
-.btn-brutalist {
-  background-color: var(--color-burgundy);
-  color: var(--color-white);
-  padding: 12px 24px;
-  border-radius: var(--premium-radius-sm);
-  font-weight: 700;
-  text-transform: uppercase;
-  border: none;
-}
 
-.brutalist-card {
-  background: var(--color-white);
-  border-radius: var(--premium-radius-lg);
-  box-shadow: var(--premium-shadow-sm);
-}
-
-.text-aggressive {
-  font-family: var(--font-display);
-  text-transform: uppercase;
+/* Responsive Overrides */
+@media (max-width: 480px) {
+    .desktop-center {
+        max-width: 100%;
+    }
 }
