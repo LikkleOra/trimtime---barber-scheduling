@@ -81,10 +81,10 @@ const App: React.FC = () => {
 
         <div className="flex overflow-x-auto gap-4 pb-4 no-scrollbar -mx-4 px-4 snap-x snap-mandatory">
             {[
-                { id: 'ladies-haircut', name: 'LADIES CUT', text: 'URBAN FEMME', img: '/services/ladies-cut.jpg' },
-                { id: 'shave-trim', name: 'TRIM & EDGE', text: 'SHARP FINISH', img: '/services/trimming.jpg' },
-                { id: 'haircut', name: 'THE CLASSIC', text: 'TIMELESS LOOK', img: '/services/haircut.jpg' },
-                { id: 'unique-haircut', name: 'CUSTOM DYE', text: 'LOUD COLORS', img: '/services/haircut-custom-dye.jpg' }
+                { id: 'ladies-haircut', name: 'LADIES CUT', text: 'URBAN FEMME', img: '/services/ladies-cut.jpg?v=2' },
+                { id: 'shave-trim', name: 'TRIM & EDGE', text: 'SHARP FINISH', img: '/services/trimming.jpg?v=2' },
+                { id: 'haircut', name: 'THE CLASSIC', text: 'TIMELESS LOOK', img: '/services/haircut.jpg?v=2' },
+                { id: 'unique-haircut', name: 'CUSTOM DYE', text: 'LOUD COLORS', img: '/services/haircut-custom-dye.jpg?v=2' }
             ].map((style, idx) => (
                 <div 
                     key={idx} 
@@ -168,7 +168,7 @@ const App: React.FC = () => {
                     {SERVICES.map(s => (
                         <div key={s.id} className="brutalist-card-thick flex flex-col h-full bg-white shadow-solid-4px">
                             <div className="relative aspect-video overflow-hidden border-b-2 border-black">
-                                <img src={s.image} className="w-full h-full object-cover grayscale contrast-125 transition-transform hover:scale-110" alt={s.name} />
+                                <img src={`${s.image}?v=2`} className="w-full h-full object-cover grayscale contrast-125 transition-transform hover:scale-110" alt={s.name} />
                                 <div className="absolute top-2 right-2">
                                     <div className="tilted-label text-lg px-2 py-1 border-2 border-black shadow-solid-4px mb-1">
                                         R{s.price}
@@ -210,7 +210,12 @@ const App: React.FC = () => {
                         {Array.from({ length: 31 }).map((_, i) => (
                             <div 
                                 key={i} 
-                                className={`h-10 flex items-center justify-center text-sm font-black border border-black cursor-pointer transition-all ${i+1 === 5 ? 'bg-black text-white' : 'bg-white text-black hover:bg-black/5'}`}
+                                onClick={() => {
+                                    const newDate = new Date(selectedDate);
+                                    newDate.setDate(i + 1);
+                                    setSelectedDate(newDate);
+                                }}
+                                className={`h-10 flex items-center justify-center text-sm font-black border border-black cursor-pointer transition-all ${selectedDate.getDate() === i+1 ? 'bg-black text-white shadow-solid-4px scale-105' : 'bg-white text-black hover:bg-black/5'}`}
                             >
                                 {i + 1}
                             </div>
@@ -240,44 +245,47 @@ const App: React.FC = () => {
     if (step === 2) {
         return (
             <div className="p-4 bg-[#FFD700] min-h-screen">
-                <header className="py-8 border-b-4 border-black mb-8">
-                    <h1 className="text-5xl font-black italic uppercase tracking-tighter text-center">CHECKOUT</h1>
+                <button onClick={() => setStep(1)} className="mb-6 font-black italic uppercase tracking-tighter text-lg bg-black text-white px-3 py-1 flex items-center gap-2 shadow-solid-4px transition-transform active:translate-y-1">
+                    <ArrowLeft size={18} /> BACK
+                </button>
+                <header className="py-8 border-b-4 border-black mb-8 text-center bg-white shadow-solid-6px brutalist-card-thick rotate-1">
+                    <h1 className="text-5xl font-black italic uppercase tracking-tighter text-black">CHECKOUT</h1>
                 </header>
 
-                <div className="brutalist-card-thick bg-white p-6 max-w-[340px] mx-auto space-y-6 shadow-solid-6px">
-                    <div className="space-y-1">
-                        <label className="text-lg font-black italic uppercase tracking-tighter">Your Name</label>
+                <div className="brutalist-card-thick bg-white p-8 max-w-[340px] mx-auto space-y-6 shadow-solid-6px relative">
+                    {/* Decorative Tape */}
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-6 bg-black/10 -translate-y-3 rotate-3 backdrop-blur-sm border border-black/20"></div>
+
+                    <div className="space-y-2">
+                        <label className="text-lg font-black italic uppercase tracking-tighter border-b-2 border-black block pb-1">Client Intake</label>
                         <input 
                             value={customerName}
                             onChange={(e) => setCustomerName(e.target.value)}
-                            className="w-full border-2 border-black p-3 text-xl font-black focus:bg-yellow-50 outline-none"
-                            placeholder="NAME"
+                            className="w-full border-2 border-black p-4 text-xl font-black focus:bg-yellow-50 outline-none mt-2 placeholder:text-black/20 placeholder:italic"
+                            placeholder="YOUR NAME"
                         />
-                    </div>
-                    <div className="space-y-1">
-                        <label className="text-lg font-black italic uppercase tracking-tighter">Contact #</label>
                         <input 
                             value={customerPhone}
                             onChange={(e) => setCustomerPhone(e.target.value)}
-                            className="w-full border-2 border-black p-3 text-xl font-black focus:bg-yellow-50 outline-none"
-                            placeholder="+27 000"
+                            className="w-full border-2 border-black p-4 text-xl font-black focus:bg-yellow-50 outline-none mt-2 placeholder:text-black/20 placeholder:italic"
+                            placeholder="CONTACT #"
                         />
                     </div>
                     
-                    <div className="pt-4 space-y-2 border-t-2 border-black">
-                        <div className="flex justify-between items-center">
-                            <span className="text-sm font-black uppercase tracking-tighter opacity-50">Service</span>
-                            <span className="text-md font-black uppercase text-right leading-none">{selectedService?.name}</span>
+                    <div className="pt-6 space-y-3 border-t-4 border-black border-dashed">
+                        <div className="flex justify-between items-center bg-gray-100 p-2 border-2 border-black">
+                            <span className="text-xs font-black uppercase tracking-tighter opacity-50">Service</span>
+                            <span className="text-sm font-black uppercase text-right leading-none">{selectedService?.name}</span>
                         </div>
-                        <div className="flex justify-between items-center">
-                            <span className="text-sm font-black uppercase tracking-tighter opacity-50">Time Slot</span>
-                            <span className="text-md font-black uppercase">{selectedTime}</span>
+                        <div className="flex justify-between items-center bg-gray-100 p-2 border-2 border-black">
+                            <span className="text-xs font-black uppercase tracking-tighter opacity-50">Time Slot</span>
+                            <span className="text-sm font-black uppercase">{selectedTime}</span>
                         </div>
                     </div>
 
                     <button 
                         onClick={handleConfirm}
-                        className="btn-brutalist-red w-full py-4 text-2xl shadow-solid-6px active:translate-y-1 active:shadow-none"
+                        className="btn-brutalist-red w-full py-4 text-3xl shadow-solid-6px active:translate-y-1 active:shadow-none hover:bg-black hover:text-[#FFD700]"
                     >
                         CONFIRM
                     </button>
@@ -289,53 +297,67 @@ const App: React.FC = () => {
     // Receipt View
     if (step === 3) {
         return (
-            <div className="p-4 bg-[#F2F2F2] min-h-screen flex flex-col items-center relative overflow-hidden">
-                <div className="absolute top-0 rotate-6 bg-[#FFD700] w-[150%] h-[100px] -translate-y-12 border-b-6 border-black z-0"></div>
-                
-                <main className="relative z-10 w-full max-w-[320px] mt-16 bg-white border-4 border-black p-6 shadow-solid-6px">
-                    <TornEdge position="top" />
-                    <TornEdge position="bottom" />
-
-                    <div className="text-center py-4 mb-4 border-b-4 border-black border-dashed">
-                        <div className="tilted-label text-md mb-4">#READY</div>
-                        <h1 className="text-2xl font-black italic tracking-tighter leading-tight">
-                            REF: {lastBookingId}
-                        </h1>
-                    </div>
+            <div className="p-4 bg-[#F2F2F2] min-h-screen flex flex-col items-center relative overflow-hidden pb-20">
+                <main className="relative z-10 w-full max-w-[380px] mt-12 bg-white p-8 font-mono border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+                    <TornEdge position="top" /> 
                     
-                    <div className="space-y-4">
-                        {[
-                            { label: 'Service', val: selectedService?.name },
-                            { label: 'Time', val: selectedTime },
-                            { label: 'Total', val: 'R'+selectedService?.price }
-                        ].map(item => (
-                            <div key={item.label} className="flex justify-between items-center">
-                                <span className="text-[10px] font-black text-black/40 uppercase tracking-tighter">{item.label}</span>
-                                <span className="text-sm font-black uppercase">{item.val}</span>
-                            </div>
-                        ))}
+                    <div className="text-center mb-6">
+                        <h1 className="text-4xl font-black tracking-tighter italic">FADEZONE</h1>
+                        <p className="text-xs tracking-widest uppercase mt-2">424 Commissioner St.</p>
+                        <p className="text-xs tracking-widest uppercase">Johannesburg</p>
                     </div>
 
-                    <div className="mt-8 pt-6 border-t-4 border-black text-center">
-                        <p className="text-[9px] font-black uppercase tracking-widest opacity-30 mb-4">SCREENSHOT FOR ENTRY</p>
+                    <div className="border-y-2 border-dashed border-black py-4 mb-6 text-center space-y-1">
+                        <p className="text-2xl font-black font-sans uppercase italic">REF: {lastBookingId}</p>
+                        <p className="text-sm">DATE: {selectedDate.toISOString().split('T')[0]}</p>
+                        <p className="text-sm">TIME: {selectedTime}</p>
+                    </div>
+
+                    <div className="space-y-4 mb-6">
+                        <div className="flex justify-between items-center text-sm font-bold">
+                            <span className="uppercase text-left flex-1 break-words pr-4">{selectedService?.name}</span>
+                            <span>R{selectedService?.price}</span>
+                        </div>
+                        <div className="flex justify-between items-center text-sm opacity-60">
+                            <span>TAX (15%)</span>
+                            <span>INCLUDED</span>
+                        </div>
+                    </div>
+
+                    <div className="border-t-2 border-black pt-4 mb-8">
+                        <div className="flex justify-between items-center text-xl font-black">
+                            <span>TOTAL</span>
+                            <span>R{selectedService?.price}</span>
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col items-center gap-2 mb-6">
+                        {/* Fake Barcode CSS */}
+                        <div className="w-full h-12 flex justify-between pr-2 pl-2 opacity-80" style={{backgroundImage: 'repeating-linear-gradient(90deg, #000 0px, #000 2px, transparent 2px, transparent 6px, #000 6px, #000 10px, transparent 10px, transparent 11px, #000 11px, #000 12px, transparent 12px, transparent 15px, #000 15px, #000 18px)'}}></div>
+                        <p className="text-[10px] tracking-[0.2em]">{lastBookingId}-2026-FZ</p>
+                    </div>
+
+                    <div className="mt-4 pt-4 border-t-2 border-dashed border-black text-center relative z-20">
+                        <p className="text-[9px] font-black font-sans uppercase tracking-[0.2em] opacity-40 mb-4">SCREENSHOT FOR ENTRY</p>
                         <button 
                             onClick={() => {
                                 const msg = `Hey Alex, I've booked a ${selectedService?.name} at ${selectedTime}. Ref: ${lastBookingId}`;
                                 window.open(`https://wa.me/27812687806?text=${encodeURIComponent(msg)}`, '_blank');
                             }}
-                            className="w-full bg-[#25D366] text-black font-black italic uppercase text-xs py-2 border-2 border-black shadow-solid-4px active:translate-y-1 active:shadow-none"
+                            className="bg-black w-full text-[#FFD700] hover:bg-[#25D366] hover:text-black transition-colors font-black uppercase italic text-sm py-4 border-2 border-black shadow-[4px_4px_0px_0px_var(--color-yellow)] hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none"
                         >
                             CONFIRM VIA WHATSAPP
                         </button>
                     </div>
+
+                    <TornEdge position="bottom" />
                 </main>
 
-                
                 <button 
-                    onClick={() => { setActiveView('profile'); setStep(0); }}
-                    className="relative z-10 mt-12 btn-brutalist-red px-12 py-4 text-2xl transform-tilted shadow-solid-6px"
+                    onClick={() => { setActiveView('home'); setStep(0); }}
+                    className="mt-12 text-black bg-[#FFD700] py-3 px-8 font-black uppercase italic tracking-tighter border-4 border-black hover:bg-black hover:text-[#FFD700] transition-colors shadow-solid-4px active:shadow-none"
                 >
-                    GOT IT
+                    RETURN TO HOME
                 </button>
             </div>
         );
