@@ -15,8 +15,6 @@ const Layout: React.FC<LayoutProps> = ({ children, activeView, onViewChange }) =
   const navItems = [
     { id: 'home', icon: Landmark, label: 'HOME' },
     { id: 'bookings', icon: Calendar, label: 'BOOK A FADE' },
-    { id: 'about', icon: Info, label: 'OUR STORY' },
-    { id: 'contacts', icon: MapPin, label: 'REACH US' },
     { id: 'profile', icon: Zap, label: 'MY ACCOUNT' }
   ];
 
@@ -47,32 +45,42 @@ const Layout: React.FC<LayoutProps> = ({ children, activeView, onViewChange }) =
           </button>
         </header>
 
+        {/* Backdrop for Menu */}
+        <div 
+            className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-[90] transition-opacity duration-500 ${isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+            onClick={() => setIsMenuOpen(false)}
+        />
+
         {/* NEO-BRUTALIST MENU OVERLAY */}
-        {isMenuOpen && (
-            <div className="fixed inset-0 z-[100] bg-[#FFD700] flex flex-col p-10 pt-24 animate-in fade-in slide-in-from-top duration-200 h-full max-w-[450px] left-1/2 -translate-x-1/2">
-                <div className="space-y-6">
-                    {navItems.map((item) => (
-                        <button
-                            key={item.id}
-                            onClick={() => handleNav(item.id as ViewType)}
-                            className={`flex items-center gap-6 w-full text-left transition-all ${activeView === item.id ? 'translate-x-4' : ''}`}
-                        >
-                            <div className={`p-3 border-2 border-black shadow-solid-4px ${activeView === item.id ? 'bg-black text-[#FFD700]' : 'bg-white text-black'}`}>
-                                <item.icon size={24} strokeWidth={4} />
-                            </div>
-                            <span className={`text-4xl font-black italic uppercase tracking-tighter hover:text-red-600 ${activeView === item.id ? 'text-red-600' : 'text-black'}`}>
-                                {item.label}
-                            </span>
-                        </button>
-                    ))}
-                </div>
-                
-                <div className="mt-auto border-t-4 border-black pt-8">
-                    <p className="text-sm font-black italic uppercase mb-2">MASTER BARBER ON CALL</p>
-                    <p className="text-3xl font-black tracking-widest text-black/40">081 268 7806</p>
-                </div>
+        <div 
+            className={`fixed inset-y-0 right-0 z-[100] bg-[#FFD700] border-l-8 border-black shadow-[-20px_0_0_rgba(0,0,0,1)] flex flex-col p-10 pt-24 h-full w-full max-w-[450px] transition-transform duration-500 ease-[cubic-bezier(0.87,0,0.13,1)] ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+        >
+            <div className="space-y-8">
+                {navItems.map((item, index) => (
+                    <button
+                        key={item.id}
+                        onClick={() => handleNav(item.id as ViewType)}
+                        style={{ transitionDelay: isMenuOpen ? `${index * 75 + 100}ms` : '0ms' }}
+                        className={`group flex items-center gap-6 w-full text-left transition-all duration-500 transform ${isMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-12 opacity-0'} ${activeView === item.id ? 'translate-x-4' : ''}`}
+                    >
+                        <div className={`p-3 border-2 border-black transition-transform group-hover:scale-110 group-active:scale-95 shadow-solid-4px ${activeView === item.id ? 'bg-black text-[#FFD700]' : 'bg-white text-black'}`}>
+                            <item.icon size={24} strokeWidth={4} />
+                        </div>
+                        <span className={`text-5xl font-black italic uppercase tracking-tighter transition-colors group-hover:text-red-600 ${activeView === item.id ? 'text-red-600' : 'text-black'}`}>
+                            {item.label}
+                        </span>
+                    </button>
+                ))}
             </div>
-        )}
+            
+            <div 
+                style={{ transitionDelay: isMenuOpen ? '400ms' : '0ms' }}
+                className={`mt-auto border-t-4 border-black pt-8 transition-all duration-500 transform ${isMenuOpen ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
+            >
+                <p className="text-sm font-black italic uppercase mb-2">MASTER BARBER ON CALL</p>
+                <p className="text-3xl font-black tracking-widest hover:text-red-600 transition-colors cursor-pointer text-black">081 268 7806</p>
+            </div>
+        </div>
 
         {/* Main Content Area */}
         <main className="flex-1 relative overflow-x-hidden bg-[#F2F2F2] border-x-4 border-b-4 border-black shadow-solid-6px">
