@@ -116,19 +116,7 @@ const App: React.FC = () => {
       </section>
 
 
-      {/* Stats Section - COMPACT */}
-      <section className="py-10 px-8 bg-black text-[#FFD700] border-t-4 border-black">
-          <div className="grid grid-cols-2 gap-8">
-              <div className="flex flex-col items-center">
-                  <span className="text-5xl font-black italic tracking-tighter">10+</span>
-                  <p className="text-[10px] font-black uppercase tracking-widest text-[#FFD700]/60">MASTER BARBERS</p>
-              </div>
-              <div className="flex flex-col items-center">
-                  <span className="text-5xl font-black italic tracking-tighter">99%</span>
-                  <p className="text-[10px] font-black uppercase tracking-widest text-[#FFD700]/60">VIBE RATING</p>
-              </div>
-          </div>
-      </section>
+
 
       {/* Story Section - INTEGRATED */}
       <section className="py-12 bg-[#F2F2F2] border-t-4 border-black">

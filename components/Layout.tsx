@@ -35,9 +35,12 @@ const Layout: React.FC<LayoutProps> = ({ children, activeView, onViewChange }) =
              >
                 {isMenuOpen ? <X size={28} strokeWidth={4} /> : <Menu size={28} strokeWidth={4} />}
              </button>
-             <h1 className="text-xl font-black italic uppercase tracking-tighter leading-none text-black ml-1">
+             <button 
+                onClick={() => handleNav('home')}
+                className="text-xl font-black italic uppercase tracking-tighter leading-none text-black ml-1 cursor-pointer transition-transform active:scale-95"
+             >
                 FADEZONE
-             </h1>
+             </button>
           </div>
 
           <button onClick={() => handleNav('staff')} className="p-1 active:scale-95 transition-transform">
@@ -45,40 +48,57 @@ const Layout: React.FC<LayoutProps> = ({ children, activeView, onViewChange }) =
           </button>
         </header>
 
-        {/* Backdrop for Menu */}
+        {/* FULL SCREEN NEO-BRUTALIST MENU OVERLAY */}
         <div 
-            className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-[90] transition-opacity duration-500 ${isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
-            onClick={() => setIsMenuOpen(false)}
-        />
-
-        {/* NEO-BRUTALIST MENU OVERLAY */}
-        <div 
-            className={`fixed inset-y-0 right-0 z-[100] bg-[#FFD700] border-l-8 border-black shadow-[-20px_0_0_rgba(0,0,0,1)] flex flex-col p-10 pt-24 h-full w-full max-w-[450px] transition-transform duration-500 ease-[cubic-bezier(0.87,0,0.13,1)] ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+            className={`fixed inset-0 z-[110] bg-[#FFD700] flex flex-col h-[100dvh] w-full transition-transform duration-500 ease-[cubic-bezier(0.87,0,0.13,1)] ${isMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}
         >
-            <div className="space-y-8">
-                {navItems.map((item, index) => (
-                    <button
-                        key={item.id}
-                        onClick={() => handleNav(item.id as ViewType)}
-                        style={{ transitionDelay: isMenuOpen ? `${index * 75 + 100}ms` : '0ms' }}
-                        className={`group flex items-center gap-6 w-full text-left transition-all duration-500 transform ${isMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-12 opacity-0'} ${activeView === item.id ? 'translate-x-4' : ''}`}
+            {/* Replicated Header inside menu so users can close it */}
+            <header className="px-5 h-[62px] min-h-[62px] flex justify-between items-center bg-[#FFD700] border-b-4 border-black">
+                <div className="flex items-center gap-2">
+                    <button 
+                        onClick={() => setIsMenuOpen(false)}
+                        className="p-1 hover:scale-110 active:scale-95 transition-all text-black"
                     >
-                        <div className={`p-3 border-2 border-black transition-transform group-hover:scale-110 group-active:scale-95 shadow-solid-4px ${activeView === item.id ? 'bg-black text-[#FFD700]' : 'bg-white text-black'}`}>
-                            <item.icon size={24} strokeWidth={4} />
-                        </div>
-                        <span className={`text-5xl font-black italic uppercase tracking-tighter transition-colors group-hover:text-red-600 ${activeView === item.id ? 'text-red-600' : 'text-black'}`}>
-                            {item.label}
-                        </span>
+                        <X size={28} strokeWidth={4} />
                     </button>
-                ))}
-            </div>
-            
-            <div 
-                style={{ transitionDelay: isMenuOpen ? '400ms' : '0ms' }}
-                className={`mt-auto border-t-4 border-black pt-8 transition-all duration-500 transform ${isMenuOpen ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
-            >
-                <p className="text-sm font-black italic uppercase mb-2">MASTER BARBER ON CALL</p>
-                <p className="text-3xl font-black tracking-widest hover:text-red-600 transition-colors cursor-pointer text-black">081 268 7806</p>
+                    <button 
+                        onClick={() => handleNav('home')}
+                        className="text-xl font-black italic uppercase tracking-tighter leading-none text-black ml-1 cursor-pointer transition-transform active:scale-95"
+                    >
+                        FADEZONE
+                    </button>
+                </div>
+                <button onClick={() => handleNav('staff')} className="p-1 active:scale-95 transition-transform">
+                    <User size={26} strokeWidth={3} className="text-black" />
+                </button>
+            </header>
+
+            <div className="flex-1 flex flex-col p-10 pt-16 overflow-y-auto">
+                <div className="space-y-8">
+                    {navItems.map((item, index) => (
+                        <button
+                            key={item.id}
+                            onClick={() => handleNav(item.id as ViewType)}
+                            style={{ transitionDelay: isMenuOpen ? `${index * 75 + 100}ms` : '0ms' }}
+                            className={`group flex items-center gap-6 w-full text-left transition-all duration-500 transform ${isMenuOpen ? 'translate-y-0 opacity-100' : '-translate-y-4 opacity-0'} ${activeView === item.id ? 'translate-x-4' : ''}`}
+                        >
+                            <div className={`p-3 border-2 border-black transition-transform group-hover:scale-110 group-active:scale-95 shadow-solid-4px ${activeView === item.id ? 'bg-black text-[#FFD700]' : 'bg-white text-black'}`}>
+                                <item.icon size={24} strokeWidth={4} />
+                            </div>
+                            <span className={`text-5xl font-black italic uppercase tracking-tighter transition-colors group-hover:text-red-600 ${activeView === item.id ? 'text-red-600' : 'text-black'}`}>
+                                {item.label}
+                            </span>
+                        </button>
+                    ))}
+                </div>
+                
+                <div 
+                    style={{ transitionDelay: isMenuOpen ? '400ms' : '0ms' }}
+                    className={`mt-auto border-t-4 border-black pt-8 pb-8 transition-all duration-500 transform ${isMenuOpen ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
+                >
+                    <p className="text-sm font-black italic uppercase mb-2">MASTER BARBER ON CALL</p>
+                    <p className="text-3xl font-black tracking-widest hover:text-red-600 transition-colors cursor-pointer text-black">081 268 7806</p>
+                </div>
             </div>
         </div>
 

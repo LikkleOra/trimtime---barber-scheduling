@@ -135,7 +135,6 @@ body {
     min-height: 100vh;
     box-shadow: 0 0 30px rgba(0,0,0,0.15);
     position: relative;
-    padding: 18px; /* Global 18px Safe-Zone */
 }
 
 /* Ensure body is also yellow to avoid gap during scroll/overscroll */
