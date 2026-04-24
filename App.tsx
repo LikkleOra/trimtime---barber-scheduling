@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useRef } from 'react';
+import { useSwipeable } from 'react-swipeable';
 import Layout from './components/Layout';
 import TimeGrid from './components/TimeGrid';
 import BookingSummary from './components/BookingSummary';
@@ -46,18 +47,26 @@ const App: React.FC = () => {
     return { days, firstDay, year, month };
   };
 
+  // Calendar navigation handler with immutable Date creation
+  const changeMonth = useCallback((offset: number) => {
+    setViewDate(prev => new Date(prev.getFullYear(), prev.getMonth() + offset, 1));
+  }, []);
+
+  // Swipe handlers for mobile navigation
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: () => changeMonth(1),
+    onSwipedRight: () => changeMonth(-1),
+    trackMouse: true,
+    preventScrollOnSwipe: true,
+  });
+
   const renderCalendar = () => {
     const { days, firstDay, year, month } = getDaysInMonth(viewDate);
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     const daysOfWeek = ["S", "M", "T", "W", "T", "F", "S"];
 
-    const changeMonth = (offset: number) => {
-      const newDate = new Date(viewDate.setMonth(viewDate.getMonth() + offset));
-      setViewDate(new Date(newDate));
-    };
-
     return (
-      <div className="w-full">
+      <div {...swipeHandlers} className="w-full">
         {/* Calendar Header */}
         <div className="bg-black text-white p-6 flex justify-between items-center mb-6">
           <button onClick={() => changeMonth(-1)} className="hover:text-[#fbd600] transition-colors"><ChevronLeft size={20} /></button>
